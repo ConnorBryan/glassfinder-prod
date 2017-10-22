@@ -278,6 +278,7 @@ function Detail(props) {
 
   const {
     image,
+    images,
     name,
     address: {
       city,
@@ -295,10 +296,18 @@ function Detail(props) {
   } = model;
 
   const sliderPieces = pieces
-    ? pieces.map((piece, index) => ({
+    ? pieces.map(piece => ({
       id: piece.id,
       src: piece.image,
       onClick: id => setPiece(piece),
+    }))
+    : [];
+
+  const sliderImages = images
+    ? images.map((image, index) => ({
+      id: 0,
+      src: image,
+      onClick: () => {}
     }))
     : [];
 
@@ -382,16 +391,20 @@ function Detail(props) {
             </Item.Header>
             <Item.Content>
               {sliderPieces.length > 0 && (
-                <Slider
-                  images={sliderPieces} />
+                <Slider images={sliderPieces} />
               )}
             </Item.Content>
           </Item>
         )}
-        <Item>
-          <Item.Content>
+        <Item as='h4'>
+          <Item.Header>
             Images
-          </Item.Content>
+          </Item.Header>
+          <Item.Extra>
+            {sliderImages.length > 0 && (
+              <Slider images={sliderImages} />
+            )}
+          </Item.Extra>
         </Item>
       </Item.Group>
     </Segment>
@@ -574,7 +587,11 @@ class App extends Component {
 
     this.setState({
       models: { ...this.state.models, headshop },
-    }, () => history.push(`/headshop/${headshop.id}`));
+    }, () => {
+      history.push(`/headshop/${headshop.id}`);
+
+      this.getPiecesByHeadshop();
+    });
   }
   
   clearHeadshop = () => {
@@ -671,6 +688,28 @@ class App extends Component {
 
       return [];
     }
+  }
+
+  getPiecesByHeadshop = async () => {
+    const {
+      models: {
+        headshop: {
+          id,
+        },
+      },
+    } = this.state;
+    console.log('getting headshops of', id);
+    const { data: pieces } = await axios.get(`http://localhost:6166/pieces/headshop/${id}`);
+
+    this.setState({
+      models: {
+        ...this.state.models,
+        headshop: {
+          ...this.state.models.headshop,
+          pieces
+        }
+      }
+    });
   }
 
   getPiecesByArtist = async () => {
