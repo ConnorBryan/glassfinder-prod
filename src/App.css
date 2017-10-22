@@ -1,0 +1,35 @@
+#map {
+  margin: 0 !important;
+  padding: 0 !important;
+  min-height: 88vh !important;
+  max-height: 88vh !important;
+}
+
+.wrapper {
+  position: relative;
+  min-height: 100vh !important;
+}
+
+.wrapper .pushable {
+  min-height: 88vh !important;
+}
+
+.Bar {
+  min-height: 6vh !important;
+}
+
+.transparent {
+  background: rgba(50, 50, 50, 0.7) !important;
+}
+
+.thirty-percent-width {
+  width: 30% !important;
+}
+
+.fifty-percent-width {
+  width: 50% !important;
+}
+
+.no-padding {
+  padding: 0 !important;
+}
