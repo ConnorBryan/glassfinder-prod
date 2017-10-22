@@ -18,6 +18,12 @@
   min-height: 6vh !important;
 }
 
+.Slider {
+  display: inline-block;
+  white-space: nowrap;
+  overflow-x: scroll;
+}
+
 .transparent {
   background: rgba(50, 50, 50, 0.7) !important;
 }
@@ -31,5 +37,6 @@
 }
 
 .no-padding {
-  padding: 0 !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
 }

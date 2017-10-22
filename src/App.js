@@ -15,6 +15,7 @@ import {
   Dropdown,
   Header,
   Icon,
+  Image,
   Item,
   Label,
   Menu,
@@ -268,7 +269,11 @@ function PiecesList(props) {
 }
 
 function Detail(props) {
-  const { accessor, title } = props;
+  const {
+    accessor,
+    title,
+    setPiece,
+  } = props;
   const model = props[accessor];
 
   const {
@@ -286,7 +291,16 @@ function Detail(props) {
     description,
     owner,
     price,
+    pieces,
   } = model;
+
+  const sliderPieces = pieces
+    ? pieces.map((piece, index) => ({
+      id: piece.id,
+      src: piece.image,
+      onClick: id => setPiece(piece),
+    }))
+    : [];
 
   return (
     <Segment
@@ -361,11 +375,19 @@ function Detail(props) {
             {description}
           </Item.Content>
         </Item>
-        <Item>
-          <Item.Content>
-            Pieces
-          </Item.Content>
-        </Item>
+        {accessor !== 'piece' && (
+          <Item>
+            <Item.Header as='h4'>
+              Pieces
+            </Item.Header>
+            <Item.Content>
+              {sliderPieces.length > 0 && (
+                <Slider
+                  images={sliderPieces} />
+              )}
+            </Item.Content>
+          </Item>
+        )}
         <Item>
           <Item.Content>
             Images
@@ -466,6 +488,23 @@ function BottomView(props) {
   );
 }
 
+function Slider(props) {
+  const { images } = props;
+
+  return (
+    <Image.Group
+      className='Slider'
+      size='small'>
+      {images.map((image, index) => (
+        <Image
+          key={index}
+          onClick={e => image.onClick(image.id)}
+          src={image.src} />
+      ))}
+    </Image.Group>
+  );
+}
+
 const INITIAL_STATE = {
   /* User */
   activeUser: null,
@@ -530,28 +569,59 @@ class App extends Component {
   toggleBottomView = () => this.state.showBottomView ? this.hideBottomView() : this.showBottomView();
 
   /* Headshop controls */
-  setHeadshop = headshop => this.setState({
-    models: { ...this.state.models, headshop },
-  });
-  clearHeadshop = () => this.setState({
-    models:{ ...this.state.models, headshop: null },
-  });
+  setHeadshop = headshop => {
+    const { history } = this.props;
+
+    this.setState({
+      models: { ...this.state.models, headshop },
+    }, () => history.push(`/headshop/${headshop.id}`));
+  }
+  
+  clearHeadshop = () => {
+    const { history } = this.props;
+
+    this.setState({
+      models:{ ...this.state.models, headshop: null },
+    }, () => history.push(`/headshops/`));
+  }
 
   /* Artist controls */
-  setArtist = artist => this.setState({
-    models: { ...this.state.models, artist },
-  });
-  clearArtist = () => this.setState({
-    models: { ...this.state.models, artist: null },
-  });
+  setArtist = artist => {
+    const { history } = this.props;
+    
+    this.setState({
+      models: { ...this.state.models, artist },
+    }, () => {
+      history.push(`/artist/${artist.id}`);
+
+      this.getPiecesByArtist();
+    });
+  }
+  clearArtist = () => {
+    const { history } = this.props;
+
+    this.setState({
+      models: { ...this.state.models, artist: null },
+    }, () => history.push('/artists/'));
+  }
+  
 
   /* Piece controls */
-  setPiece = piece => this.setState({
-    models: { ...this.state.models, piece },
-  });
-  clearPiece = () => this.setState({
-    models: { ...this.state.models, piece: null },
-  });
+  setPiece = piece => {
+    const { history } = this.props;
+    
+    this.setState({
+      models: { ...this.state.models, piece },
+    }, () => history.push(`/piece/${piece.id}`));
+  }
+  
+  clearPiece = () => {
+    const { history } = this.props;
+
+    this.setState({
+      models: { ...this.state.models, piece: null },
+    }, () => history.push('/pieces/'));
+  }
 
   /* XHR */
   getHeadshops = async () => {
@@ -603,9 +673,29 @@ class App extends Component {
     }
   }
 
-  async initMap() {
-    const { history } = this.props;
+  getPiecesByArtist = async () => {
+    const {
+      models: {
+        artist: {
+          id,
+        },
+      },
+    } = this.state;
 
+    const { data: pieces } = await axios.get(`http://localhost:6166/pieces/artist/${id}`);
+
+    this.setState({
+      models: {
+        ...this.state.models,
+        artist: {
+          ...this.state.models.artist,
+          pieces
+        }
+      }
+    });
+  }
+
+  async initMap() {
     this.map = new window.google.maps.Map(
       document.getElementById('map'),
       {
@@ -629,7 +719,6 @@ class App extends Component {
 
       markers.forEach(marker => {
         marker.addListener('click', () => {
-          history.push(`/headshop/${marker.id}`);
           this.setHeadshop(marker.headshop);
           this.showRightView();
         });
@@ -643,6 +732,7 @@ class App extends Component {
   }
 
   render() {
+    const { history } = this.props;
     const {
       showTopMenu,
       showLeftMenu,
@@ -677,6 +767,7 @@ class App extends Component {
           <LeftMenu visible={showLeftMenu} />
           <RightView
             visible={showRightView}
+            history={history}
 
             headshops={headshops}
             artists={artists}
