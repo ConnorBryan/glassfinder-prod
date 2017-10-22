@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import {
-  BrowserRouter as Router,
   Link,
   Route,
   Switch,
+  withRouter,
 } from 'react-router-dom';
 import axios from 'axios';
 
@@ -41,8 +41,11 @@ function TopBar(props) {
   const items = [
     {
       key: 0,
+      as: Link,
+      to: '/',
       header: true,
-      content: 'Glassfinder'
+      content: 'Glassfinder',
+      onClick: props.hideAllViews
     },
     {
       key: 1,
@@ -121,13 +124,11 @@ function Map(props) {
 
 function Wrapper(props) {
   return (
-    <Router>
-      <Container
-        className='wrapper'
-        fluid>
-        {props.children}
-      </Container>
-    </Router>
+    <Container
+      className='wrapper'
+      fluid>
+      {props.children}
+    </Container>
   );
 }
 
@@ -267,7 +268,7 @@ function PiecesList(props) {
 }
 
 function Detail(props) {
-  const { accessor } = props;
+  const { accessor, title } = props;
   const model = props[accessor];
 
   const {
@@ -292,6 +293,11 @@ function Detail(props) {
       inverted
       className='transparent'
       attached='top'>
+      <Label ribbon>
+        <Header as='h2'>
+          {title}
+        </Header>
+      </Label>
       <Item.Group divided>
         <Item>
           <Item.Image
@@ -323,6 +329,14 @@ function Detail(props) {
                 Rating {rating}
               </Label>
             </Item.Extra>
+            <Item.Extra>
+              <Label>
+                View all images
+              </Label>
+              <Label>
+                Show on map
+              </Label>
+            </Item.Extra>
           </Item.Content>
         </Item>
         <Item>
@@ -352,6 +366,11 @@ function Detail(props) {
             Pieces
           </Item.Content>
         </Item>
+        <Item>
+          <Item.Content>
+            Images
+          </Item.Content>
+        </Item>
       </Item.Group>
     </Segment>
   );
@@ -363,6 +382,7 @@ function Headshop(props) {
   return (
     <Detail
       accessor='headshop'
+      title='Headshop'
       {...props} />
   );
 }
@@ -373,6 +393,7 @@ function Artist(props) {
   return (
     <Detail
       accessor='artist'
+      title='Artist'
       {...props} />
   );
 }
@@ -383,6 +404,7 @@ function Piece(props) {
   return (
     <Detail
       accessor='piece'
+      title='Piece'
       {...props} />
   );
 }
@@ -470,8 +492,8 @@ const INITIAL_STATE = {
 };
 
 class App extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = { ...INITIAL_STATE };
   }
 
@@ -482,21 +504,30 @@ class App extends Component {
   }
 
   /* View controls */
-  showTopMenu = () => this.setState({ showTopMenu: true });
+  hideAllViews = () => {
+    this.hideTopMenu();
+    this.hideLeftMenu();
+    this.hideRightView();
+    this.hideBottomView();
+
+    return true;
+  };
+
+  showTopMenu = () => this.hideAllViews() && this.setState({ showTopMenu: true });
   hideTopMenu = () => this.setState({ showTopMenu: false });
-  toggleTopMenu = () => this.setState(prevState => ({ showTopMenu: !prevState.showTopMenu }));
+  toggleTopMenu = () => this.state.showTopMenu ? this.hideTopMenu() : this.showTopMenu();
 
-  showLeftMenu = () => this.setState({ showLeftMenu: true });
+  showLeftMenu = () => this.hideAllViews() && this.setState({ showLeftMenu: true });
   hideLeftMenu = () => this.setState({ showLeftMenu: false });
-  toggleLeftMenu = () => this.setState(prevState => ({ showLeftMenu: !prevState.showLeftMenu }));
+  toggleLeftMenu = () => this.state.showLeftMenu ? this.hideLeftMenu() : this.showLeftMenu();
 
-  showRightView = () => this.setState({ showRightView: true });
+  showRightView = () => this.hideAllViews() && this.setState({ showRightView: true });
   hideRightView = () => this.setState({ showRightView: false });
-  toggleRightView = () => this.setState(prevState => ({ showRightView: !prevState.showRightView }));
+  toggleRightView = () => this.state.showRightView ? this.hideRightView() : this.showRightView();
 
-  showBottomView = () => this.setState({ showBottomView: true });
+  showBottomView = () => this.hideAllViews() && this.setState({ showBottomView: true });
   hideBottomView = () => this.setState({ showBottomView: false });
-  toggleBottomView = () => this.setState(prevState => ({ showBottomView: !prevState.showBottomView }));
+  toggleBottomView = () => this.state.showBottomView ? this.hideBottomView() : this.showBottomView();
 
   /* Headshop controls */
   setHeadshop = headshop => this.setState({
@@ -573,6 +604,8 @@ class App extends Component {
   }
 
   async initMap() {
+    const { history } = this.props;
+
     this.map = new window.google.maps.Map(
       document.getElementById('map'),
       {
@@ -588,6 +621,7 @@ class App extends Component {
       const { data } = await axios.get('http://localhost:6166/headshops');
 
       const markers = data.map(tuple => new window.google.maps.Marker({
+        id: tuple[1].id,
         title: tuple[1].name,
         position: tuple[1].position,
         headshop: tuple[1],
@@ -595,6 +629,7 @@ class App extends Component {
 
       markers.forEach(marker => {
         marker.addListener('click', () => {
+          history.push(`/headshop/${marker.id}`);
           this.setHeadshop(marker.headshop);
           this.showRightView();
         });
@@ -628,6 +663,7 @@ class App extends Component {
     return (
       <Wrapper>
         <TopBar
+          hideAllViews={this.hideAllViews}
           getHeadshops={this.getHeadshops}
           getArtists={this.getArtists}
           getPieces={this.getPieces}
@@ -661,4 +697,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default withRouter(App);
