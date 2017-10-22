@@ -314,11 +314,14 @@ function Detail(props) {
   return (
     <Segment
       inverted
-      className='transparent'
+      className='transparent Detail'
       attached='top'>
       <Label ribbon>
         <Header as='h2'>
-          {title}
+          {name}
+          <Header.Subheader as='h3'>
+            <Icon name='user circle' /> {title}
+          </Header.Subheader>
         </Header>
       </Label>
       <Item.Group divided>
@@ -328,36 +331,29 @@ function Detail(props) {
             src={image}
             size='small' />
           <Item.Content>
-            <Item.Header>
-              {name}
+            <Item.Header className='white'>
+              <Icon name='talk' /> {tagline}
             </Item.Header>
-            <Item.Extra>
-              {city}, {state}
-            </Item.Extra>
-            <Item.Description>
-              {tagline}
+            <Item.Description className='white'>
+              <Icon name='flag' /> {city}, {state}
+              <Label style={{ marginLeft: '1rem' }}>
+                <Icon
+                  name='map pin' /> Show on map
+              </Label>
             </Item.Description>
             <Item.Extra>
               {memberSince && (
                 <Label>
-                  Member since {memberSince}
+                  <Icon name='calendar' /> Member since {memberSince}
                 </Label>
               )}
               {price && (
                 <Label color='green'>
-                  {price}
+                  <Icon name='dollar' />  {price}
                 </Label>
               )}
               <Label color='blue'>
-                Rating {rating}
-              </Label>
-            </Item.Extra>
-            <Item.Extra>
-              <Label>
-                View all images
-              </Label>
-              <Label>
-                Show on map
+                <Icon name='empty star' /> Rating {rating}
               </Label>
             </Item.Extra>
           </Item.Content>
@@ -368,14 +364,14 @@ function Detail(props) {
             className='transparent'>
             {owner && (
               <Menu.Item>
-                Owned by {owner}
+                <Icon name='drivers license outline' /> Owned by {owner}
               </Menu.Item>
             )}
             <Menu.Item>
-              {phone}
+              <Icon name='phone square' /> {phone}
             </Menu.Item>
             <Menu.Item>
-              {email}
+              <Icon name='envelope' /> {email}
             </Menu.Item>
           </Menu>
         </Item>
@@ -384,28 +380,50 @@ function Detail(props) {
             {description}
           </Item.Content>
         </Item>
-        {accessor !== 'piece' && (
+        <Item.Group className='fancy'>
+          {accessor !== 'piece' && [
+            <Item key='pieces-header'>
+              <Item.Header
+                as='h4'
+                className='fancy'>
+                <Icon name='puzzle' /> Pieces
+              </Item.Header>
+              <Item.Content>
+                <Button floated='right'>
+                  <Icon name='eye' />  View all pieces
+                </Button>
+              </Item.Content>
+            </Item>,
+            <Item key='pieces-content'>
+              <Item.Content>
+                {sliderPieces.length > 0 && (
+                  <Slider
+                    images={sliderPieces}
+                    imageEffects={{ cursor: 'pointer' }} />
+                )}
+              </Item.Content>
+            </Item>
+          ]}
           <Item>
-            <Item.Header as='h4'>
-              Pieces
+            <Item.Header
+              as='h4'
+              className='fancy'>
+              <Icon name='image' /> Images
             </Item.Header>
             <Item.Content>
-              {sliderPieces.length > 0 && (
-                <Slider images={sliderPieces} />
+              <Button floated='right'>
+                <Icon name='eye' /> View all images
+              </Button>
+            </Item.Content>
+          </Item>
+          <Item>
+            <Item.Content>
+              {sliderImages.length > 0 && (
+                <Slider images={sliderImages} />
               )}
             </Item.Content>
           </Item>
-        )}
-        <Item as='h4'>
-          <Item.Header>
-            Images
-          </Item.Header>
-          <Item.Extra>
-            {sliderImages.length > 0 && (
-              <Slider images={sliderImages} />
-            )}
-          </Item.Extra>
-        </Item>
+        </Item.Group>
       </Item.Group>
     </Segment>
   );
@@ -450,7 +468,7 @@ function RightView(props) {
   return (
     <View
       as={Segment}
-      className='fifty-percent-width no-padding'
+      className='fifty-percent-width no-padding RightView'
       direction='right'
       visible={visible}>
       <Switch>
@@ -502,7 +520,7 @@ function BottomView(props) {
 }
 
 function Slider(props) {
-  const { images } = props;
+  const { images, imageEffects } = props;
 
   return (
     <Image.Group
@@ -511,6 +529,7 @@ function Slider(props) {
       {images.map((image, index) => (
         <Image
           key={index}
+          style={imageEffects}
           onClick={e => image.onClick(image.id)}
           src={image.src} />
       ))}
@@ -698,7 +717,7 @@ class App extends Component {
         },
       },
     } = this.state;
-    console.log('getting headshops of', id);
+
     const { data: pieces } = await axios.get(`http://localhost:6166/pieces/headshop/${id}`);
 
     this.setState({
@@ -819,7 +838,7 @@ class App extends Component {
             setHeadshop={this.setHeadshop} 
             setArtist={this.setArtist} 
             setPiece={this.setPiece} />
-          <BottomView visible={showBottomView} />
+          {/*<BottomView visible={showBottomView} />*/}
         </Sidebar.Pushable>
         <BottomBar />
       </Wrapper>
