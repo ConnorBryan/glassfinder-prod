@@ -43,6 +43,11 @@
   padding-bottom: 0 !important;
 }
 
+.no-margin {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
 @media only screen and (max-width: 767px) {
   .ui.container {
     margin: 0 !important;
@@ -50,15 +55,15 @@
 }
 
 .fancy {
-  text-transform: uppercase;
+  text-transform: uppercase !important;
   letter-spacing: 0.44rem;
 }
 
 .RightView {
   overflow: hidden;
   -webkit-box-shadow: -7px 6px 17px -5px rgba(0,0,0,0.75) !important;
--moz-box-shadow: -7px 6px 17px -5px rgba(0,0,0,0.75) !important;
-box-shadow: -7px 6px 17px -5px rgba(0,0,0,0.75) !important;
+  -moz-box-shadow: -7px 6px 17px -5px rgba(0,0,0,0.75) !important;
+  box-shadow: -7px 6px 17px -5px rgba(0,0,0,0.75) !important;
 }
 
 .white {

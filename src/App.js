@@ -19,13 +19,24 @@ import {
   Item,
   Label,
   Menu,
+  Search,
   Segment,
   Sidebar,
 } from 'semantic-ui-react';
 
+const iconMap = {
+  Headshop: 'building',
+  Artist: 'user circle',
+  Piece: 'puzzle',
+};
+
+// Pluralize the icon map.
+Object.keys(iconMap).forEach(key => (iconMap[`${key}s`] = iconMap[key]));
+
 function Bar(props) {
   const {
     attached,
+    children,
     items
   } = props;
 
@@ -34,7 +45,9 @@ function Bar(props) {
       attached={attached}
       items={items}
       inverted
-      {...props} />
+      {...props}>
+      {children}
+    </Menu>
   );
 }
 
@@ -43,52 +56,12 @@ function TopBar(props) {
     {
       key: 0,
       as: Link,
+      className: 'fancy',
       to: '/',
       header: true,
       content: 'Glassfinder',
       onClick: props.hideAllViews
-    },
-    {
-      key: 1,
-      as: Link,
-      to: '/headshops',
-      onClick: props.getHeadshops,
-      content: 'Get headshops'
-    },
-    {
-      key: 2,
-      as: Link,
-      to: '/artists',
-      onClick: props.getArtists,
-      content: 'Get artists'
-    },
-    {
-      key: 3,
-      as: Link,
-      to: '/pieces',
-      onClick: props.getPieces,
-      content: 'Get pieces'
-    },
-    {
-      key: 4,
-      onClick: props.toggleTopMenu,
-      content: 'top'
-    },
-    {
-      key: 5,
-      onClick: props.toggleLeftMenu,
-      content: 'left'
-    },
-    {
-      key: 6,
-      onClick: props.toggleRightView,
-      content: 'right'
-    },
-    {
-      key: 7,
-      onClick: props.toggleBottomView,
-      content: 'bottom'
-    },
+    }
   ];
 
   return (
@@ -100,19 +73,32 @@ function TopBar(props) {
 }
 
 function BottomBar(props) {
-  const items = [
-    {
-      key: 0,
-      header: true,
-      content: 'Glassfinder'
-    },
-  ];
+  const {
+    toggleLeftMenu,
+    toggleRightView,
+    showLeftMenu,
+    showRightView,
+  } = props;
 
   return (
     <Bar
       className='Bar'
-      attached='bottom'
-      items={items} />
+      attached='bottom'>
+      <Menu.Item
+        active={showLeftMenu}
+        onClick={toggleLeftMenu}
+        className='fancy'>
+        <Icon name='bars' /> Navigation
+      </Menu.Item>
+      <Menu.Menu position='right'>
+        <Menu.Item
+          active={showRightView}
+          onClick={toggleRightView}
+          className='fancy'>
+          <Icon name='ellipsis horizontal' /> Details
+        </Menu.Item>
+      </Menu.Menu>
+    </Bar>
   );
 }
 
@@ -173,15 +159,50 @@ function TopMenu(props) {
 }
 
 function LeftMenu(props) {
-  const { visible } = props;
+  const {
+    history,
+    visible,
+    toggleRightView,
+  } = props;
 
   return (
     <View
       as={Menu}
+      className='thirty-percent-width'
       direction='left'
+      divided
       visible={visible}>
-      <Menu.Item>
-        LeftMenu
+      <Menu.Item
+        className='fancy'
+        header>
+        <Icon name='bars' /> Navigation
+      </Menu.Item>
+      <Menu.Item
+        as={Link}
+        to='/headshops'>
+        <Header
+          as='h1'
+          className='fancy white'>
+          <Icon name='building' /> Headshops
+        </Header>
+      </Menu.Item>
+      <Menu.Item
+        as={Link}
+        to='/artists'>
+        <Header
+          as='h1'
+          className='fancy white'>
+          <Icon name='user circle' /> Artists
+        </Header>
+      </Menu.Item>
+      <Menu.Item
+        as={Link}
+        to='/pieces'>
+        <Header
+          as='h1'
+          className='fancy white'>
+          <Icon name='puzzle' /> Pieces
+        </Header>
       </Menu.Item>
     </View>
   );
@@ -189,6 +210,7 @@ function LeftMenu(props) {
 
 function Master(props) {
   const {
+    accessor,
     collection,
     path,
     title,
@@ -200,40 +222,93 @@ function Master(props) {
   if (!_collection) return null;
 
   const normalized = _collection.map(tuple => tuple[1]);
+  const resultified = normalized.map((item, index) => {
+    const {
+      name,
+      tagline,
+    } = item;
 
-  const items = normalized.map((item, index) => ({
-    key: index,
-    as: Link,
-    to: `/${path}/${item.id}`,
-    content: item.name,
-    onClick: () => onClick(item),
-  }));
+    return {
+      key: index,
+      title: name,
+      description: tagline,
+      onClick: () => onClick(item),
+    };
+  });
 
-  return (
+  return [
+    <Segment
+      key='segment'
+      className='no-margin'
+      inverted>
+      <Menu
+        inverted
+        widths={2}>
+        <Menu.Item
+          as='h2'
+          className='fancy'>
+          <Icon name={iconMap[title]} /> {title}
+        </Menu.Item>
+        <Menu.Menu position='right'>
+          <Menu.Item>
+            <Search
+              input='text'
+              results={resultified}
+              aligned='right' />
+          </Menu.Item>
+        </Menu.Menu>
+      </Menu>
+    </Segment>,
     <Menu
+      key='menu'
       inverted
       fluid
       vertical
-      className='transparent'
-      items={[
-        {
-          key: -1,
-          header: true,
-          as: 'h2',
-          content: title,
-        },
-        ...items
-      ]}>
-
+      className='no-margin transparent'>
+      {normalized.map((item, index) => (
+        <Menu.Item
+          key={index}
+          as={Link}
+          to={`/${path}/${item.id}`}
+          content={item.name}
+          onClick={() => onClick(item)}>
+          <Item.Header>
+            {item.name}
+          </Item.Header>
+          <Item.Content>
+            <Icon name='talk' /> {item.tagline}
+          </Item.Content>
+          <Item.Content>
+            <Icon name='flag' /> {item.address.city}, {item.address.state}
+          </Item.Content>
+          {item.memberSince && (
+            <Item.Content>
+              <Icon name='calendar' /> Member since {item.memberSince}
+            </Item.Content>
+          )}
+          <Item.Content>
+            <Label style={{ width: '5rem' }} attached='left' ribbon color='blue'>
+              <Icon name='empty star' /> Rating {item.rating}
+            </Label>
+          </Item.Content>
+        </Menu.Item>
+      ))}
     </Menu>
-  );
+  ];
 }
 
 function HeadshopsList(props) {
-  const { setHeadshop } = props;
+  const {
+    headshops,
+    setHeadshop,
+    getHeadshops,
+  } = props;
+
+  if (!headshops.length) getHeadshops();
 
   return (
     <Master
+      accessor='headshop'
       collection='headshops'
       path='headshop'
       title='Headshops'
@@ -243,7 +318,13 @@ function HeadshopsList(props) {
 }
 
 function ArtistsList(props) {
-  const { setArtist } = props;
+  const {
+    artists,
+    setArtist,
+    getArtists,
+  } = props;
+
+  if (!artists.length) getArtists();
 
   return (
     <Master
@@ -256,7 +337,13 @@ function ArtistsList(props) {
 }
 
 function PiecesList(props) {
-  const { setPiece } = props;
+  const {
+    pieces,
+    setPiece,
+    getPieces,
+  } = props;
+
+  if (!pieces.length) getPieces();
 
   return (
     <Master
@@ -319,8 +406,8 @@ function Detail(props) {
       <Label ribbon>
         <Header as='h2'>
           {name}
-          <Header.Subheader as='h3'>
-            <Icon name='user circle' /> {title}
+          <Header.Subheader className='fancy'>
+            <Icon name={iconMap[title]} /> {title}
           </Header.Subheader>
         </Header>
       </Label>
@@ -337,8 +424,7 @@ function Detail(props) {
             <Item.Description className='white'>
               <Icon name='flag' /> {city}, {state}
               <Label style={{ marginLeft: '1rem' }}>
-                <Icon
-                  name='map pin' /> Show on map
+                <Icon name='map pin' /> Show on map
               </Label>
             </Item.Description>
             <Item.Extra>
@@ -463,7 +549,17 @@ function Piece(props) {
 }
 
 function RightView(props) {
-  const { visible } = props;
+  const {
+    visible,
+
+    headshops,
+    artists,
+    pieces,
+
+    getHeadshops,
+    getArtists,
+    getPieces,
+  } = props;
 
   return (
     <View
@@ -479,15 +575,15 @@ function RightView(props) {
         <Route
           exact
           path='/headshops'
-          render={() => <HeadshopsList {...props} />} />
+          render={() => <HeadshopsList headshops={headshops} getHeadshops={getHeadshops} {...props} />} />
         <Route
           exact
           path='/artists'
-          render={() => <ArtistsList {...props} />} />
+          render={() => <ArtistsList artists={artists} getArtists={getArtists} {...props} />} />
         <Route
           exact
           path='/pieces'
-          render={() => <PiecesList {...props} />} />
+          render={() => <PiecesList pieces={pieces} getPieces={getPieces} {...props} />} />
         <Route
           exact
           path='/headshop/:id'
@@ -565,13 +661,29 @@ const INITIAL_STATE = {
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = { ...INITIAL_STATE };
+
+    const { location: { pathname } } = props;
+
+    this.state = {
+      ...INITIAL_STATE,
+      previousPath: pathname,
+    };
   }
 
   componentDidMount() {
     window.google
       ? this.initMap()
       : (window.initMap = () => this.initMap());
+  }
+
+  componentDidUpdate() {
+    const { location: { pathname } } = this.props;
+    const { previousPath } = this.state;
+
+    if (pathname !== previousPath) {
+      if (pathname !== '/') this.showRightView();
+      this.setState({ previousPath: pathname });
+    }
   }
 
   /* View controls */
@@ -588,7 +700,7 @@ class App extends Component {
   hideTopMenu = () => this.setState({ showTopMenu: false });
   toggleTopMenu = () => this.state.showTopMenu ? this.hideTopMenu() : this.showTopMenu();
 
-  showLeftMenu = () => this.hideAllViews() && this.setState({ showLeftMenu: true });
+  showLeftMenu = () => this.setState({ showLeftMenu: true });
   hideLeftMenu = () => this.setState({ showLeftMenu: false });
   toggleLeftMenu = () => this.state.showLeftMenu ? this.hideLeftMenu() : this.showLeftMenu();
 
@@ -837,10 +949,18 @@ class App extends Component {
             
             setHeadshop={this.setHeadshop} 
             setArtist={this.setArtist} 
-            setPiece={this.setPiece} />
+            setPiece={this.setPiece}
+            
+            getHeadshops={this.getHeadshops} 
+            getArtists={this.getArtists} 
+            getPieces={this.getPieces} />
           {/*<BottomView visible={showBottomView} />*/}
         </Sidebar.Pushable>
-        <BottomBar />
+        <BottomBar
+          showLeftMenu={showLeftMenu}          
+          showRightView={showRightView}
+          toggleLeftMenu={this.toggleLeftMenu}
+          toggleRightView={this.toggleRightView} />
       </Wrapper>
     );
   }
