@@ -6,6 +6,8 @@ import {
   withRouter,
 } from 'react-router-dom';
 import axios from 'axios';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 
 import './App.css';
 
@@ -966,4 +968,17 @@ class App extends Component {
   }
 }
 
-export default withRouter(App);
+const mapStateToProps = state => ({
+    main: state.main
+});
+
+const mapDispatchToProps = dispatch => ({
+  actions: bindActionCreators({}, dispatch)
+})
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(
+  withRouter(App)
+);
