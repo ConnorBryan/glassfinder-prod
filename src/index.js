@@ -14,6 +14,7 @@ import axios from 'axios';
     I m p o r t s
 */
 import {
+  Container,
   Menu,
 } from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css';
@@ -27,6 +28,9 @@ import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import {
   BrowserRouter as Router,
+  Link,
+  Route,
+  Switch,
 } from 'react-router-dom';
 
 /*
@@ -88,6 +92,7 @@ export const HANDLERS = {
 export const MODELS = [
   {
     type: 'headshopsById',
+    title: 'Headshops',
     url: '/headshops',
     getterType: 'GET_HEADSHOPS_BY_ID',
     getter: 'getHeadshopsById',
@@ -96,6 +101,7 @@ export const MODELS = [
   },
   {
     type: 'artistsById',
+    title: 'Artists',
     url: '/artists',
     getterType: 'GET_ARTISTS_BY_ID',
     getter: 'getArtistsById',
@@ -104,6 +110,7 @@ export const MODELS = [
   },
   {
     type: 'piecesById',
+    title: 'Pieces',
     url: '/pieces',
     getterType: 'GET_PIECES_BY_ID',
     getter: 'getPiecesById',
@@ -179,39 +186,81 @@ const STORE = configureStore();
  * @returns {Component}
  */
 export function DeveloperTools(props) {
-  const {
-    actions: {
-      getHeadshopsById,
-      getArtistsById,
-      getPiecesById,
-    },
-  } = props;
+  const modelItems = MODELS.map(({ title, url, getter }, index) => ({
+    key: index,
+    content: `Get ${title}`,
+    as: Link,
+    to: url,
+    onClick: props.actions[getter],
+  }));
 
   const items = [
     {
-      key: 0,
+      key: 'header',
       header: true,
       content: 'Developer Tools',
+      as: Link,
+      to: '/',
     },
-    {
-      key: 1,
-      content: 'Get Headshops',
-      onClick: getHeadshopsById,
-    },
-    {
-      key: 2,
-      content: 'Get Artists',
-      onClick: getArtistsById,
-    },
-    {
-      key: 3,
-      content: 'Get Pieces',
-      onClick: getPiecesById,
-    },
+    ...modelItems,
   ];
 
   return (
-    <Menu items={items} />
+    <Menu
+      inverted
+      items={items} />
+  );
+}
+
+/**
+ * @function Home
+ * @desc The default view for the application.
+ * @param {object} props 
+ * @returns {Component}
+ */
+export function Home(props) {
+  return (
+    <div>
+      Home
+    </div>
+  );
+}
+
+/**
+ * @function Master
+ * @desc A list-style view for browsing through models.
+ * @param {object} props 
+ * @returns {Component}
+ */
+export function Master(props) {
+  const {
+    type,
+  } = props;
+  
+  return (
+    <div>
+      Master
+      {type}
+    </div>
+  );
+}
+
+/**
+ * @function Detail
+ * @desc A view presenting more information about a model.
+ * @param {object} props 
+ * @returns {Component}
+ */
+export function Detail(props) {
+  const {
+    type,
+  } = props;
+
+  return (
+    <div>
+      Detail
+      {type}
+    </div>
   );
 }
 
@@ -239,17 +288,32 @@ export class BaseApp extends Component {
   }
 
   render() {
-    const {
-      actions: {
-        setLoading,
-        setVersion,
-      },
-    } = this.props;
-
     return (
-      <div>
-        <DeveloperTools {...this.props} />
-      </div>
+      <Container fluid>
+        <Router>
+          <div>
+            <DeveloperTools {...this.props} />
+            <Switch>
+              <Route
+                exact
+                path='/'
+                render={() => <Home {...this.props} />} />
+              {MODELS.map(({ type, url }, index) => [
+                <Route
+                  exact
+                  key={`${type}-master`}
+                  path={url}
+                  render={() => <Master type={type} {...this.props} />} />,
+                <Route
+                  exact
+                  key={`${type}-detail`}
+                  path={`${url}/:id`}
+                  render={() => <Detail type={type} {...this.props} />} />,
+              ])} 
+            </Switch>
+          </div>
+        </Router>
+      </Container>
     );
   }
 }
