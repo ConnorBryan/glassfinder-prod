@@ -56,7 +56,9 @@ export const CONSTANTS = {
   API_ROOT: 'http://localhost:6166',
 };
 
-/* R e d u x */
+/*
+  R e d u x
+*/
 export const ACTION_TYPES = {
   SET_ERROR: 'SET_ERROR',
   SET_VERSION: 'SET_VERSION',
@@ -88,7 +90,6 @@ export const HANDLERS = {
   [ACTION_TYPES.SET_INITIALIZED]: state => ({ ...state, initialized: true }),
 };
 
-/* M o d e l s */
 export const MODELS = [
   {
     type: 'headshopsById',
@@ -107,6 +108,15 @@ export const MODELS = [
     getter: 'getArtistsById',
     setterType: 'SET_ARTISTS_BY_ID',
     setter: 'setArtistsById',
+  },
+  {
+    type: 'companiesById',
+    title: 'Companies',
+    url: '/companies',
+    getterType: 'GET_COMPANIES_BY_ID',
+    getter: 'getCompaniesById',
+    setterType: 'SET_COMPANIES_BY_ID',
+    setter: 'setCompaniesById',
   },
   {
     type: 'piecesById',
@@ -145,9 +155,7 @@ export const modelGetter = modelConfig => () => async (dispatch, getState) => {
     dispatch(ACTIONS.setLoading(false));    
   }
 }
-
 export const modelSetter = config => (state, { [config.type]: data }) => ({ ...state, [config.type]: new Map(data) });
-
 export const generateModel = modelConfig => {
   const {
     type,
@@ -178,7 +186,9 @@ export const mapDispatchToProps = dispatch => ({ actions: bindActionCreators(ACT
 
 const STORE = configureStore();
 
-/* R e a c t */
+/*
+  R e a c t
+*/
 /**
  * @function DeveloperTools
  * @desc Useful for debugging purposes.
