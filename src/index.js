@@ -291,6 +291,20 @@ export function Detail(props) {
   } = props;
 
   /**
+   * @function Bar
+   * @desc A view that contains various sections to be displayed horizontally.
+   * @param {object} props
+   * @returns {Component}
+   */
+  function Bar(props) {
+    return (
+      <div>
+        Bar
+      </div>
+    );
+  }
+
+  /**
    * @function Nametag
    * @desc A view presenting the type, image and name of a model.
    * @param {object} props 
@@ -312,9 +326,7 @@ export function Detail(props) {
    */
   function InfoBar(props) {
     return (
-      <div>
-        InfoBar
-      </div>
+      <Bar />
     );
   }
 
@@ -327,9 +339,7 @@ export function Detail(props) {
    */
   function RatingBar(props) {
     return (
-      <div>
-        RatingBar
-      </div>
+      <Bar />
     );
   }
 
@@ -341,9 +351,7 @@ export function Detail(props) {
    */
   function ContactBar(props) {
     return (
-      <div>
-        ContactBar
-      </div>
+      <Bar />
     );
   }
 
