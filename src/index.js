@@ -184,7 +184,7 @@ export const configureStore = () => finalCreateStore(REDUCER, INITIAL_STATE);
 export const mapStateToProps = state => ({ ...state });
 export const mapDispatchToProps = dispatch => ({ actions: bindActionCreators(ACTIONS, dispatch) });
 
-const STORE = configureStore();
+export const STORE = configureStore();
 
 /*
   R e a c t
@@ -244,6 +244,18 @@ export function Home(props) {
  */
 export function Master(props) {
   const {
+    address,
+    description,
+    email,
+    id,
+    image,
+    images,
+    memberSince,
+    name,
+    phone,
+    position,
+    rating,
+    tagline,
     type,
   } = props;
   
@@ -263,13 +275,128 @@ export function Master(props) {
  */
 export function Detail(props) {
   const {
+    address,
+    description,
+    email,
+    id,
+    image,
+    images,
+    memberSince,
+    name,
+    phone,
+    position,
+    rating,
+    tagline,
     type,
   } = props;
 
+  /**
+   * @function Nametag
+   * @desc A view presenting the type, image and name of a model.
+   * @param {object} props 
+   * @returns {Component}
+   */
+  function Nametag(props) {
+    return (
+      <div>
+        Nametag
+      </div>
+    );
+  }
+
+  /**
+   * @function InfoBar
+   * @desc A view presenting the address and memberSince of a model.
+   * @param {object} props 
+   * @returns {Component}
+   */
+  function InfoBar(props) {
+    return (
+      <div>
+        InfoBar
+      </div>
+    );
+  }
+
+  /**
+   * @function RatingBar
+   * @desc A view presenting the rating of a model,
+   *       as well as ways of interacting with the rating.
+   * @param {object} props 
+   * @returns {Component}
+   */
+  function RatingBar(props) {
+    return (
+      <div>
+        RatingBar
+      </div>
+    );
+  }
+
+  /**
+   * @function ContactBar
+   * @desc A view presenting the phone number and email of a model.
+   * @param {object} props 
+   * @returns {Component}
+   */
+  function ContactBar(props) {
+    return (
+      <div>
+        ContactBar
+      </div>
+    );
+  }
+
+  /**
+   * @function DescriptionBox
+   * @desc A view presenting the description of a model.
+   * @param {object} props 
+   * @returns {Component}
+   */
+  function DescriptionBox(props) {
+    return (
+      <div>
+        DescriptionBox
+      </div>
+    );
+  }
+
+  /**
+   * @function Slider
+   * @desc A view acting as a collection for a series of images.
+   * @param {object} props 
+   * @returns {Component}
+   */
+  function Slider(props) {
+    return (
+      <div>
+        Slider
+      </div>
+    );
+  }
+
   return (
-    <div>
-      Detail
-      {type}
+    <div className='Detail'>
+      <Nametag
+        type={type}
+        image={image}
+        name={name} />
+
+      <InfoBar
+        address={address}
+        memberSince={memberSince} />
+      
+      <RatingBar
+        id={id}
+        rating={rating} />
+
+      <ContactBar
+        phone={phone}
+        email={email} />
+
+      <DescriptionBox description={description} />
+
+      <Slider images={images} />
     </div>
   );
 }
@@ -298,6 +425,7 @@ export class BaseApp extends Component {
   }
 
   render() {
+    console.log('App rendering with', this.props)
     return (
       <Container fluid>
         <Router>
