@@ -12,7 +12,8 @@
     "redux": "^3.7.2",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.2.0",
-    "semantic-ui-css": "^2.2.12"
+    "semantic-ui-css": "^2.2.12",
+    "string": "^3.3.3"
   },
   "scripts": {
     "start": "react-scripts start",

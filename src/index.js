@@ -8,6 +8,7 @@
     I m p o r t s
 */
 import axios from 'axios';
+import S from 'string';
 
 /*
   S t y l e
@@ -57,6 +58,92 @@ export const CONSTANTS = {
 };
 
 /*
+  M o d e l s
+*/
+const MODELS = [
+  {
+    singular: 'headshop',
+    plural: 'headshops',
+  },
+  {
+    singular: 'artist',
+    plural: 'artists',
+  },
+  {
+    singular: 'company',
+    plural: 'companies',
+  },
+  {
+    singular: 'piece',
+    plural: 'pieces',
+  },
+];
+
+export function generateReduxConfigFromModels(MODELS, ACTION_TYPES, ACTIONS, INITIAL_STATE, HANDLERS) {
+    MODELS.forEach(model => {
+      const { singular, plural } = model;
+
+      const capitalizedSingular = S(singular).capitalize();
+      const capitalizedPlural = S(plural).capitalize();
+      const uppercasePlural = capitalizedPlural.toUpperCase();
+
+      const SET_MODELS = `SET_${uppercasePlural}`;
+      const SET_MODEL = 'SET_MODEL';
+      const getModels = `get${capitalizedPlural}`;
+      const setModels = `set${capitalizedPlural}`;
+      const getModel = `get${capitalizedSingular}`;
+      const setModel = `set${capitalizedSingular}`;
+      
+      INITIAL_STATE[plural] = [];
+      ACTION_TYPES[SET_MODELS] = SET_MODELS;
+      ACTIONS[setModels] = data => ({ type: ACTION_TYPES[SET_MODELS], [plural]: data });
+      ACTIONS[setModel] = data => ({ type: ACTION_TYPES[SET_MODEL], model: data });
+      ACTIONS[getModels] = (sort, reversed) => async (dispatch, getState) => {
+        dispatch(ACTIONS.setLoading(true));
+
+        const { page } = getState();
+
+        try {
+          let path = `${CONSTANTS.API_ROOT}/${plural}?`;
+
+          path += `page=${page}&`;
+
+          if (sort) path += `sort=${sort}&`;
+          if (reversed) path += `reversed=${reversed}`;
+
+          const { data } = await axios.get(path);
+          
+          dispatch(ACTIONS[setModels](data));
+        } catch (e) {
+          dispatch(ACTIONS.setError({
+            error: e,
+            message: `Unable to fetch ${plural}`,
+          }));
+        } finally {
+          dispatch(ACTIONS.setLoading(false));
+        }
+      };
+      ACTIONS[getModel] = id => async (dispatch, getState) => {
+        dispatch(ACTIONS.setLoading(true));
+
+        try {
+          const { data } = axios.get(`${CONSTANTS.API_ROOT}/${singular}/${id}`);
+
+          dispatch(ACTIONS[setModel](data));
+        } catch (e) {
+          dispatch(ACTIONS.setError({
+            error: e,
+            message: `Unable to fetch ${singular} with ID ${id}`,
+          }));          
+        } finally {
+          dispatch(ACTIONS.setLoading(false));        
+        }
+      };
+      HANDLERS[SET_MODELS] = (state, { [plural]: data }) => ({ ...state, [plural]: data });      
+    });
+}
+
+/*
   R e d u x
 */
 export const ACTION_TYPES = {
@@ -64,6 +151,8 @@ export const ACTION_TYPES = {
   SET_VERSION: 'SET_VERSION',
   SET_LOADING: 'SET_LOADING',
   SET_INITIALIZED: 'SET_INITIALIZED',
+  SET_MODEL: 'SET_MODEL',
+  SET_PAGE: 'SET_PAGE',
   INITIALIZE: 'INITIALIZE',
 };
 
@@ -71,7 +160,9 @@ export const ACTIONS = {
   setError: error => ({ type: ACTION_TYPES.SET_ERROR, error }),
   setVersion: version => ({ type: ACTION_TYPES.SET_VERSION, version }),
   setLoading: isLoading => ({ type: ACTION_TYPES.SET_LOADING, isLoading }),
+  setModel: model => ({ type: ACTION_TYPES.SET_MODEL, model }),
   setInitialized: () => ({ type: ACTION_TYPES.SET_INITIALIZED }),
+  setPage: page => ({ type: ACTION_TYPES.SET_PAGE, page }),
   initialize: () => dispatch => {
     dispatch(ACTIONS.setVersion('1.0.1'));
     dispatch(ACTIONS.setInitialized());
@@ -81,97 +172,20 @@ export const ACTIONS = {
 export const INITIAL_STATE = {
   version: '1.0.0',
   isLoading: false,
+  model: null,
+  page: 0,
   initialized: false,
 };
 
 export const HANDLERS = {
   [ACTION_TYPES.SET_VERSION]: (state, { version }) => ({ ...state, version }),
   [ACTION_TYPES.SET_LOADING]: (state, { isLoading }) => ({ ...state, isLoading }),
+  [ACTION_TYPES.SET_MODEL]: (state, { model }) => ({ ...state, model }),
+  [ACTION_TYPES.SET_PAGE]: (state, { page }) => ({ ...state, page }),
   [ACTION_TYPES.SET_INITIALIZED]: state => ({ ...state, initialized: true }),
 };
 
-export const MODELS = [
-  {
-    type: 'headshopsById',
-    title: 'Headshops',
-    url: '/headshops',
-    getterType: 'GET_HEADSHOPS_BY_ID',
-    getter: 'getHeadshopsById',
-    setterType: 'SET_HEADSHOPS_BY_ID',
-    setter: 'setHeadshopsById',
-  },
-  {
-    type: 'artistsById',
-    title: 'Artists',
-    url: '/artists',
-    getterType: 'GET_ARTISTS_BY_ID',
-    getter: 'getArtistsById',
-    setterType: 'SET_ARTISTS_BY_ID',
-    setter: 'setArtistsById',
-  },
-  {
-    type: 'companiesById',
-    title: 'Companies',
-    url: '/companies',
-    getterType: 'GET_COMPANIES_BY_ID',
-    getter: 'getCompaniesById',
-    setterType: 'SET_COMPANIES_BY_ID',
-    setter: 'setCompaniesById',
-  },
-  {
-    type: 'piecesById',
-    title: 'Pieces',
-    url: '/pieces',
-    getterType: 'GET_PIECES_BY_ID',
-    getter: 'getPiecesById',
-    setterType: 'GET_PIECES_BY_ID',
-    setter: 'setPiecesById',
-  },
-];
-
-export const modelGetter = modelConfig => () => async (dispatch, getState) => {
-  const {
-    url,
-    setter,
-    type,
-  } = modelConfig;
-
-  const { [type]: oldData } = getState();
-
-  if (oldData) return;
-
-  try {
-    const path = `${CONSTANTS.API_ROOT}${url}`;
-    const { data } = await axios.get(path);
-
-    dispatch(ACTIONS.setLoading(true));
-    dispatch(ACTIONS[setter](data));
-  } catch (e) {
-    dispatch(ACTIONS.setError({
-      error: e,
-      message: `Unable to fetch ${type}`,
-    }));
-  } finally {
-    dispatch(ACTIONS.setLoading(false));    
-  }
-}
-export const modelSetter = config => (state, { [config.type]: data }) => ({ ...state, [config.type]: new Map(data) });
-export const generateModel = modelConfig => {
-  const {
-    type,
-    setterType,
-    getter,
-    setter,
-  } = modelConfig;
-
-  INITIAL_STATE[type] = null;
-  ACTION_TYPES[setterType] = setterType;
-  ACTIONS[getter] = modelGetter(modelConfig),
-  ACTIONS[setter] = data => ({ type: ACTION_TYPES[setterType], [type]: data }) ,
-  HANDLERS[[ACTION_TYPES[setterType]]] = modelSetter(modelConfig);
-}
-
-MODELS.forEach(modelConfig => generateModel(modelConfig));
+generateReduxConfigFromModels(MODELS, ACTION_TYPES, ACTIONS, INITIAL_STATE, HANDLERS);
 
 export const REDUCER = (state = INITIAL_STATE, action) => (
   HANDLERS[action.type]
@@ -196,12 +210,12 @@ export const STORE = configureStore();
  * @returns {Component}
  */
 export function DeveloperTools(props) {
-  const modelItems = MODELS.map(({ title, url, getter }, index) => ({
+  const modelItems = MODELS.map(({ singular, plural }, index) => ({
     key: index,
-    content: `Get ${title}`,
+    content: `Get ${S(plural).capitalize()}`,
     as: Link,
-    to: url,
-    onClick: props.actions[getter],
+    to: `/${plural}`,
+    onClick: () => props.actions[`get${S(plural).capitalize()}`](),
   }));
 
   const items = [
@@ -433,7 +447,6 @@ export class BaseApp extends Component {
   }
 
   render() {
-    console.log('App rendering with', this.props)
     return (
       <Container fluid>
         <Router>
@@ -444,17 +457,17 @@ export class BaseApp extends Component {
                 exact
                 path='/'
                 render={() => <Home {...this.props} />} />
-              {MODELS.map(({ type, url }, index) => [
+              {MODELS.map(({ singular, plural }, index) => [
                 <Route
                   exact
-                  key={`${type}-master`}
-                  path={url}
-                  render={() => <Master type={type} {...this.props} />} />,
+                  key={`${singular}-master`}
+                  path={`/${plural}`}
+                  render={() => <Master type={singular} {...this.props} />} />,
                 <Route
                   exact
-                  key={`${type}-detail`}
-                  path={`${url}/:id`}
-                  render={() => <Detail type={type} {...this.props} />} />,
+                  key={`${singular}-detail`}
+                  path={`/${singular}/:id`}
+                  render={() => <Detail type={singular} {...this.props} />} />,
               ])} 
             </Switch>
           </div>
@@ -463,25 +476,6 @@ export class BaseApp extends Component {
     );
   }
 }
-
-const getPropTypesFromModels = (previousPropTypes = {}) => {
-  MODELS.reduce((propTypes, { type }) => {
-    propTypes[type] = PropTypes.object;
-
-    return propTypes;
-  }, { ...previousPropTypes })
-};
-
-const getDefaultPropsFromModels = (previousDefaultProps = {}) => {
-  MODELS.reduce((defaultProps, { type }) => {
-    defaultProps[type] = new Map();
-    
-    return defaultProps;
-  }, { ...previousDefaultProps })
-};
-
-BaseApp.propTypes = getPropTypesFromModels();
-BaseApp.defaultProps = getDefaultPropsFromModels();
 
 /**
  * @const App
