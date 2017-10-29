@@ -15,10 +15,20 @@ import S from 'string';
     I m p o r t s
 */
 import {
+  Button,
   Container,
+  Dropdown,
+  Grid,
+  Header,
+  Icon,
+  Item,
+  Label,
   Menu,
+  Search,
+  Segment,
 } from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css';
+import './index.css';
 
 /*
   R e a c t
@@ -79,6 +89,15 @@ const MODELS = [
   },
 ];
 
+/**
+ * @function generateReduxConfigFromModels
+ * @desc Abstracts over the Redux boilerplate process for common themes across models.
+ * @param {Array<object>} MODELS 
+ * @param {object} ACTION_TYPES 
+ * @param {object} ACTIONS 
+ * @param {object} INITIAL_STATE 
+ * @param {object} HANDLERS 
+ */
 export function generateReduxConfigFromModels(MODELS, ACTION_TYPES, ACTIONS, INITIAL_STATE, HANDLERS) {
     MODELS.forEach(model => {
       const { singular, plural } = model;
@@ -111,9 +130,11 @@ export function generateReduxConfigFromModels(MODELS, ACTION_TYPES, ACTIONS, INI
           if (sort) path += `sort=${sort}&`;
           if (reversed) path += `reversed=${reversed}`;
 
-          const { data } = await axios.get(path);
+          const { data: { collection, collectionSize } } = await axios.get(path);
           
-          dispatch(ACTIONS[setModels](data));
+          dispatch(ACTIONS[setModels](collection));
+          dispatch(ACTIONS.setModelType(plural));
+          dispatch(ACTIONS.setCollectionSize(collectionSize));
         } catch (e) {
           dispatch(ACTIONS.setError({
             error: e,
@@ -126,10 +147,13 @@ export function generateReduxConfigFromModels(MODELS, ACTION_TYPES, ACTIONS, INI
       ACTIONS[getModel] = id => async (dispatch, getState) => {
         dispatch(ACTIONS.setLoading(true));
 
+        await new Promise(r => setTimeout(r, 1000));
+
         try {
-          const { data } = axios.get(`${CONSTANTS.API_ROOT}/${singular}/${id}`);
+          const { data } = await axios.get(`${CONSTANTS.API_ROOT}/${singular}/${id}`);
 
           dispatch(ACTIONS[setModel](data));
+          dispatch(ACTIONS.setModelType(singular));
         } catch (e) {
           dispatch(ACTIONS.setError({
             error: e,
@@ -143,6 +167,13 @@ export function generateReduxConfigFromModels(MODELS, ACTION_TYPES, ACTIONS, INI
     });
 }
 
+export const getModelSingular = plural => (
+  MODELS.filter(model => model.plural === plural).map(model => model.singular)[0] || null
+)
+export const getModelPlural = singular => (
+  MODELS.filter(model => model.singular === singular).map(model => model.plural)[0] || null
+)
+export const getModelGetter = model => `get${S(model).capitalize()}`
 /*
   R e d u x
 */
@@ -153,6 +184,9 @@ export const ACTION_TYPES = {
   SET_INITIALIZED: 'SET_INITIALIZED',
   SET_MODEL: 'SET_MODEL',
   SET_PAGE: 'SET_PAGE',
+  SET_MODEL_TYPE: 'SET_MODEL_TYPE',
+  SET_COLLECTION_SIZE: 'SET_COLLECTION_SIZE',
+  SET_MAPMARKERS: 'SET_MAPMARKERS',
   INITIALIZE: 'INITIALIZE',
 };
 
@@ -163,18 +197,54 @@ export const ACTIONS = {
   setModel: model => ({ type: ACTION_TYPES.SET_MODEL, model }),
   setInitialized: () => ({ type: ACTION_TYPES.SET_INITIALIZED }),
   setPage: page => ({ type: ACTION_TYPES.SET_PAGE, page }),
+  setModelType: modelType => ({ type: ACTION_TYPES.SET_MODEL_TYPE, modelType }),
+  setCollectionSize: collectionSize => ({ type: ACTION_TYPES.SET_COLLECTION_SIZE, collectionSize }),
+  setMapmarkers: mapmarkers => ({ type: ACTION_TYPES.SET_MAPMARKERS, mapmarkers }),
   initialize: () => dispatch => {
     dispatch(ACTIONS.setVersion('1.0.1'));
     dispatch(ACTIONS.setInitialized());
+  },
+  loadPage: page => (dispatch, getState) => {
+    const { modelType, collectionSize: lastPage } = getState();
+    const modelGetter = getModelGetter(modelType);
+
+    if ((page < 0) || (page >= lastPage)) return false;
+    
+    try {
+      dispatch(ACTIONS.setLoading(true));
+      dispatch(ACTIONS.setPage(page));
+      dispatch(ACTIONS[modelGetter]());
+    } catch (e) {
+      dispatch(ACTIONS.setError({
+        error: e,
+        message: `Unable to load page ${page} of ${modelType}`,
+      }));
+    } finally {
+      dispatch(ACTIONS.setLoading(false));
+    }
+  },
+  getMapmarkers: () => async dispatch => {
+    try {
+      const { data } = await axios.get(`${CONSTANTS.API_ROOT}/mapmarkers`);
+
+      dispatch(ACTIONS.setMapmarkers(data));
+    } catch (e) {
+      dispatch(ACTIONS.setError({
+        error: e,
+        message: `Unable to retrieve mapmarkers`,
+      }));
+    }
   },
 };
 
 export const INITIAL_STATE = {
   version: '1.0.0',
   isLoading: false,
-  model: null,
+  model: {},
   page: 0,
   initialized: false,
+  modelType: null,
+  mapmarkers: [],
 };
 
 export const HANDLERS = {
@@ -182,6 +252,9 @@ export const HANDLERS = {
   [ACTION_TYPES.SET_LOADING]: (state, { isLoading }) => ({ ...state, isLoading }),
   [ACTION_TYPES.SET_MODEL]: (state, { model }) => ({ ...state, model }),
   [ACTION_TYPES.SET_PAGE]: (state, { page }) => ({ ...state, page }),
+  [ACTION_TYPES.SET_MODEL_TYPE]: (state, { modelType }) => ({ ...state, modelType }),
+  [ACTION_TYPES.SET_COLLECTION_SIZE]: (state, { collectionSize }) => ({ ...state, collectionSize }),
+  [ACTION_TYPES.SET_MAPMARKERS]: (state, { mapmarkers }) => ({ ...state, mapmarkers }),
   [ACTION_TYPES.SET_INITIALIZED]: state => ({ ...state, initialized: true }),
 };
 
@@ -215,7 +288,10 @@ export function DeveloperTools(props) {
     content: `Get ${S(plural).capitalize()}`,
     as: Link,
     to: `/${plural}`,
-    onClick: () => props.actions[`get${S(plural).capitalize()}`](),
+    onClick: e => {
+      props.actions[getModelGetter(plural)]();
+      props.actions.setModelType(plural);
+    },
   }));
 
   const items = [
@@ -242,12 +318,74 @@ export function DeveloperTools(props) {
  * @param {object} props 
  * @returns {Component}
  */
-export function Home(props) {
-  return (
-    <div>
-      Home
-    </div>
-  );
+export class Home extends Component {
+  componentDidMount() {
+    window.google
+      ? this.initMap()
+      : (window.initMap = () => this.initMap());
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { mapmarkers } = nextProps;
+
+    if (mapmarkers.length > 0) {
+      this.renderMapmarkers();
+    }
+  }
+
+  async initMap() {
+    const {
+      headshops,
+      actions: {
+        getMapmarkers,
+      },
+    } = this.props;
+
+    this.map = new window.google.maps.Map(
+      document.getElementById('map'),
+      {
+        center: {
+          lat: 33.071875,
+          lng: -97.029784,
+        },
+        zoom: 14,
+      }
+    );
+
+    getMapmarkers();
+  }
+
+  renderMapmarkers() {
+    setTimeout(() => {
+
+      const {
+      history: { history },
+      mapmarkers,
+    } = this.props;
+
+    const addedMarkers = mapmarkers.map(headshop => new window.google.maps.Marker({
+      id: headshop.id,
+      title: headshop.name,
+      position: headshop.position,
+    }));
+
+    addedMarkers.forEach(mapmarker => {
+      const { id } = mapmarker;
+
+      mapmarker.addListener('click', () => history.push(`/headshop/${id}`));
+      mapmarker.setMap(this.map);
+    });
+
+    }, 1000);
+  }
+
+  render() {
+    return (
+      <Segment
+        raised
+        id='map' />
+    );
+  }
 }
 
 /**
@@ -256,29 +394,115 @@ export function Home(props) {
  * @param {object} props 
  * @returns {Component}
  */
-export function Master(props) {
-  const {
-    address,
-    description,
-    email,
-    id,
-    image,
-    images,
-    memberSince,
-    name,
-    phone,
-    position,
-    rating,
-    tagline,
-    type,
-  } = props;
-  
-  return (
-    <div>
-      Master
-      {type}
-    </div>
-  );
+export class Master extends Component {
+  render() {
+    const {
+      page,
+      collectionSize: lastPage,
+      type,
+      actions: {
+        loadPage,
+      },
+    } = this.props;
+    const { [type]: collection } = this.props;
+
+    const Pagination = () => !collection.length ? null : (
+      <Segment
+          attached='top'>
+          <Button.Group
+            compact
+            divided
+            widths={5}>
+              <Button
+                primary
+                disabled={page === 0}
+                icon='fast backward'
+                onClick={() => loadPage(0)} />
+              <Button
+                primary
+                disabled={page === 0}
+                icon='chevron left'
+                onClick={() => loadPage(page - 1)} />
+              <Button content={`${page + 1}`} />
+              <Button
+                primary
+                disabled={page + 1 >= lastPage}
+                icon='chevron right'
+                onClick={() => loadPage(page + 1)} />
+              <Button
+                primary
+                disabled={page + 1 >= lastPage}
+                icon='fast forward'
+                onClick={() => loadPage(lastPage - 1)} />
+          </Button.Group>
+        </Segment>
+    );
+
+    if (!collection) return null;
+
+    return (
+      <Container
+        stacked
+        as={Segment}>
+        <Segment attached='top'>
+          <Grid>
+            <Grid.Row columns={2}>
+              <Grid.Column>
+                <Header as='h3'>
+                  {S(type).capitalize().s}
+                </Header>
+              </Grid.Column>
+              <Grid.Column>
+                <Dropdown
+                  text='Sort'
+                  textAlign='right'>
+                  <Dropdown.Menu>
+                    <Dropdown.Item
+                      icon='star'
+                      text='Rating' />
+                  </Dropdown.Menu>
+                </Dropdown>
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
+        </Segment>
+        <Segment attached='top'>
+          <Search />
+        </Segment>
+        <Pagination />
+        <Segment
+          attached='top'
+          textAlign={!collection.length ? 'center' : 'left'}>
+          <Item.Group divided>
+            {collection.map((item, key) => (
+              <Item
+                as={Link}
+                key={key}
+                to={`/${getModelSingular(type)}/${item.id}`}>
+                <Item.Content>
+                  {item.name}
+                </Item.Content>
+                <Item.Content>
+                  <Icon name='announcement' /> {item.tagline}
+                </Item.Content>
+                <Item.Content>
+                  <Icon name='star' /> Rating {item.rating} / 5.00
+                </Item.Content>
+              </Item>
+            ))}
+            {!collection.length && (
+              <Item.Content>
+                <Icon name='warning sign' /> <br/>
+                No {type} found. <br />
+                Please try again later.
+              </Item.Content>
+            )}
+          </Item.Group>
+        </Segment>
+        <Pagination />
+      </Container>
+    );
+  }
 }
 
 /**
@@ -287,142 +511,117 @@ export function Master(props) {
  * @param {object} props 
  * @returns {Component}
  */
-export function Detail(props) {
-  const {
-    address,
-    description,
-    email,
-    id,
-    image,
-    images,
-    memberSince,
-    name,
-    phone,
-    position,
-    rating,
-    tagline,
-    type,
-  } = props;
+export class Detail extends Component {
+  static defaultProps = {
+    model: {},
+  };
 
-  /**
-   * @function Bar
-   * @desc A view that contains various sections to be displayed horizontally.
-   * @param {object} props
-   * @returns {Component}
-   */
-  function Bar(props) {
-    return (
-      <div>
-        Bar
-      </div>
-    );
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      model: {},
+    };
   }
 
-  /**
-   * @function Nametag
-   * @desc A view presenting the type, image and name of a model.
-   * @param {object} props 
-   * @returns {Component}
-   */
-  function Nametag(props) {
-    return (
-      <div>
-        Nametag
-      </div>
-    );
+  componentDidMount() {
+    const {
+      type,
+      location: { location: { pathname } }
+    } = this.props;
+    const { [getModelPlural(type)]: collection } = this.props;
+
+    const id = pathname.split('/').pop();
+    const model = collection.filter(model => model.id === id)[0] || {};
+    
+    this.setState({ model });
   }
 
-  /**
-   * @function InfoBar
-   * @desc A view presenting the address and memberSince of a model.
-   * @param {object} props 
-   * @returns {Component}
-   */
-  function InfoBar(props) {
+  render() {
+    let { type } = this.props;
+    const {
+      model: {
+        address,
+        description,
+        email,
+        id,
+        image,
+        images,
+        memberSince,
+        name,
+        phone,
+        position,
+        rating,
+        tagline,
+      },
+    } = this.state;
+
+    type = S(type).capitalize().s;
+
     return (
-      <Bar />
+      <Container as={Segment}>
+        <Label
+          ribbon
+          color='blue'
+          positon='top left'>
+          <Header as='h3'>
+            {type}
+          </Header>
+        </Label>
+        <Label position='right'>
+            Member since {memberSince}
+          </Label>
+        <Segment
+          secondary
+          textAlign='center'>
+          <Item>
+            <Item.Image
+              size='small'
+              src={image} />
+            <Item.Header as='h2'>
+              {name}
+            </Item.Header>
+            <Item.Content>
+              <Item.Meta>
+                <Icon name='announcement' /> {tagline}
+              </Item.Meta>
+            </Item.Content>
+          </Item>
+        </Segment>
+
+        <Menu
+          borderless
+          as={Segment}>
+          <Menu.Item>
+            <Icon name='star' /> Rating {rating} / 5.00
+          </Menu.Item>
+
+          <Menu.Menu position='right'>
+            <Menu.Item icon='chevron up' />
+            <Menu.Item icon='chevron down' />
+          </Menu.Menu>
+        </Menu>
+
+        <Segment>
+          <Label position='left'>
+            <Icon name='phone' /> {phone}
+          </Label>
+          <Label position='right'>
+            <Icon name='envelope' /> {email}
+          </Label>
+        </Segment>
+
+        <Segment>
+          <Header as='h3'>
+            About
+          </Header>
+          {description}
+        </Segment>
+      </Container>
     );
   }
-
-  /**
-   * @function RatingBar
-   * @desc A view presenting the rating of a model,
-   *       as well as ways of interacting with the rating.
-   * @param {object} props 
-   * @returns {Component}
-   */
-  function RatingBar(props) {
-    return (
-      <Bar />
-    );
-  }
-
-  /**
-   * @function ContactBar
-   * @desc A view presenting the phone number and email of a model.
-   * @param {object} props 
-   * @returns {Component}
-   */
-  function ContactBar(props) {
-    return (
-      <Bar />
-    );
-  }
-
-  /**
-   * @function DescriptionBox
-   * @desc A view presenting the description of a model.
-   * @param {object} props 
-   * @returns {Component}
-   */
-  function DescriptionBox(props) {
-    return (
-      <div>
-        DescriptionBox
-      </div>
-    );
-  }
-
-  /**
-   * @function Slider
-   * @desc A view acting as a collection for a series of images.
-   * @param {object} props 
-   * @returns {Component}
-   */
-  function Slider(props) {
-    return (
-      <div>
-        Slider
-      </div>
-    );
-  }
-
-  return (
-    <div className='Detail'>
-      <Nametag
-        type={type}
-        image={image}
-        name={name} />
-
-      <InfoBar
-        address={address}
-        memberSince={memberSince} />
-      
-      <RatingBar
-        id={id}
-        rating={rating} />
-
-      <ContactBar
-        phone={phone}
-        email={email} />
-
-      <DescriptionBox description={description} />
-
-      <Slider images={images} />
-    </div>
-  );
 }
-
+  
 /**
  * @class BaseApp
  * @desc This is the primary application delivered to the end user.
@@ -447,29 +646,36 @@ export class BaseApp extends Component {
   }
 
   render() {
+    const { isLoading } = this.props;
+
     return (
       <Container fluid>
         <Router>
           <div>
             <DeveloperTools {...this.props} />
-            <Switch>
-              <Route
-                exact
-                path='/'
-                render={() => <Home {...this.props} />} />
-              {MODELS.map(({ singular, plural }, index) => [
-                <Route
-                  exact
-                  key={`${singular}-master`}
-                  path={`/${plural}`}
-                  render={() => <Master type={singular} {...this.props} />} />,
-                <Route
-                  exact
-                  key={`${singular}-detail`}
-                  path={`/${singular}/:id`}
-                  render={() => <Detail type={singular} {...this.props} />} />,
-              ])} 
-            </Switch>
+            {isLoading
+              ? null
+              : (
+                <Switch>
+                  <Route
+                    exact
+                    path='/'
+                    render={history => <Home history={history} {...this.props} />} />
+                  {MODELS.map(({ singular, plural }, index) => [
+                    <Route
+                      exact
+                      key={`${singular}-master`}
+                      path={`/${plural}`}
+                      render={() => <Master type={plural} {...this.props} />} />,
+                    <Route
+                      exact
+                      key={`${singular}-detail`}
+                      path={`/${singular}/:id`}
+                      render={location => <Detail type={singular} location={location} {...this.props} />} />,
+                  ])} 
+                </Switch>
+              )
+            }
           </div>
         </Router>
       </Container>

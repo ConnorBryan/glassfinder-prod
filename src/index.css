@@ -1,0 +1,11 @@
+.segment .search > .input {
+  width: 100% !important;
+}
+
+.label .header {
+  color: white !important;
+}
+
+#map {
+  min-height: 80vh;
+}
