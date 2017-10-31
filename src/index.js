@@ -284,42 +284,6 @@ export const STORE = configureStore();
   R e a c t
 */
 /**
- * @function DeveloperTools
- * @desc Useful for debugging purposes.
- * @param {object} props 
- * @returns {Component}
- */
-export function DeveloperTools(props) {
-  const modelItems = MODELS.map(({ singular, plural }, index) => ({
-    key: index,
-    content: `Get ${S(plural).capitalize()}`,
-    as: Link,
-    to: `/${plural}`,
-    onClick: e => {
-      props.actions[getModelGetter(plural)]();
-      props.actions.setModelType(plural);
-    },
-  }));
-
-  const items = [
-    {
-      key: 'header',
-      header: true,
-      content: 'Developer Tools',
-      as: Link,
-      to: '/',
-    },
-    ...modelItems,
-  ];
-
-  return (
-    <Menu
-      inverted
-      items={items} />
-  );
-}
-
-/**
  * @function Home
  * @desc The default view for the application.
  * @param {object} props 
@@ -342,7 +306,6 @@ export class Home extends Component {
 
   async initMap() {
     const {
-      headshops,
       actions: {
         getMapmarkers,
       },
@@ -413,39 +376,6 @@ export class Master extends Component {
     } = this.props;
     const { [type]: collection } = this.props;
 
-    const Pagination = () => !collection.length ? null : (
-      <Segment
-          attached='top'>
-          <Button.Group
-            compact
-            widths={5}>
-              <Button
-                primary
-                disabled={page === 0}
-                icon='fast backward'
-                onClick={() => loadPage(0)} />
-              <Button
-                primary
-                disabled={page === 0}
-                icon='chevron left'
-                onClick={() => loadPage(page - 1)} />
-              <Button content={`${page + 1}`} />
-              <Button
-                primary
-                disabled={page + 1 >= lastPage}
-                icon='chevron right'
-                onClick={() => loadPage(page + 1)} />
-              <Button
-                primary
-                disabled={page + 1 >= lastPage}
-                icon='fast forward'
-                onClick={() => loadPage(lastPage - 1)} />
-          </Button.Group>
-        </Segment>
-    );
-
-    if (!collection) return null;
-
     return (
       <Segment>
         <Segment attached='top'>
@@ -471,7 +401,12 @@ export class Master extends Component {
         <Segment attached='top'>
           <Search />
         </Segment>
-        <Pagination />
+        {collection && collection.length && (
+          <Pagination
+            page={page}
+            lastPage={lastPage}
+            loadPage={loadPage }/>
+        )}
         <Segment attached='top'>
           <Item.Group>
             {collection.map((item, key) => (
@@ -499,7 +434,12 @@ export class Master extends Component {
             )}
           </Item.Group>
         </Segment>
-        <Pagination />
+        {collection && collection.length && (
+          <Pagination
+            page={page}
+            lastPage={lastPage}
+            loadPage={loadPage }/>
+        )}
       </Segment>
     );
   }
@@ -580,16 +520,12 @@ export class Detail extends Component {
     const {
       history,
       model: {
-        address,
         description,
         email,
-        id,
         image,
-        images,
         memberSince,
         name,
         phone,
-        position,
         rating,
         tagline,
       },
@@ -653,7 +589,7 @@ export class Detail extends Component {
           {description}
         </Segment>
       </Segment>,
-      <Segment key='sliders'>
+      <div key='sliders'>
         {sliders.map(({ type, collection }) => (
           <Slider
             key={type}
@@ -661,17 +597,99 @@ export class Detail extends Component {
             type={type}
             collection={collection} />
         ))}
-      </Segment>
+      </div>
     ];
   }
 }
 
+/**
+ * @function DeveloperTools
+ * @desc Useful for debugging purposes.
+ * @param {object} props 
+ * @returns {Component}
+ */
+export function DeveloperTools(props) {
+  const modelItems = MODELS.map(({ singular, plural }, index) => ({
+    key: index,
+    content: `Get ${S(plural).capitalize()}`,
+    as: Link,
+    to: `/${plural}`,
+    onClick: e => {
+      props.actions[getModelGetter(plural)]();
+      props.actions.setModelType(plural);
+    },
+  }));
+
+  const items = [
+    {
+      key: 'header',
+      header: true,
+      content: 'Developer Tools',
+      as: Link,
+      to: '/',
+    },
+    ...modelItems,
+  ];
+
+  return (
+    <Menu
+      inverted
+      items={items} />
+  );
+}
+
+/**
+ * @function Pagination
+ * @desc A subview presenting controls for paginating through a collection of models.
+ * @param {object} props 
+ * @returns {Component}
+ */
+export function Pagination(props) {
+  const { page, lastPage, loadPage } = props;
+
+  return (
+    <Segment
+        attached='top'>
+        <Button.Group
+          compact
+          widths={5}>
+            <Button
+              primary
+              disabled={page === 0}
+              icon='fast backward'
+              onClick={() => loadPage(0)} />
+            <Button
+              primary
+              disabled={page === 0}
+              icon='chevron left'
+              onClick={() => loadPage(page - 1)} />
+            <Button content={`${page + 1}`} />
+            <Button
+              primary
+              disabled={page + 1 >= lastPage}
+              icon='chevron right'
+              onClick={() => loadPage(page + 1)} />
+            <Button
+              primary
+              disabled={page + 1 >= lastPage}
+              icon='fast forward'
+              onClick={() => loadPage(lastPage - 1)} />
+        </Button.Group>
+      </Segment>
+  );
+}
+
+/**
+ * @function Slider
+ * @desc A subview presenting a type of model, as well as relevant images that link to a model.
+ * @param {object} props 
+ * @returns {Component}
+ */
 export function Slider(props) {
   const {
     history,
     type,
     collection,
-    images,
   } = props;
 
   const plural = getModelPlural(type);
