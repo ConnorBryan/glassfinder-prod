@@ -9,3 +9,13 @@
 #map {
   min-height: 80vh;
 }
+
+.Slider-images {
+  white-space: nowrap;
+  overflow-x: scroll;
+}
+
+.Slider-image {
+  display: inline-block !important;
+  margin-right: 0.5rem;
+}

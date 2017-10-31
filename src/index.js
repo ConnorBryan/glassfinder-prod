@@ -21,6 +21,7 @@ import {
   Grid,
   Header,
   Icon,
+  Image,
   Item,
   Label,
   Menu,
@@ -65,6 +66,12 @@ import {
 */
 export const CONSTANTS = {
   API_ROOT: 'http://localhost:6166',
+  ASSOCIATIONS: {
+    headshop: ['artist', 'company', 'piece'],
+    artist: ['headshop', 'company', 'piece'],
+    company: ['headshop', 'artist', 'piece'],
+    piece: ['headshop', 'artist', 'company'],
+  },
 };
 
 /*
@@ -411,7 +418,6 @@ export class Master extends Component {
           attached='top'>
           <Button.Group
             compact
-            divided
             widths={5}>
               <Button
                 primary
@@ -441,9 +447,7 @@ export class Master extends Component {
     if (!collection) return null;
 
     return (
-      <Container
-        stacked
-        as={Segment}>
+      <Segment>
         <Segment attached='top'>
           <Grid>
             <Grid.Row columns={2}>
@@ -453,9 +457,7 @@ export class Master extends Component {
                 </Header>
               </Grid.Column>
               <Grid.Column>
-                <Dropdown
-                  text='Sort'
-                  textAlign='right'>
+                <Dropdown text='Sort'>
                   <Dropdown.Menu>
                     <Dropdown.Item
                       icon='star'
@@ -470,10 +472,8 @@ export class Master extends Component {
           <Search />
         </Segment>
         <Pagination />
-        <Segment
-          attached='top'
-          textAlign={!collection.length ? 'center' : 'left'}>
-          <Item.Group divided>
+        <Segment attached='top'>
+          <Item.Group>
             {collection.map((item, key) => (
               <Item
                 as={Link}
@@ -500,7 +500,7 @@ export class Master extends Component {
           </Item.Group>
         </Segment>
         <Pagination />
-      </Container>
+      </Segment>
     );
   }
 }
@@ -520,26 +520,65 @@ export class Detail extends Component {
     super(props);
 
     this.state = {
-      model: {},
+      sliders: [],
     };
   }
 
   componentDidMount() {
     const {
       type,
-      location: { location: { pathname } }
+      location: { pathname },
+      actions: { setModel },
     } = this.props;
     const { [getModelPlural(type)]: collection } = this.props;
 
+    // Grab the local model.
     const id = pathname.split('/').pop();
-    const model = collection.filter(model => model.id === id)[0] || {};
+    const model = collection.filter(model => model.id === id)[0] || {};    
     
-    this.setState({ model });
+    setModel(model);
+
+    this.loadSliders(type, model);
+  }
+
+  /**
+   * @method loadSliders
+   * @desc Using the associated collections of IDs to other models,
+   *       create slider configuration objects.
+   * @param {*} type 
+   * @param {*} model 
+   */
+  loadSliders(type, model) {
+    const { actions: { setError } } = this.props;
+
+    const sliders = [];
+    
+    CONSTANTS.ASSOCIATIONS[type].forEach(async association => {
+      const plural = getModelPlural(association);
+      const collection = model[plural] || [];
+      const collectionById = collection.reduce((queryParam, id, i) => queryParam + `${i > 0 ? ',' : ''}${id}`, '');
+      
+      try {
+        const { data } = await axios.get(`${CONSTANTS.API_ROOT}/${plural}ById?collection=${collectionById}`);
+
+        sliders.push({
+          type: association,
+          collection: data,
+        });
+
+        this.setState({ sliders });
+      } catch (e) {
+        setError({
+          error: e,
+          message: `Failed while trying to retrieve sliders for ${type}`,
+        });
+      }
+    });
   }
 
   render() {
-    let { type } = this.props;
     const {
+      history,
       model: {
         address,
         description,
@@ -554,12 +593,14 @@ export class Detail extends Component {
         rating,
         tagline,
       },
-    } = this.state;
+    } = this.props;
+    let { type } = this.props;    
+    const { sliders } = this.state;
 
     type = S(type).capitalize().s;
 
-    return (
-      <Container as={Segment}>
+    return [
+      <Segment key='main'>
         <Label
           ribbon
           color='blue'
@@ -571,9 +612,7 @@ export class Detail extends Component {
         <Label position='right'>
             Member since {memberSince}
           </Label>
-        <Segment
-          secondary
-          textAlign='center'>
+        <Segment secondary>
           <Item>
             <Item.Image
               size='small'
@@ -588,20 +627,17 @@ export class Detail extends Component {
             </Item.Content>
           </Item>
         </Segment>
-
         <Menu
           borderless
           as={Segment}>
           <Menu.Item>
             <Icon name='star' /> Rating {rating} / 5.00
           </Menu.Item>
-
           <Menu.Menu position='right'>
             <Menu.Item icon='chevron up' />
             <Menu.Item icon='chevron down' />
           </Menu.Menu>
         </Menu>
-
         <Segment>
           <Label position='left'>
             <Icon name='phone' /> {phone}
@@ -610,18 +646,73 @@ export class Detail extends Component {
             <Icon name='envelope' /> {email}
           </Label>
         </Segment>
-
         <Segment>
           <Header as='h3'>
             About
           </Header>
           {description}
         </Segment>
-      </Container>
-    );
+      </Segment>,
+      <Segment key='sliders'>
+        {sliders.map(({ type, collection }) => (
+          <Slider
+            key={type}
+            history={history}
+            type={type}
+            collection={collection} />
+        ))}
+      </Segment>
+    ];
   }
 }
-  
+
+export function Slider(props) {
+  const {
+    history,
+    type,
+    collection,
+    images,
+  } = props;
+
+  const plural = getModelPlural(type);
+
+  return (
+    <Segment>
+      <Menu attached='top'>
+        <Menu.Item header>
+          {S(plural).capitalize().s}
+        </Menu.Item>
+        <Menu.Menu position='right'>
+          <Menu.Item>
+            Sort
+          </Menu.Item>
+        </Menu.Menu>
+      </Menu>
+      <Segment
+        className='Slider-images'
+        attached='bottom'>
+        {collection.map(({ id, image }, index) => (
+          <Image
+            className='Slider-image'
+            key={index}
+            src={image}
+            onClick={() => history.push(`/${type}/${id}`)} />
+        ))}
+      </Segment>
+    </Segment>
+  );
+}
+
+Slider.propTypes = {
+  type: PropTypes.string,
+  images: PropTypes.arrayOf(PropTypes.string),
+};
+
+Slider.defaultProps = {
+  type: '',
+  images: [],
+};
+
 /**
  * @class BaseApp
  * @desc This is the primary application delivered to the end user.
@@ -666,12 +757,21 @@ export class BaseApp extends Component {
                       exact
                       key={`${singular}-master`}
                       path={`/${plural}`}
-                      render={() => <Master type={plural} {...this.props} />} />,
+                      render={() => (
+                        <Master
+                          type={plural}
+                          {...this.props} />
+                      )} />,
                     <Route
                       exact
                       key={`${singular}-detail`}
                       path={`/${singular}/:id`}
-                      render={location => <Detail type={singular} location={location} {...this.props} />} />,
+                      render={router => (
+                        <Detail
+                          type={singular}
+                          {...this.props}
+                          {...router} />
+                      )} />,
                   ])} 
                 </Switch>
               )
