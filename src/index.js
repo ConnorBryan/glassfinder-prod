@@ -154,8 +154,6 @@ export function generateReduxConfigFromModels(MODELS, ACTION_TYPES, ACTIONS, INI
       ACTIONS[getModel] = id => async (dispatch, getState) => {
         dispatch(ACTIONS.setLoading(true));
 
-        await new Promise(r => setTimeout(r, 1000));
-
         try {
           const { data } = await axios.get(`${CONSTANTS.API_ROOT}/${singular}/${id}`);
 
@@ -181,6 +179,7 @@ export const getModelPlural = singular => (
   MODELS.filter(model => model.singular === singular).map(model => model.plural)[0] || null
 )
 export const getModelGetter = model => `get${S(model).capitalize()}`
+
 /*
   R e d u x
 */
@@ -247,7 +246,7 @@ export const ACTIONS = {
 export const INITIAL_STATE = {
   version: '1.0.0',
   isLoading: false,
-  model: {},
+  model: null,
   page: 0,
   initialized: false,
   modelType: null,
@@ -453,7 +452,7 @@ export class Master extends Component {
  */
 export class Detail extends Component {
   static defaultProps = {
-    model: {},
+    model: null,
   };
 
   constructor(props) {
@@ -467,18 +466,29 @@ export class Detail extends Component {
   componentDidMount() {
     const {
       type,
+      model: propsModel,
+      location,
       location: { pathname },
-      actions: { setModel },
     } = this.props;
-    const { [getModelPlural(type)]: collection } = this.props;
+    const {
+      [getModelPlural(type)]: collection,
+      actions: {
+        [getModelGetter(type)]: getModel,
+        setModel
+      },
+    } = this.props;
 
-    // Grab the local model.
     const id = pathname.split('/').pop();
-    const model = collection.filter(model => model.id === id)[0] || {};    
-    
-    setModel(model);
+    const model = propsModel || collection.filter(model => model.id === id)[0] || null;
 
-    this.loadSliders(type, model);
+    if (model && (model.id !== id)) return getModel(id);
+
+    if (model) {
+      setModel(model);
+      this.loadSliders(type, model);
+    } else {
+      getModel(id);
+    }
   }
 
   /**
@@ -517,21 +527,22 @@ export class Detail extends Component {
   }
 
   render() {
-    const {
-      history,
-      model: {
-        description,
-        email,
-        image,
-        memberSince,
-        name,
-        phone,
-        rating,
-        tagline,
-      },
-    } = this.props;
-    let { type } = this.props;    
+    const { history } = this.props;
+    let { type, model } = this.props;
     const { sliders } = this.state;
+    
+    if (!model) model = {};
+
+    const {
+      description,
+      email,
+      image,
+      memberSince,
+      name,
+      phone,
+      rating,
+      tagline,
+    } = model;
 
     type = S(type).capitalize().s;
 
