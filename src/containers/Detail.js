@@ -134,10 +134,17 @@ export default class Detail extends Component {
     const iconName = CONSTANTS.ICONS[type];
 
     return [
+      isLoading && (
+        <Dimmer
+          active
+          key='dimmer'>
+          <Loader active />
+        </Dimmer>
+      ),
       <Card
         color='blue'
         fluid
-        key='header'>
+        key='main'>
         <Card.Content extra>
           <Label
             ribbon
@@ -154,17 +161,9 @@ export default class Detail extends Component {
             color='blue'
             corner='right' />
         </Card.Content>
-      </Card>,
-      <Card
-        color='blue'
-        fluid
-        key='main'>
+        
         <Image src={image} />
-        {isLoading && (
-          <Dimmer active>
-            <Loader active />
-          </Dimmer>
-        )}
+       
         <Card.Content>
           <Card.Header
             className='fancy'>

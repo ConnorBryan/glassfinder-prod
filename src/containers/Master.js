@@ -56,7 +56,6 @@ export default class Master extends Component {
       <Segment.Group
         className='Master'
         key='data'>
-
         <Segment attached='top'>
           <Grid>
             <Grid.Row columns={2}>
@@ -75,18 +74,15 @@ export default class Master extends Component {
             </Grid.Row>
           </Grid>
         </Segment>
-
         <Segment attached='top'>
           <Search />
         </Segment>
-
         {collection.length > 0 && (
           <Pagination
             page={page}
             lastPage={lastPage}
             loadPage={loadPage }/>
         )}
-
         <Segment
           attached='top'
           as={Grid}
@@ -144,7 +140,6 @@ export default class Master extends Component {
               </Grid.Row>
             )}
         </Segment>
-        
         {collection.length > 0 && (
           <Pagination
             page={page}
