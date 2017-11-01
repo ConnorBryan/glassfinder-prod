@@ -66,6 +66,7 @@ body {
   z-index: 1 !important;
   text-align: center !important;
   border-radius: 0 !important;
-  position: fixed!important;
+  position: fixed !important;
+  border-bottom: 10vh solid black !important;
   bottom: 0 !important;
 }
