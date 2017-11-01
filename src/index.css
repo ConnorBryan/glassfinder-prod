@@ -37,7 +37,7 @@ body {
 .Layout {
   height: 100vh !important;
   margin: 0 !important;
-  overflow: hidden;
+  overflow: hidden !important;
 }
 
 .first-third {
