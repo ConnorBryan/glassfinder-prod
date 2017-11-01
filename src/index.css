@@ -48,21 +48,24 @@ body {
 }
 
 .second-third {
-  height: 72vh !important;
+  height: 94vh !important;
+  border-radius: 0 !important;
   margin: 0 !important;
   padding: 0 !important;
+  padding-bottom: 12vh !important;
   border: none !important;
   overflow-x: hidden;
 }
 
 #map {
-  min-height: 72vh;
+  min-height: 94vh !important;
 }
 
 .third-third {
-  height: 12vh !important;
   margin: 0 !important;
   z-index: 1 !important;
   text-align: center !important;
   border-radius: 0 !important;
+  position: fixed!important;
+  bottom: 0 !important;
 }
