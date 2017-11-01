@@ -2,7 +2,7 @@
   G L A S S F I N D E R
     by Connor Bryan
 */
-import { Container } from 'semantic-ui-react';
+import { Container, Segment } from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css';
 import './index.css';
 import React, { Component } from 'react';
@@ -13,6 +13,7 @@ import {
   Route,
   Switch,
 } from 'react-router-dom';
+
 import Home from './containers/Home';
 import Master from './containers/Master';
 import Detail from './containers/Detail';
@@ -21,10 +22,7 @@ import { connect, Provider } from 'react-redux';
 import MODELS from './models';
 import ACTION_CREATORS from './redux/actionCreators';
 import { bindActionCreators } from 'redux';
-import STORE from './redux';
-
-export const mapStateToProps = state => ({ ...state });
-export const mapDispatchToProps = dispatch => ({ actions: bindActionCreators(ACTION_CREATORS, dispatch) });
+import STORE, { mapStateToProps, mapDispatchToProps } from './redux';
 
 /**
  * @class BaseApp
@@ -45,18 +43,23 @@ export class BaseApp extends Component {
    */
   componentDidMount() {
     const { actions: { initialize } } = this.props;
-    
+
     initialize();
   }
 
   render() {
-    const { isLoading } = this.props;
+    const { error, isLoading } = this.props;
 
     return (
       <Container fluid>
         <Router>
           <div>
             <DeveloperTools {...this.props} />
+            {error && (
+              <Segment>
+                {error.message}
+              </Segment>
+            )}
             {isLoading
               ? null
               : (

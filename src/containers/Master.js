@@ -88,7 +88,7 @@ export default class Master extends Component {
           <Pagination
             page={page}
             lastPage={lastPage}
-            loadPage={loadPage }/>
+            loadPage={loadPage}/>
         )}
       </Segment>
     );

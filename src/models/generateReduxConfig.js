@@ -43,7 +43,7 @@ export default function generateReduxConfigFromModels(MODELS, ACTION_TYPES, ACTI
 
           if (sort) path += `sort=${sort}&`;
           if (reversed) path += `reversed=${reversed}`;
-
+          console.log('path', path)
           const { data: { collection, collectionSize } } = await axios.get(path);
           
           dispatch(ACTIONS[setModels](collection));
