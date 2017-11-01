@@ -1,3 +1,7 @@
+body {
+  background: black;
+}
+
 .segment .search > .input {
   width: 100% !important;
 }
@@ -42,11 +46,12 @@
 .first-third {
   height: 6vh !important;
   margin: 0 !important;
+  border-radius: 0 !important;
   z-index: 1 !important;
 }
 
 .second-third {
-  height: 82vh !important;
+  height: 72vh !important;
   margin: 0 !important;
   overflow: scroll;
   overflow-x: hidden;
@@ -57,4 +62,5 @@
   margin: 0 !important;
   z-index: 1 !important;
   text-align: center !important;
+  border-radius: 0 !important;
 }

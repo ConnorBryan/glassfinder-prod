@@ -122,11 +122,6 @@ export class BaseApp extends Component {
       <Router>
         <Layout {...this.props}>
             <div>
-              {error && (
-                <Segment>
-                  {error.message}
-                </Segment>
-              )}
             <Switch>
               <Route
                 exact
