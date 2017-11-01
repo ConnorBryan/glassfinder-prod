@@ -154,8 +154,12 @@ export default class Detail extends Component {
                 <Icon name='star' /> Rating {rating} / 5.00
               </Menu.Item>
               <Menu.Menu position='right'>
-                <Menu.Item icon='chevron up' />
-                <Menu.Item icon='chevron down' />
+                <Menu.Item
+                  icon='chevron up'
+                  onClick={() => {}} />
+                <Menu.Item
+                  icon='chevron down'
+                  onClick={() => {}} />
               </Menu.Menu>
             </Card.Description>
         </Card.Content>
@@ -190,9 +194,18 @@ export default class Detail extends Component {
           <Card.Description>
               <Button
                 basic
-                fluid
-                primary>
+                fluid>
                  View on map <Icon name='chevron right' />
+              </Button>
+            </Card.Description>
+        </Card.Content>
+
+        <Card.Content extra>
+          <Card.Description>
+              <Button
+                basic
+                fluid>
+                 View more images <Icon name='chevron right' />
               </Button>
             </Card.Description>
         </Card.Content>

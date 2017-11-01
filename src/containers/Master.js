@@ -80,10 +80,7 @@ export default class Master extends Component {
                     icon={iconName}
                     color='blue'
                     corner='right'/>
-                  <Item
-                    as={Link}
-                    key={key}
-                    to={`/${Formatters.getModelSingular(type)}/${item.id}`}>
+                  <Item>
                     <Item.Content
                       as='h3'>
                       {item.name}
