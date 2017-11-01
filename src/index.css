@@ -1,5 +1,6 @@
 body {
   background: black;
+  overflow: hidden !important;
 }
 
 .segment .search > .input {
@@ -48,17 +49,16 @@ body {
 }
 
 .second-third {
-  height: 94vh !important;
+  height: 85vh !important;
   border-radius: 0 !important;
   margin: 0 !important;
   padding: 0 !important;
-  padding-bottom: 12vh !important;
   border: none !important;
   overflow-x: hidden;
 }
 
 #map {
-  min-height: 94vh !important;
+  min-height: 85vh !important;
 }
 
 .third-third {
@@ -67,6 +67,6 @@ body {
   text-align: center !important;
   border-radius: 0 !important;
   position: fixed !important;
-  border-bottom: 10vh solid black !important;
+  border-bottom: 9vh solid black !important;
   bottom: 0 !important;
 }
