@@ -33,8 +33,6 @@ export default class Detail extends Component {
       type,
       model: propsModel,
       location: { pathname },
-    } = this.props;
-    const {
       [Formatters.getModelPlural(type)]: collection,
       actions: {
         [Formatters.getModelGetter(type)]: getModel,

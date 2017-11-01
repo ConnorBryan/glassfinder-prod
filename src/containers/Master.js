@@ -17,16 +17,28 @@ import * as Formatters from '../util/formatters';
 import Pagination from '../components/Pagination';
 
 export default class Master extends Component {
+  componentDidMount() {
+    const {
+        type,
+        [type]: collection,
+        actions: {
+          [Formatters.getModelGetter(type)]: getModels,
+        },
+      } = this.props;
+
+    if (collection.length === 0) getModels();
+  }
+
   render() {
     const {
       page,
       collectionSize: lastPage,
       type,
+      [type]: collection,
       actions: {
         loadPage,
       },
     } = this.props;
-    const { [type]: collection } = this.props;
 
     const iconName = CONSTANTS.ICONS[Formatters.getModelSingular(type)];
 
