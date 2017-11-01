@@ -49,11 +49,10 @@ export default class Detail extends Component {
 
     if (model) {
       setModel(model);
+      this.loadSliders(type, model);    
     } else {
       getModel(id);
     }
-
-    this.loadSliders(type, model);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -68,7 +67,7 @@ export default class Detail extends Component {
     const model = propsModel || collection.filter(model => model.id === id)[0] || null;
     const { model: nextModel } = nextProps;
 
-    if (!model && nextModel) this.loadSliders(type, nextModel);
+    if ((!model && nextModel) || model && (model.name !== nextModel.name)) this.loadSliders(type, nextModel);
   }
 
   /**
