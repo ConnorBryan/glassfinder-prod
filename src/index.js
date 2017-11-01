@@ -6,6 +6,7 @@ import { Container, Segment } from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css';
 import './index.css';
 import React, { Component } from 'react';
+import { connect, Provider } from 'react-redux';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import {
@@ -18,10 +19,7 @@ import Home from './containers/Home';
 import Master from './containers/Master';
 import Detail from './containers/Detail';
 import DeveloperTools from './components/DeveloperTools';
-import { connect, Provider } from 'react-redux';
 import MODELS from './models';
-import ACTION_CREATORS from './redux/actionCreators';
-import { bindActionCreators } from 'redux';
 import STORE, { mapStateToProps, mapDispatchToProps } from './redux';
 
 /**

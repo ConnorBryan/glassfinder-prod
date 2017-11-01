@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import {
+  Button,
+  Card,
   Header,
   Icon,
-  Item,
+  Image,
   Label,
   Menu,
   Segment,  
 } from 'semantic-ui-react';
-import S from 'string';
 import axios from 'axios';
 
 import CONSTANTS from '../constants';
@@ -90,13 +91,14 @@ export default class Detail extends Component {
   }
 
   render() {
-    const { history } = this.props;
-    let { type, model } = this.props;
+    const { history, type } = this.props;
+    let { model } = this.props;
     const { sliders } = this.state;
     
     if (!model) model = {};
 
     const {
+      address,
       description,
       email,
       image,
@@ -107,61 +109,101 @@ export default class Detail extends Component {
       tagline,
     } = model;
 
-    type = S(type).capitalize().s;
+    const iconName = CONSTANTS.ICONS[type];
 
     return [
-      <Segment key='main'>
-        <Label
-          ribbon
-          color='blue'
-          positon='top left'>
-          <Header as='h3'>
-            {type}
-          </Header>
-        </Label>
-        <Label position='right'>
-            Member since {memberSince}
+      <Card
+        color='blue'
+        fluid
+        key='derp'>
+        <Card.Content extra>
+          <Label
+            ribbon
+            color='blue'
+            positon='top right'>
+            <Header
+              as='h3'
+              className='fancy'>
+              {type}
+            </Header>
           </Label>
-        <Segment secondary>
-          <Item>
-            <Item.Image
-              size='small'
-              src={image} />
-            <Item.Header as='h2'>
-              {name}
-            </Item.Header>
-            <Item.Content>
-              <Item.Meta>
-                <Icon name='announcement' /> {tagline}
-              </Item.Meta>
-            </Item.Content>
-          </Item>
-        </Segment>
-        <Menu
-          borderless
-          as={Segment}>
-          <Menu.Item>
-            <Icon name='star' /> Rating {rating} / 5.00
-          </Menu.Item>
-          <Menu.Menu position='right'>
-            <Menu.Item icon='chevron up' />
-            <Menu.Item icon='chevron down' />
-          </Menu.Menu>
-        </Menu>
-        <Segment>
-          <Label position='left'>
+        </Card.Content>
+        
+        <Card.Content extra>
+          <Label
+            icon={iconName}
+            color='blue'
+            corner='right' />
+        </Card.Content>
+        
+        <Image src={image} />
+        
+        <Card.Content>
+          <Card.Header
+            className='fancy'>
+            {name}
+          </Card.Header>
+          <Card.Meta>
+            <Icon name='calendar' /> Member since {memberSince}
+          </Card.Meta>
+        </Card.Content>
+        
+        <Card.Content extra>
+          <Card.Description as={Menu}>
+              <Menu.Item>
+                <Icon name='star' /> Rating {rating} / 5.00
+              </Menu.Item>
+              <Menu.Menu position='right'>
+                <Menu.Item icon='chevron up' />
+                <Menu.Item icon='chevron down' />
+              </Menu.Menu>
+            </Card.Description>
+        </Card.Content>
+        
+        <Card.Content extra>
+          <Card.Description>
+            <Icon name='announcement' /> {tagline}
+          </Card.Description>
+        </Card.Content>
+        
+        <Card.Content extra>
+          <Card.Description>
             <Icon name='phone' /> {phone}
-          </Label>
-          <Label position='right'>
+          </Card.Description>
+        </Card.Content>
+
+        <Card.Content extra>
+          <Card.Description>
             <Icon name='envelope' /> {email}
-          </Label>
-        </Segment>
-        <Segment>
-          <Header as='h3'>
-            About
-          </Header>
-          {description}
-        </Segment>
+          </Card.Description>
+        </Card.Content>
+
+        {address && (
+          <Card.Content extra>
+            <Card.Description>
+              <Icon name='map pin' /> {address.city}, {address.state}
+            </Card.Description>
+          </Card.Content>
+        )}
+
+        <Card.Content extra>
+          <Card.Description>
+              <Button
+                basic
+                fluid
+                primary>
+                 View on map <Icon name='chevron right' />
+              </Button>
+            </Card.Description>
+        </Card.Content>
+      </Card>,
+      <Segment key='about'>
+        <Header
+          as='h3'
+          className='fancy'>
+          About
+        </Header>
+        {description}
       </Segment>,
       <div key='sliders'>
         {sliders.map(({ type, collection }) => (

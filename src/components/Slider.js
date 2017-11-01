@@ -7,6 +7,7 @@ import {
 } from 'semantic-ui-react';
 import S from 'string';
 
+import CONSTANTS from '../constants';
 import * as Formatters from '../util/formatters';
 
 /**
@@ -20,15 +21,19 @@ export function Slider({ collection, history, type }) {
 
   return (
     <Segment>
-      <Menu attached='top'>
-        <Menu.Item header>
+      <Menu
+        attached='top'
+        compact>
+        <Menu.Item
+          icon={CONSTANTS.ICONS[type]} />
+        <Menu.Item
+          className='fancy'
+          header>
           {S(plural).capitalize().s}
         </Menu.Item>
-        <Menu.Menu position='right'>
-          <Menu.Item>
-            Sort
-          </Menu.Item>
-        </Menu.Menu>
+        <Menu.Item position='right'>
+          <em>{collection.length} found.</em>
+        </Menu.Item>
       </Menu>
       <Segment
         className='Slider-images'
@@ -37,6 +42,8 @@ export function Slider({ collection, history, type }) {
           <Image
             className='Slider-image'
             key={index}
+            shape='rounded'
+            spaced='right'
             src={image}
             onClick={() => history.push(`/${type}/${id}`)} />
         ))}

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  Dropdown,
   Grid,
   Header,
   Icon,
@@ -72,12 +71,14 @@ export default class Master extends Component {
               to={`/${Formatters.getModelSingular(type)}/${item.id}`}>
               <Grid.Column width={4}>
                 <Image
+                  shape='circular'
                   size='tiny'
                   src={item.image} />
               </Grid.Column>
                 <Grid.Column width={12}>
                   <Label
                     icon={iconName}
+                    color='blue'
                     corner='right'/>
                   <Item
                     as={Link}
