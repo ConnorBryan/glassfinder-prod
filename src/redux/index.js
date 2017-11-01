@@ -42,8 +42,8 @@ export const ACTION_HANDLERS = {
 
     try {
       dispatch(ACTION_HANDLERS.setLoading(true));
-      dispatch(ACTION_HANDLERS[modelGetter](page));
       dispatch(ACTION_HANDLERS.setPage(page));
+      dispatch(ACTION_HANDLERS[modelGetter](page));
     } catch (e) {
       dispatch(ACTION_HANDLERS.setError({
         error: e,

@@ -45,9 +45,11 @@ export default class Slider extends Component {
         <Menu
           attached='top'
           compact>
-          <Menu.Item
-            icon={expanded ? 'caret up' : 'caret down'}
-            onClick={this.toggleExpanded} />
+          {collection.length > 0 && (
+            <Menu.Item
+              icon={expanded ? 'caret up' : 'caret down'}
+              onClick={this.toggleExpanded} />
+          )}
           <Menu.Item
             className='fancy'
             header>
@@ -57,7 +59,7 @@ export default class Slider extends Component {
             <em>{collection.length} found.</em>
           </Menu.Item>
         </Menu>
-        {expanded && (
+        {expanded && collection.length > 0 && (
           <Segment
             className='Slider-images'
             attached='bottom'>

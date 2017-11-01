@@ -53,6 +53,7 @@ body {
   border-radius: 0 !important;
   margin: 0 !important;
   padding: 0 !important;
+  padding-bottom: 20vh !important;
   border: none !important;
   overflow-x: hidden;
 }

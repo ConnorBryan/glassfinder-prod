@@ -76,17 +76,21 @@ export function Layout(props) {
         className='third-third'
         fluid
         widths={CONSTANTS.MODEL_TYPES_SINGULAR.length}>
-        {CONSTANTS.MODEL_TYPES_SINGULAR.map((model, index) => (
-          <Menu.Item
-            as={Link}
-            key={index}
-            to={`/${Formatters.getModelPlural(model)}`}>
-            <Icon
-              circular
-              name={CONSTANTS.ICONS[model]}
-              size='large' />
-          </Menu.Item>
-        ))}
+        {CONSTANTS.MODEL_TYPES_SINGULAR.map((model, index) => {
+          const plural = Formatters.getModelPlural(model);
+
+          return (
+            <Menu.Item
+              as={Link}
+              key={index}
+              to={`/${plural}`}>
+              <Icon
+                circular
+                name={CONSTANTS.ICONS[model]}
+                size='large' />
+            </Menu.Item>
+          );
+        })}
       </Menu>
     </div>
   );
@@ -116,8 +120,6 @@ export class BaseApp extends Component {
   }
 
   render() {
-    const { error } = this.props;
-
     return (
       <Router>
         <Layout {...this.props}>

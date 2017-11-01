@@ -31,7 +31,7 @@ export default function generateReduxConfigFromModels(MODELS, ACTION_TYPES, ACTI
       ACTION_TYPES[SET_MODELS] = SET_MODELS;
       ACTIONS[setModels] = data => ({ type: ACTION_TYPES[SET_MODELS], [plural]: data });
       ACTIONS[setModel] = data => ({ type: ACTION_TYPES[SET_MODEL], model: data });
-      ACTIONS[getModels] = (sort, reversed) => async (dispatch, getState) => {
+      ACTIONS[getModels] = (page, sort, reversed) => async (dispatch, getState) => {
         dispatch(ACTIONS.setLoading(true));
 
         const { page } = getState();

@@ -1,14 +1,12 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  Dimmer,
   Grid,
   Header,
   Icon,
   Image,
   Item,
   Label,
-  Loader,
   Search,
   Segment,
 } from 'semantic-ui-react';
@@ -34,7 +32,6 @@ export default class Master extends Component {
   render() {
     const {
       collectionSize: lastPage,
-      isLoading,
       page,
       type,
       [type]: collection,
@@ -45,14 +42,7 @@ export default class Master extends Component {
 
     const iconName = CONSTANTS.ICONS[Formatters.getModelSingular(type)];
 
-    return [
-      isLoading && (
-        <Dimmer
-          active
-          key='dimmer'>
-          <Loader active />
-        </Dimmer>
-      ),
+    return (
       <Segment.Group
         className='Master'
         key='data'>
@@ -81,7 +71,7 @@ export default class Master extends Component {
           <Pagination
             page={page}
             lastPage={lastPage}
-            loadPage={loadPage }/>
+            loadPage={loadPage}/>
         )}
         <Segment
           attached='top'
@@ -147,6 +137,6 @@ export default class Master extends Component {
             loadPage={loadPage}/>
         )}
       </Segment.Group>
-    ];
+    );
   }
 }
