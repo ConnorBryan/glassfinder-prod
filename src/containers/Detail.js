@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
-import S from 'string';
-import axios from 'axios';
 import {
-  Segment,
-  Label,
   Header,
   Icon,
   Item,
+  Label,
   Menu,
+  Segment,  
 } from 'semantic-ui-react';
+import S from 'string';
+import axios from 'axios';
 
 import CONSTANTS from '../constants';
 import * as Formatters from '../util/formatters';

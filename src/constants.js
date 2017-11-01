@@ -9,4 +9,10 @@ export default {
     company: ['headshop', 'artist', 'piece'],
     piece: ['headshop', 'artist', 'company'],
   },
+  ICONS: {
+    headshop: 'cart',
+    artist: 'paint brush',
+    company: 'building',
+    piece: 'puzzle',
+  },
 };
