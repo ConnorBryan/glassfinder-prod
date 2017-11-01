@@ -2,9 +2,6 @@
   G L A S S F I N D E R
     by Connor Bryan
 */
-import { Container, Segment } from 'semantic-ui-react';
-import 'semantic-ui-css/semantic.min.css';
-import './index.css';
 import React, { Component } from 'react';
 import { connect, Provider } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -14,6 +11,8 @@ import {
   Route,
   Switch,
 } from 'react-router-dom';
+import 'semantic-ui-css/semantic.min.css';
+import { Container, Segment } from 'semantic-ui-react';
 
 import Home from './containers/Home';
 import Master from './containers/Master';
@@ -21,6 +20,7 @@ import Detail from './containers/Detail';
 import DeveloperTools from './components/DeveloperTools';
 import MODELS from './models';
 import STORE, { mapStateToProps, mapDispatchToProps } from './redux';
+import './index.css';
 
 /**
  * @class BaseApp
@@ -46,7 +46,7 @@ export class BaseApp extends Component {
   }
 
   render() {
-    const { error, isLoading } = this.props;
+    const { error } = this.props;
 
     return (
       <Container fluid>
@@ -58,38 +58,33 @@ export class BaseApp extends Component {
                 {error.message}
               </Segment>
             )}
-            {isLoading
-              ? null
-              : (
-                <Switch>
-                  <Route
-                    exact
-                    path='/'
-                    render={history => <Home history={history} {...this.props} />} />
-                  {MODELS.map(({ singular, plural }, index) => [
-                    <Route
-                      exact
-                      key={`${singular}-master`}
-                      path={`/${plural}`}
-                      render={() => (
-                        <Master
-                          type={plural}
-                          {...this.props} />
-                      )} />,
-                    <Route
-                      exact
-                      key={`${singular}-detail`}
-                      path={`/${singular}/:id`}
-                      render={router => (
-                        <Detail
-                          type={singular}
-                          {...this.props}
-                          {...router} />
-                      )} />,
-                  ])} 
-                </Switch>
-              )
-            }
+            <Switch>
+              <Route
+                exact
+                path='/'
+                render={history => <Home history={history} {...this.props} />} />
+              {MODELS.map(({ singular, plural }, index) => [
+                <Route
+                  exact
+                  key={`${singular}-master`}
+                  path={`/${plural}`}
+                  render={() => (
+                    <Master
+                      type={plural}
+                      {...this.props} />
+                  )} />,
+                <Route
+                  exact
+                  key={`${singular}-detail`}
+                  path={`/${singular}/:id`}
+                  render={router => (
+                    <Detail
+                      type={singular}
+                      {...this.props}
+                      {...router} />
+                  )} />,
+              ])} 
+            </Switch>
           </div>
         </Router>
       </Container>

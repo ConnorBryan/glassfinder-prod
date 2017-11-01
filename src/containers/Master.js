@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import {
+  Dimmer,
   Grid,
   Header,
   Icon,
   Image,
   Item,
   Label,
+  Loader,
   Search,
   Segment,
 } from 'semantic-ui-react';
@@ -31,8 +33,9 @@ export default class Master extends Component {
 
   render() {
     const {
-      page,
       collectionSize: lastPage,
+      isLoading,
+      page,
       type,
       [type]: collection,
       actions: {
@@ -42,26 +45,34 @@ export default class Master extends Component {
 
     const iconName = CONSTANTS.ICONS[Formatters.getModelSingular(type)];
 
-    return (
-      <Segment>
-        <Segment attached='top'>
-          <Grid>
-            <Grid.Row columns={2}>
-              <Grid.Column>
-                <Header
-                  as='h3'
-                  className='fancy'>
-                  {S(type).capitalize().s}
-                </Header>
-              </Grid.Column>
-              <Grid.Column textAlign='right'>
-                <Icon
-                  name={iconName}
-                  size='large' />
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
-        </Segment>
+    return [
+      <Segment
+        attached='top'
+        key='header'>
+        <Grid>
+          <Grid.Row columns={2}>
+            <Grid.Column>
+              <Header
+                as='h3'
+                className='fancy'>
+                {S(type).capitalize().s}
+              </Header>
+            </Grid.Column>
+            <Grid.Column textAlign='right'>
+              <Icon
+                name={iconName}
+                size='large' />
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
+      </Segment>,
+
+      <Segment.Group key='data'>
+        {isLoading && (
+          <Dimmer active>
+            <Loader active />
+          </Dimmer>
+        )}
         <Segment attached='top'>
           <Search />
         </Segment>
@@ -134,7 +145,7 @@ export default class Master extends Component {
             lastPage={lastPage}
             loadPage={loadPage}/>
         )}
-      </Segment>
-    );
+      </Segment.Group>
+    ];
   }
 }

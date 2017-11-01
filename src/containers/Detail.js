@@ -2,10 +2,12 @@ import React, { Component } from 'react';
 import {
   Button,
   Card,
+  Dimmer,
   Header,
   Icon,
   Image,
   Label,
+  Loader,
   Menu,
   Segment,  
 } from 'semantic-ui-react';
@@ -47,9 +49,31 @@ export default class Detail extends Component {
 
     if (model) {
       setModel(model);
-      this.loadSliders(type, model);
     } else {
       getModel(id);
+    }
+
+    this.loadSliders(type, model);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const {
+      type,
+      model: propsModel,
+      location: { pathname },
+      [Formatters.getModelPlural(type)]: collection,
+    } = this.props;
+
+    const id = pathname.split('/').pop();
+    const model = propsModel || collection.filter(model => model.id === id)[0] || null;
+    const { model: nextModel } = nextProps;
+
+    if (!model && nextModel) {
+      try {
+        this.loadSliders(type, nextModel);
+      } catch (e) {
+        // Pass
+      }
     }
   }
 
@@ -64,6 +88,8 @@ export default class Detail extends Component {
     const { actions: { setError } } = this.props;
 
     const sliders = [];
+
+    if (!model) return;
     
     CONSTANTS.ASSOCIATIONS[type].forEach(async association => {
       const plural = Formatters.getModelPlural(association);
@@ -77,7 +103,7 @@ export default class Detail extends Component {
           type: association,
           collection: data,
         });
-
+        
         this.setState({ sliders });
       } catch (e) {
         setError({
@@ -89,7 +115,11 @@ export default class Detail extends Component {
   }
 
   render() {
-    const { history, type } = this.props;
+    const {
+      history,
+      isLoading,
+      type,
+    } = this.props;
     let { model } = this.props;
     const { sliders } = this.state;
     
@@ -113,7 +143,7 @@ export default class Detail extends Component {
       <Card
         color='blue'
         fluid
-        key='derp'>
+        key='header'>
         <Card.Content extra>
           <Label
             ribbon
@@ -125,17 +155,22 @@ export default class Detail extends Component {
               {type}
             </Header>
           </Label>
-        </Card.Content>
-        
-        <Card.Content extra>
           <Label
             icon={iconName}
             color='blue'
             corner='right' />
         </Card.Content>
-        
+      </Card>,
+      <Card
+        color='blue'
+        fluid
+        key='main'>
         <Image src={image} />
-        
+        {isLoading && (
+          <Dimmer active>
+            <Loader active />
+          </Dimmer>
+        )}
         <Card.Content>
           <Card.Header
             className='fancy'>
@@ -193,7 +228,7 @@ export default class Detail extends Component {
               <Button
                 basic
                 fluid>
-                 View on map <Icon name='chevron right' />
+                View on map <Icon name='chevron right' />
               </Button>
             </Card.Description>
         </Card.Content>
@@ -203,12 +238,13 @@ export default class Detail extends Component {
               <Button
                 basic
                 fluid>
-                 View more images <Icon name='chevron right' />
+                View more images <Icon name='chevron right' />
               </Button>
             </Card.Description>
         </Card.Content>
       </Card>,
-      <Segment key='about'>
+      
+      !isLoading && <Segment key='about'>
         <Header
           as='h3'
           className='fancy'>
@@ -216,6 +252,7 @@ export default class Detail extends Component {
         </Header>
         {description}
       </Segment>,
+      
       <div key='sliders'>
         {sliders.map(({ type, collection }) => (
           <Slider
