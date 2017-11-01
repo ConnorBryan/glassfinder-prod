@@ -28,3 +28,8 @@
 .Master-item .image {
   margin-top: 1rem;
 }
+
+.Master .segment {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}

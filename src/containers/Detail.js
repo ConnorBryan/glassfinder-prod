@@ -68,13 +68,7 @@ export default class Detail extends Component {
     const model = propsModel || collection.filter(model => model.id === id)[0] || null;
     const { model: nextModel } = nextProps;
 
-    if (!model && nextModel) {
-      try {
-        this.loadSliders(type, nextModel);
-      } catch (e) {
-        // Pass
-      }
-    }
+    if (!model && nextModel) this.loadSliders(type, nextModel);
   }
 
   /**
@@ -103,7 +97,7 @@ export default class Detail extends Component {
           type: association,
           collection: data,
         });
-        
+
         this.setState({ sliders });
       } catch (e) {
         setError({

@@ -46,42 +46,47 @@ export default class Master extends Component {
     const iconName = CONSTANTS.ICONS[Formatters.getModelSingular(type)];
 
     return [
-      <Segment
-        attached='top'
-        key='header'>
-        <Grid>
-          <Grid.Row columns={2}>
-            <Grid.Column>
-              <Header
-                as='h3'
-                className='fancy'>
-                {S(type).capitalize().s}
-              </Header>
-            </Grid.Column>
-            <Grid.Column textAlign='right'>
-              <Icon
-                name={iconName}
-                size='large' />
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
-      </Segment>,
+      isLoading && (
+        <Dimmer
+          active
+          key='dimmer'>
+          <Loader active />
+        </Dimmer>
+      ),
+      <Segment.Group
+        className='Master'
+        key='data'>
 
-      <Segment.Group key='data'>
-        {isLoading && (
-          <Dimmer active>
-            <Loader active />
-          </Dimmer>
-        )}
+        <Segment attached='top'>
+          <Grid>
+            <Grid.Row columns={2}>
+              <Grid.Column>
+                <Header
+                  as='h3'
+                  className='fancy'>
+                  {S(type).capitalize().s}
+                </Header>
+              </Grid.Column>
+              <Grid.Column textAlign='right'>
+                <Icon
+                  name={iconName}
+                  size='large' />
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
+        </Segment>
+
         <Segment attached='top'>
           <Search />
         </Segment>
+
         {collection.length > 0 && (
           <Pagination
             page={page}
             lastPage={lastPage}
             loadPage={loadPage }/>
         )}
+
         <Segment
           attached='top'
           as={Grid}
@@ -139,6 +144,7 @@ export default class Master extends Component {
               </Grid.Row>
             )}
         </Segment>
+        
         {collection.length > 0 && (
           <Pagination
             page={page}
