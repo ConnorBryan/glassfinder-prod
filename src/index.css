@@ -10,10 +10,6 @@ body {
   color: white !important;
 }
 
-#map {
-  min-height: 80vh;
-}
-
 .Slider-images {
   white-space: nowrap;
   overflow-x: scroll;
@@ -41,6 +37,7 @@ body {
 .Layout {
   height: 100vh !important;
   margin: 0 !important;
+  overflow: hidden;
 }
 
 .first-third {
@@ -53,8 +50,13 @@ body {
 .second-third {
   height: 72vh !important;
   margin: 0 !important;
-  overflow: scroll;
+  padding: 0 !important;
+  border: none !important;
   overflow-x: hidden;
+}
+
+#map {
+  min-height: 72vh;
 }
 
 .third-third {
