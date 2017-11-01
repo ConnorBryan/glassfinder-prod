@@ -2,12 +2,10 @@ import React, { Component } from 'react';
 import {
   Button,
   Card,
-  Dimmer,
   Header,
   Icon,
   Image,
   Label,
-  Loader,
   Menu,
   Segment,  
 } from 'semantic-ui-react';
@@ -67,7 +65,7 @@ export default class Detail extends Component {
     const model = propsModel || collection.filter(model => model.id === id)[0] || null;
     const { model: nextModel } = nextProps;
 
-    if ((!model && nextModel) || model && (model.name !== nextModel.name)) this.loadSliders(type, nextModel);
+    if ((!model && nextModel) || (model && (model.name !== nextModel.name))) this.loadSliders(type, nextModel);
   }
 
   /**
@@ -108,11 +106,7 @@ export default class Detail extends Component {
   }
 
   render() {
-    const {
-      history,
-      isLoading,
-      type,
-    } = this.props;
+    const { history, type } = this.props;
     let { model } = this.props;
     const { sliders } = this.state;
     
@@ -133,13 +127,6 @@ export default class Detail extends Component {
     const iconName = CONSTANTS.ICONS[type];
 
     return [
-      isLoading && (
-        <Dimmer
-          active
-          key='dimmer'>
-          <Loader active />
-        </Dimmer>
-      ),
       <Card
         color='blue'
         fluid
@@ -236,7 +223,7 @@ export default class Detail extends Component {
         </Card.Content>
       </Card>,
       
-      !isLoading && <Segment key='about'>
+      <Segment key='about'>
         <Header
           as='h3'
           className='fancy'>

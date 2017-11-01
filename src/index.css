@@ -33,3 +33,28 @@
   margin-top: 0 !important;
   margin-bottom: 0 !important;
 }
+
+.Layout {
+  height: 100vh !important;
+  margin: 0 !important;
+}
+
+.first-third {
+  height: 6vh !important;
+  margin: 0 !important;
+  z-index: 1 !important;
+}
+
+.second-third {
+  height: 82vh !important;
+  margin: 0 !important;
+  overflow: scroll;
+  overflow-x: hidden;
+}
+
+.third-third {
+  height: 12vh !important;
+  margin: 0 !important;
+  z-index: 1 !important;
+  text-align: center !important;
+}

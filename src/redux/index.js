@@ -18,6 +18,7 @@ import HANDLERS from './actionHandlers';
 export const INITIAL_STATE = {
   version: '1.0.0',
   isLoading: false,
+  fetchingModels: false,
   model: null,
   page: 0,
   initialized: false,

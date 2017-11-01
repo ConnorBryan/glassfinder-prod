@@ -1,6 +1,3 @@
-/*
-  C o n s t a n t s
-*/
 export default {
   API_ROOT: 'http://localhost:6166',
   ASSOCIATIONS: {
@@ -9,6 +6,8 @@ export default {
     company: ['headshop', 'artist', 'piece'],
     piece: ['headshop', 'artist', 'company'],
   },
+  MODEL_TYPES_SINGULAR: ['headshop', 'artist', 'company', 'piece'],
+  MODEL_TYPES_PLURAL: ['headshops', 'artists', 'companies', 'pieces'],
   ICONS: {
     headshop: 'cart',
     artist: 'paint brush',

@@ -14,8 +14,7 @@ export default function Pagination(props) {
   return (
     <Segment
       attached='top'
-      className='Pagination'
-      primary>
+      className='Pagination'>
       <Button.Group
         compact
         widths={5}>

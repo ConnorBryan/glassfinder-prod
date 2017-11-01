@@ -8,19 +8,89 @@ import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import {
   BrowserRouter as Router,
+  Link,
   Route,
   Switch,
 } from 'react-router-dom';
 import 'semantic-ui-css/semantic.min.css';
-import { Container, Segment } from 'semantic-ui-react';
+import {
+  Dimmer,
+  Icon,
+  Image,
+  Loader,
+  Menu,
+  Segment
+} from 'semantic-ui-react';
 
+import * as Formatters from './util/formatters';
+import CONSTANTS from './constants';
 import Home from './containers/Home';
 import Master from './containers/Master';
 import Detail from './containers/Detail';
-import DeveloperTools from './components/DeveloperTools';
 import MODELS from './models';
 import STORE, { mapStateToProps, mapDispatchToProps } from './redux';
 import './index.css';
+
+export function Layout(props) {
+  const {
+    isLoading,
+  } = props;
+
+  return (
+    <div className='Layout'>
+        <Menu
+          className='first-third'
+          fluid>
+          <Menu.Item
+            as={Link}
+            className='fancy'
+            header
+            to='/'>
+            <Image size='tiny' src='/logo.png' />
+          </Menu.Item>
+          <Menu.Menu position='right'>
+            <Menu.Item
+              as={Link}
+              to='/sign-in'>
+              <Icon name='sign in' /> Sign in
+            </Menu.Item>
+            <Menu.Item
+              as={Link}
+              to='/sign-up'>
+              <Icon name='user plus' /> Sign up
+            </Menu.Item>
+          </Menu.Menu>
+        </Menu>
+          <Segment
+            attached='top'        
+            className='second-third'>
+            {!isLoading ? props.children : (
+              <Dimmer
+                active
+                className='second-third'>
+                <Loader active />
+              </Dimmer>
+            )}
+          </Segment>
+      <Menu
+        className='third-third'
+        fluid
+        widths={CONSTANTS.MODEL_TYPES_SINGULAR.length}>
+        {CONSTANTS.MODEL_TYPES_SINGULAR.map((model, index) => (
+          <Menu.Item
+            as={Link}
+            key={index}
+            to={`/${Formatters.getModelPlural(model)}`}>
+            <Icon
+              circular
+              name={CONSTANTS.ICONS[model]}
+              size='large' />
+          </Menu.Item>
+        ))}
+      </Menu>
+    </div>
+  );
+}
 
 /**
  * @class BaseApp
@@ -49,15 +119,14 @@ export class BaseApp extends Component {
     const { error } = this.props;
 
     return (
-      <Container fluid>
-        <Router>
-          <div>
-            <DeveloperTools {...this.props} />
-            {error && (
-              <Segment>
-                {error.message}
-              </Segment>
-            )}
+      <Router>
+        <Layout {...this.props}>
+            <div>
+              {error && (
+                <Segment>
+                  {error.message}
+                </Segment>
+              )}
             <Switch>
               <Route
                 exact
@@ -86,8 +155,8 @@ export class BaseApp extends Component {
               ])} 
             </Switch>
           </div>
-        </Router>
-      </Container>
+      </Layout>
+    </Router>
     );
   }
 }
