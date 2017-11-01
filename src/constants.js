@@ -1,5 +1,5 @@
 export default {
-  API_ROOT: 'http://138.197.17.204:6166',
+  API_ROOT: 'http://localhost:6166',
   ASSOCIATIONS: {
     headshop: ['artist', 'company', 'piece'],
     artist: ['headshop', 'company', 'piece'],
