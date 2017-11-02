@@ -14,6 +14,7 @@ import S from 'string';
 
 import CONSTANTS from '../constants';
 import * as Formatters from '../util/formatters';
+import Map from '../components/Map';
 import Pagination from '../components/Pagination';
 
 export default class Master extends Component {
@@ -42,7 +43,10 @@ export default class Master extends Component {
 
     const iconName = CONSTANTS.ICONS[Formatters.getModelSingular(type)];
 
-    return (
+    return [
+      <Map
+        key='map'
+        {...this.props} />,
       <Segment.Group
         className='Master'
         key='data'>
@@ -137,6 +141,6 @@ export default class Master extends Component {
             loadPage={loadPage}/>
         )}
       </Segment.Group>
-    );
+    ];
   }
 }

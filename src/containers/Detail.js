@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import {
   Button,
   Card,
-  Container,
   Header,
   Icon,
   Image,
@@ -14,7 +13,6 @@ import axios from 'axios';
 
 import CONSTANTS from '../constants';
 import * as Formatters from '../util/formatters';
-import Map from '../components/Map';
 import Slider from '../components/Slider';
 
 export default class Detail extends Component {
@@ -128,13 +126,8 @@ export default class Detail extends Component {
 
     const iconName = CONSTANTS.ICONS[type];
 
-    return [
-      <Map
-        key='map'
-        {...this.props} />,
-      <Segment
-        key='detail'
-        basic> 
+    return (
+      <Segment basic> 
           <Card
           color='blue'
           fluid
@@ -239,6 +232,6 @@ export default class Detail extends Component {
           ))}
         </div>
       </Segment>
-    ]
+    );
   }
 }

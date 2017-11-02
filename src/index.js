@@ -164,10 +164,11 @@ export class BaseApp extends Component {
                         exact
                         key={`${singular}-master`}
                         path={`/${plural}`}
-                        render={() => (
+                        render={router => (
                           <Master
                             type={plural}
-                            {...this.props} />
+                            {...this.props}
+                            {...router} />
                         )} />,
                       <Route
                         exact
