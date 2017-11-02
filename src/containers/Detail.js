@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {
   Button,
   Card,
+  Container,
   Header,
   Icon,
   Image,
@@ -126,121 +127,123 @@ export default class Detail extends Component {
 
     const iconName = CONSTANTS.ICONS[type];
 
-    return [
-      <Card
-        color='blue'
-        fluid
-        key='main'>
-        <Card.Content extra>
-          <Label
-            ribbon
-            color='blue'
-            positon='top right'>
-            <Header
-              as='h3'
+    return (
+      <Container>
+        <Card
+          color='blue'
+          fluid
+          key='main'>
+          <Card.Content extra>
+            <Label
+              ribbon
+              color='blue'
+              positon='top right'>
+              <Header
+                as='h3'
+                className='fancy'>
+                {type}
+              </Header>
+            </Label>
+            <Label
+              icon={iconName}
+              color='blue'
+              corner='right' />
+          </Card.Content>
+          
+          <Image src={image} />
+        
+          <Card.Content>
+            <Card.Header
               className='fancy'>
-              {type}
-            </Header>
-          </Label>
-          <Label
-            icon={iconName}
-            color='blue'
-            corner='right' />
-        </Card.Content>
-        
-        <Image src={image} />
-       
-        <Card.Content>
-          <Card.Header
-            className='fancy'>
-            {name}
-          </Card.Header>
-          <Card.Meta>
-            <Icon name='calendar' /> Member since {memberSince}
-          </Card.Meta>
-        </Card.Content>
-        
-        <Card.Content extra>
-          <Card.Description as={Menu}>
-              <Menu.Item>
-                <Icon name='star' /> Rating {rating} / 5.00
-              </Menu.Item>
-              <Menu.Menu position='right'>
-                <Menu.Item
-                  icon='chevron up'
-                  onClick={() => {}} />
-                <Menu.Item
-                  icon='chevron down'
-                  onClick={() => {}} />
-              </Menu.Menu>
-            </Card.Description>
-        </Card.Content>
-        
-        <Card.Content extra>
-          <Card.Description>
-            <Icon name='announcement' /> {tagline}
-          </Card.Description>
-        </Card.Content>
-        
-        <Card.Content extra>
-          <Card.Description>
-            <Icon name='phone' /> {phone}
-          </Card.Description>
-        </Card.Content>
-
-        <Card.Content extra>
-          <Card.Description>
-            <Icon name='envelope' /> {email}
-          </Card.Description>
-        </Card.Content>
-
-        {address && (
+              {name}
+            </Card.Header>
+            <Card.Meta>
+              <Icon name='calendar' /> Member since {memberSince}
+            </Card.Meta>
+          </Card.Content>
+          
+          <Card.Content extra>
+            <Card.Description as={Menu}>
+                <Menu.Item>
+                  <Icon name='star' /> Rating {rating} / 5.00
+                </Menu.Item>
+                <Menu.Menu position='right'>
+                  <Menu.Item
+                    icon='chevron up'
+                    onClick={() => {}} />
+                  <Menu.Item
+                    icon='chevron down'
+                    onClick={() => {}} />
+                </Menu.Menu>
+              </Card.Description>
+          </Card.Content>
+          
           <Card.Content extra>
             <Card.Description>
-              <Icon name='map pin' /> {address.city}, {address.state}
+              <Icon name='announcement' /> {tagline}
             </Card.Description>
           </Card.Content>
-        )}
-
-        <Card.Content extra>
-          <Card.Description>
-              <Button
-                basic
-                fluid>
-                View on map <Icon name='chevron right' />
-              </Button>
+          
+          <Card.Content extra>
+            <Card.Description>
+              <Icon name='phone' /> {phone}
             </Card.Description>
-        </Card.Content>
+          </Card.Content>
 
-        <Card.Content extra>
-          <Card.Description>
-              <Button
-                basic
-                fluid>
-                View more images <Icon name='chevron right' />
-              </Button>
+          <Card.Content extra>
+            <Card.Description>
+              <Icon name='envelope' /> {email}
             </Card.Description>
-        </Card.Content>
-      </Card>,
-      
-      <Segment key='about'>
-        <Header
-          as='h3'
-          className='fancy'>
-          About
-        </Header>
-        {description}
-      </Segment>,
-      
-      <div key='sliders'>
-        {sliders.map(({ type, collection }) => (
-          <Slider
-            key={type}
-            history={history}
-            type={type}
-            collection={collection} />
-        ))}
-      </div>
-    ];
+          </Card.Content>
+
+          {address && (
+            <Card.Content extra>
+              <Card.Description>
+                <Icon name='map pin' /> {address.city}, {address.state}
+              </Card.Description>
+            </Card.Content>
+          )}
+
+          <Card.Content extra>
+            <Card.Description>
+                <Button
+                  basic
+                  fluid>
+                  View on map <Icon name='chevron right' />
+                </Button>
+              </Card.Description>
+          </Card.Content>
+
+          <Card.Content extra>
+            <Card.Description>
+                <Button
+                  basic
+                  fluid>
+                  View more images <Icon name='chevron right' />
+                </Button>
+              </Card.Description>
+          </Card.Content>
+        </Card>
+        
+        <Segment key='about'>
+          <Header
+            as='h3'
+            className='fancy'>
+            About
+          </Header>
+          {description}
+        </Segment>
+        
+        <div key='sliders'>
+          {sliders.map(({ type, collection }) => (
+            <Slider
+              key={type}
+              history={history}
+              type={type}
+              collection={collection} />
+          ))}
+        </div>
+      </Container>
+    )
   }
 }

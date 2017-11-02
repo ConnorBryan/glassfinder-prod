@@ -36,6 +36,29 @@ export function Layout(props) {
     isLoading,
   } = props;
 
+  const things = (
+    <Menu
+      className='third-third'
+      fluid
+      widths={CONSTANTS.MODEL_TYPES_SINGULAR.length}>
+      {CONSTANTS.MODEL_TYPES_SINGULAR.map((model, index) => {
+        const plural = Formatters.getModelPlural(model);
+
+        return (
+          <Menu.Item
+            as={Link}
+            key={index}
+            to={`/${plural}`}>
+            <Icon
+              circular
+              name={CONSTANTS.ICONS[model]}
+              size='large' />
+          </Menu.Item>
+        );
+      })}
+    </Menu>
+  );
+
   return (
     <div className='Layout'>
         <Menu
@@ -72,26 +95,6 @@ export function Layout(props) {
               </Dimmer>
             )}
           </Segment>
-      <Menu
-        className='third-third'
-        fluid
-        widths={CONSTANTS.MODEL_TYPES_SINGULAR.length}>
-        {CONSTANTS.MODEL_TYPES_SINGULAR.map((model, index) => {
-          const plural = Formatters.getModelPlural(model);
-
-          return (
-            <Menu.Item
-              as={Link}
-              key={index}
-              to={`/${plural}`}>
-              <Icon
-                circular
-                name={CONSTANTS.ICONS[model]}
-                size='large' />
-            </Menu.Item>
-          );
-        })}
-      </Menu>
     </div>
   );
 }
