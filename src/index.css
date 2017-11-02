@@ -1,3 +1,20 @@
+html {
+  min-width: 424px !important;
+}
+
+body {
+  min-width: 424px !important;
+}
+
+.AgeGate {
+  text-align: center !important;
+}
+
+.AgeGate .content {
+  margin-top: 5vh !important;
+  height: 30vh !important;  
+}
+
 .segment .search > .input {
   width: 100% !important;
 }

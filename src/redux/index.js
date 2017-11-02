@@ -6,6 +6,7 @@ import {
 } from 'redux';
 import thunk from 'redux-thunk';
 import axios from 'axios';
+import Cookies from 'universal-cookie';
 
 import CONSTANTS from '../constants';
 import * as Formatters from '../util/formatters';
@@ -15,7 +16,10 @@ import ACTION_TYPES from './actionTypes';
 import ACTION_CREATORS from './actionCreators';
 import HANDLERS from './actionHandlers';
 
+const COOKIES = new Cookies();
+
 export const INITIAL_STATE = {
+  hasPassedAgeGate: !!COOKIES.get(CONSTANTS.HAS_PASSED_AGE_GATE_COOKIE),
   version: '1.0.0',
   isLoading: false,
   fetchingModels: false,
@@ -26,7 +30,13 @@ export const INITIAL_STATE = {
   mapmarkers: [],
 };
 
-generateReduxConfigFromModels(MODELS, ACTION_TYPES, ACTION_CREATORS, INITIAL_STATE, HANDLERS);
+generateReduxConfigFromModels(
+  MODELS,
+  ACTION_TYPES,
+  ACTION_CREATORS,
+  INITIAL_STATE,
+  HANDLERS
+);
 
 export const ACTION_HANDLERS = {
   ...ACTION_CREATORS,
@@ -64,6 +74,22 @@ export const ACTION_HANDLERS = {
         message: `Unable to retrieve mapmarkers`,
       }));
     }
+  },
+  checkAgeGate: () => (dispatch, getState) => {
+    const { hasPassedAgeGate } = getState();
+
+    if (hasPassedAgeGate) return;
+
+    const hasPassedAgeGateCookie = COOKIES.get(CONSTANTS.HAS_PASSED_AGE_GATE_COOKIE);
+
+    dispatch(ACTION_CREATORS.setHasPassedAgeGate(hasPassedAgeGateCookie));
+  },
+  passAgeGate: () => dispatch => {
+    const hasPassedAgeGateCookie = COOKIES.get(CONSTANTS.HAS_PASSED_AGE_GATE_COOKIE);
+
+    if (!hasPassedAgeGateCookie) COOKIES.set(CONSTANTS.HAS_PASSED_AGE_GATE_COOKIE, true, { path: '/' });
+
+    dispatch(ACTION_CREATORS.setHasPassedAgeGate(true));
   },
 };
 

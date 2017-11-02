@@ -14,4 +14,5 @@ export default {
     company: 'building',
     piece: 'puzzle',
   },
+  HAS_PASSED_AGE_GATE_COOKIE: 'HAS_PASSED_AGE_GATE',
 };

@@ -1,6 +1,7 @@
 import ACTION_TYPES from './actionTypes';
 
 export default {
+  setHasPassedAgeGate: hasPassedAgeGate => ({ type: ACTION_TYPES.SET_HAS_PASSED_AGE_GATE, hasPassedAgeGate }),
   setError: error => ({ type: ACTION_TYPES.SET_ERROR, error }),
   setVersion: version => ({ type: ACTION_TYPES.SET_VERSION, version }),
   setLoading: isLoading => ({ type: ACTION_TYPES.SET_LOADING, isLoading }),

@@ -14,6 +14,7 @@ import {
 } from 'react-router-dom';
 import 'semantic-ui-css/semantic.min.css';
 import {
+  Container,
   Dimmer,
   Icon,
   Image,
@@ -22,8 +23,7 @@ import {
   Segment
 } from 'semantic-ui-react';
 
-import * as Formatters from './util/formatters';
-import CONSTANTS from './constants';
+import AgeGate from './containers/AgeGate';
 import Home from './containers/Home';
 import Master from './containers/Master';
 import Detail from './containers/Detail';
@@ -32,32 +32,7 @@ import STORE, { mapStateToProps, mapDispatchToProps } from './redux';
 import './index.css';
 
 export function Layout(props) {
-  const {
-    isLoading,
-  } = props;
-
-  const things = (
-    <Menu
-      className='third-third'
-      fluid
-      widths={CONSTANTS.MODEL_TYPES_SINGULAR.length}>
-      {CONSTANTS.MODEL_TYPES_SINGULAR.map((model, index) => {
-        const plural = Formatters.getModelPlural(model);
-
-        return (
-          <Menu.Item
-            as={Link}
-            key={index}
-            to={`/${plural}`}>
-            <Icon
-              circular
-              name={CONSTANTS.ICONS[model]}
-              size='large' />
-          </Menu.Item>
-        );
-      })}
-    </Menu>
-  );
+  const { isLoading } = props;
 
   return (
     <div className='Layout'>
@@ -84,17 +59,21 @@ export function Layout(props) {
             </Menu.Item>
           </Menu.Menu>
         </Menu>
-          <Segment
+
+          <Container
             attached='top'        
             className='second-third'>
-            {!isLoading ? props.children : (
-              <Dimmer
-                active
-                className='second-third'>
-                <Loader active />
-              </Dimmer>
-            )}
-          </Segment>
+            <Segment>
+              {!isLoading ? props.children : (
+                <Dimmer
+                  active
+                  className='second-third'
+                  style={{ height: '90vh' }}>
+                  <Loader active />
+                </Dimmer>
+              )}
+            </Segment>
+          </Container>
     </div>
   );
 }
@@ -117,44 +96,63 @@ export class BaseApp extends Component {
    *    M E T H O D S
    */
   componentDidMount() {
-    const { actions: { initialize } } = this.props;
+    const {
+      setReduxProps,
+      actions: { initialize },
+    } = this.props;
 
+    setReduxProps({...this.props});
     initialize();
   }
 
+  componentDidUpdate() {
+    const { setReduxProps } = this.props;
+
+    setReduxProps({ ...this.props });
+  }
+
   render() {
+    const {
+        hasPassedAgeGate,
+        actions: { passAgeGate },
+      } = this.props;
+
     return (
       <Router>
         <Layout {...this.props}>
-            <div>
-            <Switch>
-              <Route
-                exact
-                path='/'
-                render={history => <Home history={history} {...this.props} />} />
-              {MODELS.map(({ singular, plural }, index) => [
-                <Route
-                  exact
-                  key={`${singular}-master`}
-                  path={`/${plural}`}
-                  render={() => (
-                    <Master
-                      type={plural}
-                      {...this.props} />
-                  )} />,
-                <Route
-                  exact
-                  key={`${singular}-detail`}
-                  path={`/${singular}/:id`}
-                  render={router => (
-                    <Detail
-                      type={singular}
-                      {...this.props}
-                      {...router} />
-                  )} />,
-              ])} 
-            </Switch>
-          </div>
+            {hasPassedAgeGate
+              ? (
+                <div>
+                  <Switch>
+                    <Route
+                      exact
+                      path='/'
+                      render={history => <Home history={history} {...this.props} />} />
+                    {MODELS.map(({ singular, plural }, index) => [
+                      <Route
+                        exact
+                        key={`${singular}-master`}
+                        path={`/${plural}`}
+                        render={() => (
+                          <Master
+                            type={plural}
+                            {...this.props} />
+                        )} />,
+                      <Route
+                        exact
+                        key={`${singular}-detail`}
+                        path={`/${singular}/:id`}
+                        render={router => (
+                          <Detail
+                            type={singular}
+                            {...this.props}
+                            {...router} />
+                        )} />,
+                    ])} 
+                  </Switch>
+                </div>
+              )
+              : <AgeGate onClick={passAgeGate} />}
       </Layout>
     </Router>
     );
@@ -173,26 +171,35 @@ export const App = connect(mapStateToProps, mapDispatchToProps)(BaseApp);
  */
 export class Root extends Component {
   render () {
-    const { store } = this.props;
+    const { setReduxProps, store } = this.props;
 
     return (
       <Provider store={store}>
-        <App />
+        <App setReduxProps={setReduxProps} />
       </Provider>
     );
   }
 }
 
 /**
- * @function Everything
+ * @class Everything
  * @desc Yup, all of it.
  */
-export const Everything = () => (
-  <Root store={STORE}>
-    <Router>
-      <App />
-    </Router>
-  </Root>
-);
+export class Everything extends Component {
+  constructor() {
+    super();
+    this.state = { reduxProps: null };
+  }
+  
+  setReduxProps = reduxProps => this.setState({ reduxProps });
+  
+  render() {
+    return (
+      <Root
+        setReduxProps={this.setReduxProps}
+        store={STORE} />
+    );
+  }
+}
 
 ReactDOM.render(<Everything />, document.getElementById('root'));

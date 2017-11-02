@@ -1,6 +1,7 @@
 import ACTION_TYPES from './actionTypes';
 
 export default {
+  [ACTION_TYPES.SET_HAS_PASSED_AGE_GATE]: (state, { hasPassedAgeGate }) => ({ ...state, hasPassedAgeGate }),
   [ACTION_TYPES.SET_VERSION]: (state, { version }) => ({ ...state, version }),
   [ACTION_TYPES.SET_LOADING]: (state, { isLoading }) => ({ ...state, isLoading }),
   [ACTION_TYPES.SET_FETCHING_MODELS]: (state, { fetchingModels }) => ({ ...state, fetchingModels }),
