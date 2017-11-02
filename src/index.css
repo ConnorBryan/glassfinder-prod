@@ -69,9 +69,6 @@ body {
   overflow-x: hidden;
 }
 
-#map {
-  min-height: 85vh !important;
-}
 
 .third-third {
   margin: 0 !important;
@@ -119,4 +116,8 @@ body {
 
 .QuickForm .button {
   margin-bottom: 1.2rem !important;
+}
+
+#map {
+  min-height: 50vh;
 }

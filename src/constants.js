@@ -15,4 +15,11 @@ export default {
     piece: 'puzzle',
   },
   HAS_PASSED_AGE_GATE_COOKIE: 'HAS_PASSED_AGE_GATE',
+  DEFAULT_MAP_CONFIG: {
+    center: {
+      lat: 32.770713,
+      lng: -96.795438,
+    },
+    zoom: 8,
+  },
 };

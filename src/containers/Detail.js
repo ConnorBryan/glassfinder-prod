@@ -14,6 +14,7 @@ import axios from 'axios';
 
 import CONSTANTS from '../constants';
 import * as Formatters from '../util/formatters';
+import Map from '../components/Map';
 import Slider from '../components/Slider';
 
 export default class Detail extends Component {
@@ -127,9 +128,14 @@ export default class Detail extends Component {
 
     const iconName = CONSTANTS.ICONS[type];
 
-    return (
-      <Container>
-        <Card
+    return [
+      <Map
+        key='map'
+        {...this.props} />,
+      <Segment
+        key='detail'
+        basic> 
+          <Card
           color='blue'
           fluid
           key='main'>
@@ -149,9 +155,7 @@ export default class Detail extends Component {
               color='blue'
               corner='right' />
           </Card.Content>
-          
           <Image src={image} />
-        
           <Card.Content>
             <Card.Header
               className='fancy'>
@@ -161,7 +165,6 @@ export default class Detail extends Component {
               <Icon name='calendar' /> Member since {memberSince}
             </Card.Meta>
           </Card.Content>
-          
           <Card.Content extra>
             <Card.Description as={Menu}>
                 <Menu.Item>
@@ -177,25 +180,21 @@ export default class Detail extends Component {
                 </Menu.Menu>
               </Card.Description>
           </Card.Content>
-          
           <Card.Content extra>
             <Card.Description>
               <Icon name='announcement' /> {tagline}
             </Card.Description>
           </Card.Content>
-          
           <Card.Content extra>
             <Card.Description>
               <Icon name='phone' /> {phone}
             </Card.Description>
           </Card.Content>
-
           <Card.Content extra>
             <Card.Description>
               <Icon name='envelope' /> {email}
             </Card.Description>
           </Card.Content>
-
           {address && (
             <Card.Content extra>
               <Card.Description>
@@ -203,7 +202,6 @@ export default class Detail extends Component {
               </Card.Description>
             </Card.Content>
           )}
-
           <Card.Content extra>
             <Card.Description>
                 <Button
@@ -213,7 +211,6 @@ export default class Detail extends Component {
                 </Button>
               </Card.Description>
           </Card.Content>
-
           <Card.Content extra>
             <Card.Description>
                 <Button
@@ -224,7 +221,6 @@ export default class Detail extends Component {
               </Card.Description>
           </Card.Content>
         </Card>
-        
         <Segment key='about'>
           <Header
             as='h3'
@@ -233,7 +229,6 @@ export default class Detail extends Component {
           </Header>
           {description}
         </Segment>
-        
         <div key='sliders'>
           {sliders.map(({ type, collection }) => (
             <Slider
@@ -243,7 +238,7 @@ export default class Detail extends Component {
               collection={collection} />
           ))}
         </div>
-      </Container>
-    )
+      </Segment>
+    ]
   }
 }

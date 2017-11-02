@@ -3,9 +3,7 @@ import { Segment } from 'semantic-ui-react';
 
 export default class Home extends Component {
   componentDidMount() {
-    window.google
-      ? this.initMap()
-      : (window.initMap = () => this.initMap());
+    
   }
 
   componentWillReceiveProps(nextProps) {
@@ -22,13 +20,13 @@ export default class Home extends Component {
         getMapmarkers,
       },
     } = this.props;
-
+, 
     this.map = new window.google.maps.Map(
       document.getElementById('map'),
       {
         center: {
-          lat: 33.071875,
-          lng: -97.029784,
+          lat: 32.770713,
+          lng: -96.795438,
         },
         zoom: 14,
       }
