@@ -116,3 +116,7 @@ body {
 .companies-link {
   background-image: url('/companies.png') !important;
 }
+
+.QuickForm .button {
+  margin-bottom: 1.2rem !important;
+}

@@ -25,6 +25,9 @@ import {
 
 import AgeGate from './containers/AgeGate';
 import Home from './containers/Home';
+import SignUp from './containers/SignUp';
+import SignIn from './containers/SignIn';
+import ForgotPassword from './containers/ForgotPassword';
 import Master from './containers/Master';
 import Detail from './containers/Detail';
 import MODELS from './models';
@@ -127,7 +130,35 @@ export class BaseApp extends Component {
                     <Route
                       exact
                       path='/'
-                      render={history => <Home history={history} {...this.props} />} />
+                      render={history => (
+                        <Home
+                          {...this.props}
+                          {...history} />
+                      )} />
+                    <Route
+                      exact
+                      path='/sign-in'
+                      render={history => (
+                        <SignIn
+                          {...this.props}
+                          {...history} />
+                      )} />
+                    <Route
+                      exact
+                      path='/sign-up'
+                      render={history => (
+                        <SignUp
+                          {...this.props}
+                          {...history} />
+                      )} />
+                    <Route
+                      exact
+                      path='/forgot-password'
+                      render={history => (
+                        <ForgotPassword
+                          {...this.props}
+                          {...history}  />
+                      )} />
                     {MODELS.map(({ singular, plural }, index) => [
                       <Route
                         exact
