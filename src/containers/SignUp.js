@@ -2,58 +2,67 @@ import React from 'react';
 
 import QuickForm from '../components/QuickForm';
 
-const signupFormConfig = {
-  icon: 'user plus',
-  title: 'Sign up',
-  fields: [
-    {
-      control: 'input',
-      type: 'email',
-      label: 'Email',
-      placeholder: 'Enter email',
-      error: false,
-      onChange: () => alert('changed email'),
-      required: true,
-    },
-    {
-      control: 'input',
-      type: 'email',
-      label: 'Email again',
-      placeholder: 'Enter email again',
-      error: false,
-      onChange: () => alert('changed email'),
-      required: true,
-    },
-    {
-      control: 'input',
-      type: 'password',
-      label: 'Password',
-      placeholder: 'Enter password',
-      error: false,
-      onChange: () => alert('changed password'),
-      required: true,
-    },
-    {
-      control: 'input',
-      type: 'password',
-      label: 'Password again',
-      placeholder: 'Enter password again',
-      error: false,
-      onChange: () => alert('changed password'),
-      required: true,
-    },
-  ],
-  onSubmit: e => console.log(e) || alert('Done'),
-  clear: e => alert('Clear'),
-};
-
 export function SignUp(props) {
+  const {
+    actions: {
+      signup,
+      setSignupFormEmail,
+      setSignupFormEmailAgain,
+      setSignupFormPassword,
+      setSignupFormPasswordAgain,
+      setSignupFormError,
+    },
+  } = props;
+
+  const signupFormConfig = {
+    icon: 'user plus',
+    title: 'Sign up',
+    fields: [
+      {
+        control: 'input',
+        type: 'email',
+        label: 'Email',
+        placeholder: 'Enter email',
+        error: false,
+        onChange: ({ target: { value } }) => setSignupFormEmail(value),
+        required: true,
+      },
+      {
+        control: 'input',
+        type: 'email',
+        label: 'Email again',
+        placeholder: 'Enter email again',
+        error: false,
+        onChange: ({ target: { value } }) => setSignupFormEmailAgain(value),
+        required: true,
+      },
+      {
+        control: 'input',
+        type: 'password',
+        label: 'Password',
+        placeholder: 'Enter password',
+        error: false,
+        onChange: ({ target: { value } }) => setSignupFormPassword(value),
+        required: true,
+      },
+      {
+        control: 'input',
+        type: 'password',
+        label: 'Password again',
+        placeholder: 'Enter password again',
+        error: false,
+        onChange: ({ target: { value } }) => setSignupFormPasswordAgain(value),
+        required: true,
+      },
+    ],
+    onSubmit: signup,
+  };
+
   const {
     icon,
     title,
     fields,
     onSubmit,
-    clear,
   } = signupFormConfig;
 
   return (
@@ -61,8 +70,7 @@ export function SignUp(props) {
       icon={icon}
       title={title}
       fields={fields}
-      onSubmit={onSubmit}
-      clear={clear} />
+      onSubmit={onSubmit} />
   );
 }
 

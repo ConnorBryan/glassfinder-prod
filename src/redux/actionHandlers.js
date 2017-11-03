@@ -12,4 +12,10 @@ export default {
   [ACTION_TYPES.SET_COLLECTION_SIZE]: (state, { collectionSize }) => ({ ...state, collectionSize }),
   [ACTION_TYPES.SET_MAPMARKERS]: (state, { mapmarkers }) => ({ ...state, mapmarkers }),
   [ACTION_TYPES.SET_INITIALIZED]: state => ({ ...state, initialized: true }),
+
+  [ACTION_TYPES.SET_SIGN_UP_FORM_EMAIL]: (state, { signupFormEmail }) => ({ ...state, signupFormEmail }),
+  [ACTION_TYPES.SET_SIGN_UP_FORM_EMAIL_AGAIN]: (state, { signupFormEmailAgain }) => ({ ...state, signupFormEmailAgain }),
+  [ACTION_TYPES.SET_SIGN_UP_FORM_PASSWORD]: (state, { signupFormPassword }) => ({ ...state, signupFormPassword }),
+  [ACTION_TYPES.SET_SIGN_UP_FORM_PASSWORD_AGAIN]: (state, { signupFormPasswordAgain }) => ({ ...state, signupFormPasswordAgain }),
+  [ACTION_TYPES.SET_SIGN_UP_FORM_ERROR]: (state, { signupFormError }) => ({ ...state, signupFormError }),
 };

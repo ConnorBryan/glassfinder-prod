@@ -32,7 +32,7 @@ export function SignIn({ history }) {
       {
         icon: 'question circle',
         content: 'Forgot password',
-        onClick: () => console.log(history) || history.push('/forgot-password'),
+        onClick: () => history.push('/forgot-password'),
       },
     ],
   };

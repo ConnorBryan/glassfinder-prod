@@ -13,7 +13,6 @@ export function QuickForm(props) {
     title,
     fields,
     onSubmit,
-    clear,
     sendButtonIcon,
     sendButtonContent,
     extraActions,
@@ -53,12 +52,7 @@ export function QuickForm(props) {
             );
           })}
           <Form.Group unstackable>
-            <Form.Button
-              fluid
-              icon='trash'
-              content='Clear'
-              onClick={clear}
-              width={8} />
+            <Form.Field width={8} />
             <Form.Button
               content={sendButtonContent}
               icon={sendButtonIcon}

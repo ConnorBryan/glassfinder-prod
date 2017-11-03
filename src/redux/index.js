@@ -91,6 +91,11 @@ export const ACTION_HANDLERS = {
 
     dispatch(ACTION_CREATORS.setHasPassedAgeGate(true));
   },
+  signup: () => (dispatch, getState) => {
+    const { signupFormEmail } = getState();
+
+    console.log('email', signupFormEmail);
+  },
 };
 
 export const REDUCER = (state = INITIAL_STATE, action) => (
