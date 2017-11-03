@@ -91,10 +91,32 @@ export const ACTION_HANDLERS = {
 
     dispatch(ACTION_CREATORS.setHasPassedAgeGate(true));
   },
-  signup: () => (dispatch, getState) => {
-    const { signupFormEmail } = getState();
+  signup: () => async (dispatch, getState) => {
+    const {
+      signupFormEmail,
+      signupFormEmailAgain,
+      signupFormPassword,
+      signupFormPasswordAgain,
+    } = getState();
 
-    console.log('email', signupFormEmail);
+    dispatch(ACTION_CREATORS.setLoading(true));
+
+    try {
+      await axios.post(`${CONSTANTS.API_ROOT}/signup`, {
+        signupFormEmail,
+        signupFormEmailAgain,
+        signupFormPassword,
+        signupFormPasswordAgain,
+      });
+      console.log('Success!');
+    } catch (e) {
+      dispatch(ACTION_CREATORS.setError({
+        error: e,
+        message: `Unable to signup`,
+      }));
+    } finally {      
+      dispatch(ACTION_CREATORS.setLoading(false));
+    }
   },
 };
 

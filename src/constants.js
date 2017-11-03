@@ -1,5 +1,6 @@
 export default {
-  API_ROOT: 'https://glassfinder.com/api',
+  // API_ROOT: 'https://glassfinder.com/api',
+  API_ROOT: 'http://localhost:6166',
   ASSOCIATIONS: {
     headshop: ['piece', 'company', 'artist'],
     artist: ['piece', 'headshop', 'company'],
