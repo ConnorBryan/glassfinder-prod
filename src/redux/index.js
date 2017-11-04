@@ -102,13 +102,15 @@ export const ACTION_HANDLERS = {
     dispatch(ACTION_CREATORS.setLoading(true));
 
     try {
-      await axios.post(`${CONSTANTS.API_ROOT}/signup`, {
+      const { data: { user, error } } = await axios.post(`${CONSTANTS.API_ROOT}/signup`, {
         signupFormEmail,
         signupFormEmailAgain,
         signupFormPassword,
         signupFormPasswordAgain,
       });
-      console.log('Success!');
+
+      if (error) throw Error(error);
+
     } catch (e) {
       dispatch(ACTION_CREATORS.setError({
         error: e,

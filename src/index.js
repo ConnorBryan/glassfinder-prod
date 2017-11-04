@@ -16,8 +16,10 @@ import 'semantic-ui-css/semantic.min.css';
 import {
   Container,
   Dimmer,
+  Header,
   Icon,
   Image,
+  Label,
   Loader,
   Menu,
   Segment
@@ -35,7 +37,11 @@ import STORE, { mapStateToProps, mapDispatchToProps } from './redux';
 import './index.css';
 
 export function Layout(props) {
-  const { isLoading } = props;
+  const {
+    error,
+    isLoading,
+    actions: { setError },
+  } = props;
 
   return (
     <div className='Layout'>
@@ -66,6 +72,19 @@ export function Layout(props) {
           <Container
             attached='top'        
             className='second-third'>
+            {error && (
+              <Segment>
+                <Label
+                  icon='close'
+                  color='red'
+                  corner='right'
+                  onClick={() => setError(null)} />
+                <Header as='h3'>
+                    <Icon name='warning sign' /> Error
+                </Header>
+                {error.message}
+              </Segment>
+            )}
             <Segment>
               {!isLoading ? props.children : (
                 <Dimmer
