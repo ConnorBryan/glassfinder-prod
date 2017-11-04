@@ -125,6 +125,36 @@ export const ACTION_HANDLERS = {
       dispatch(ACTION_CREATORS.setLoading(false));
     }
   },
+  signin: () => async (dispatch, getState) => {
+    const {
+      signinFormEmail: email,
+      signinFormPassword: password,
+    } = getState();
+
+    dispatch(ACTION_CREATORS.setError(null));
+    dispatch(ACTION_CREATORS.setLoading(true));
+
+    try {
+      const { data } = await axios.post(`${CONSTANTS.API_ROOT}/user`, {
+        email,
+        password,
+      });
+
+      if (data.error || !data.success) {
+        dispatch(ACTION_CREATORS.setError({
+          error: data.error,
+          message: data.error,
+        }));
+      }
+    } catch (e) {
+      dispatch(ACTION_CREATORS.setError({
+        error: e,
+        message: e.message,
+      }));
+    } finally {
+      dispatch(ACTION_CREATORS.setLoading(false));
+    }
+  },
 };
 
 export const REDUCER = (state = INITIAL_STATE, action) => (

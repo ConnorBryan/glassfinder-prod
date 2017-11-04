@@ -17,5 +17,7 @@ export default {
   [ACTION_TYPES.SET_SIGN_UP_FORM_EMAIL_AGAIN]: (state, { signupFormEmailAgain }) => ({ ...state, signupFormEmailAgain }),
   [ACTION_TYPES.SET_SIGN_UP_FORM_PASSWORD]: (state, { signupFormPassword }) => ({ ...state, signupFormPassword }),
   [ACTION_TYPES.SET_SIGN_UP_FORM_PASSWORD_AGAIN]: (state, { signupFormPasswordAgain }) => ({ ...state, signupFormPasswordAgain }),
-  [ACTION_TYPES.SET_SIGN_UP_FORM_ERROR]: (state, { signupFormError }) => ({ ...state, signupFormError }),
+
+  [ACTION_TYPES.SET_SIGN_IN_FORM_EMAIL]: (state, { signinFormEmail }) => ({ ...state, signinFormEmail }),
+  [ACTION_TYPES.SET_SIGN_IN_FORM_PASSWORD]: (state, { signinFormPassword }) => ({ ...state, signinFormPassword }),
 };

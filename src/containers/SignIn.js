@@ -2,7 +2,16 @@ import React from 'react';
 
 import QuickForm from '../components/QuickForm';
 
-export function SignIn({ history }) {
+export function SignIn(props) {
+    const {
+      history,
+      actions: {
+        signin,
+        setSigninFormEmail,
+        setSigninFormPassword,
+      },
+    } = props;
+
   const signinFormConfig = {
     icon: 'sign in',
     title: 'Sign in',
@@ -13,7 +22,7 @@ export function SignIn({ history }) {
         label: 'Email',
         placeholder: 'Enter email',
         error: false,
-        onChange: () => alert('changed email'),
+        onChange: ({ target: { value } }) => setSigninFormEmail(value),
         required: true,
       },
       {
@@ -22,12 +31,11 @@ export function SignIn({ history }) {
         label: 'Password',
         placeholder: 'Enter password',
         error: false,
-        onChange: () => alert('changed password'),
+        onChange: ({ target: { value } }) => setSigninFormPassword(value),
         required: true,
       },
     ],
-    onSubmit: e => console.log(e) || alert('Done'),
-    clear: e => alert('Clear'),
+    onSubmit: signin,
     extraActions: [
       {
         icon: 'question circle',
@@ -42,7 +50,6 @@ export function SignIn({ history }) {
     title,
     fields,
     onSubmit,
-    clear,
     extraActions,
   } = signinFormConfig;
 
@@ -52,7 +59,6 @@ export function SignIn({ history }) {
       title={title}
       fields={fields}
       onSubmit={onSubmit}
-      clear={clear}
       extraActions={extraActions} />
   );
 }
