@@ -93,30 +93,35 @@ export const ACTION_HANDLERS = {
   },
   signup: () => async (dispatch, getState) => {
     const {
-      signupFormEmail,
-      signupFormEmailAgain,
-      signupFormPassword,
-      signupFormPasswordAgain,
+      signupFormEmail: email,
+      signupFormEmailAgain: emailAgain,
+      signupFormPassword: password,
+      signupFormPasswordAgain: passwordAgain,
     } = getState();
 
+    dispatch(ACTION_CREATORS.setError(null));
     dispatch(ACTION_CREATORS.setLoading(true));
 
     try {
-      const { data: { user, error } } = await axios.post(`${CONSTANTS.API_ROOT}/signup`, {
-        signupFormEmail,
-        signupFormEmailAgain,
-        signupFormPassword,
-        signupFormPasswordAgain,
+      const { data } = await axios.post(`${CONSTANTS.API_ROOT}/users`, {
+        email,
+        emailAgain,
+        password,
+        passwordAgain,
       });
 
-      if (error) throw Error(error);
-
+      if (data.error || !data.success) {
+        dispatch(ACTION_CREATORS.setError({
+          error: data.error,
+          message: data.error,
+        }));
+      }
     } catch (e) {
       dispatch(ACTION_CREATORS.setError({
         error: e,
-        message: `Unable to signup`,
+        message: e.message,
       }));
-    } finally {      
+    } finally {
       dispatch(ACTION_CREATORS.setLoading(false));
     }
   },
