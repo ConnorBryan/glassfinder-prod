@@ -24,4 +24,7 @@ export default {
 
   [ACTION_TYPES.SET_SIGN_IN_FORM_EMAIL]: (state, { signinFormEmail }) => ({ ...state, signinFormEmail }),
   [ACTION_TYPES.SET_SIGN_IN_FORM_PASSWORD]: (state, { signinFormPassword }) => ({ ...state, signinFormPassword }),
+
+  [ACTION_TYPES.SET_CHANGE_PASSWORD_FORM_PASSWORD]: (state, { changePasswordFormPassword }) => ({ ...state, changePasswordFormPassword }),
+  [ACTION_TYPES.SET_CHANGE_PASSWORD_FORM_PASSWORD_AGAIN]: (state, { changePasswordFormPasswordAgain }) => ({ ...state, changePasswordFormPasswordAgain }),
 };

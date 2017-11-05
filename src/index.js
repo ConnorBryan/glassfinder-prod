@@ -31,6 +31,7 @@ import Home from './containers/Home';
 import SignUp from './containers/SignUp';
 import SignIn from './containers/SignIn';
 import ForgotPassword from './containers/ForgotPassword';
+import ChangePassword from './containers/ChangePassword';
 import UserVerification from './containers/UserVerification';
 import MyAccount from './containers/MyAccount';
 import Master from './containers/Master';
@@ -215,6 +216,14 @@ export class BaseApp extends Component {
                       path='/forgot-password'
                       render={history => this.requiresUnauthorized(
                         <ForgotPassword
+                          {...this.props}
+                          {...history}  />
+                      )} />
+                    <Route
+                      exact
+                      path='/change-password'
+                      render={history => this.requiresAuthorized(
+                        <ChangePassword
                           {...this.props}
                           {...history}  />
                       )} />

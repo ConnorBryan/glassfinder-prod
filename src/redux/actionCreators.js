@@ -23,4 +23,7 @@ export default {
 
   setSigninFormEmail: signinFormEmail => ({ type: ACTION_TYPES.SET_SIGN_IN_FORM_EMAIL, signinFormEmail }),
   setSigninFormPassword: signinFormPassword => ({ type: ACTION_TYPES.SET_SIGN_IN_FORM_PASSWORD, signinFormPassword }),
+
+  setChangePasswordFormPassword: changePasswordFormPassword => ({ type: ACTION_TYPES.SET_CHANGE_PASSWORD_FORM_PASSWORD, changePasswordFormPassword }),
+  setChangePasswordFormPasswordAgain: changePasswordFormPasswordAgain => ({ type: ACTION_TYPES.SET_CHANGE_PASSWORD_FORM_PASSWORD_AGAIN, changePasswordFormPasswordAgain }),
 };

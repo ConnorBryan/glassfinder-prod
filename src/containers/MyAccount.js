@@ -1,9 +1,18 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+import {
+  Button,
+  Icon,
+} from 'semantic-ui-react';
 
 export function MyAccount(props) {
   return (
     <div>
-      MyAccount
+      <Button
+        as={Link}
+        to='/change-password'>
+        <Icon name='lock' /> Change Password
+      </Button>
     </div>
   );
 }
