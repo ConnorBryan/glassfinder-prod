@@ -40,19 +40,33 @@ generateReduxConfigFromModels(
 
 export const ACTION_HANDLERS = {
   ...ACTION_CREATORS,
+  initialize: () => dispatch => {
+    const token = (
+      COOKIES.get(CONSTANTS.AUTH_TOKEN_COOKIE) ||
+      window.localStorage.getItem(CONSTANTS.AUTH_TOKEN_COOKIE)
+    );
+
+    if (token) dispatch(ACTION_HANDLERS.authorize(token));
+
+    dispatch(ACTION_CREATORS.setInitialized());
+  },
   authorize: token => dispatch => {
-    if (!token) throw Error(`Cannot authroize without a token`);
+    if (!token) throw Error(`Cannot authorize without a token`);
+
+    window.localStorage.setItem(CONSTANTS.AUTH_TOKEN_COOKIE, token);
+
+    COOKIES.set(CONSTANTS.AUTH_TOKEN_COOKIE, token, { path: '/' });
 
     dispatch(ACTION_CREATORS.setAuthorized(true));
     dispatch(ACTION_CREATORS.setAuthToken(token));
   },
   deauthorize: () => dispatch => {
-    dispatch(ACTION_CREATORS.setAuthorized(true));
+    window.localStorage.removeItem(CONSTANTS.AUTH_TOKEN_COOKIE);
+
+    COOKIES.remove(CONSTANTS.AUTH_TOKEN_COOKIE);
+
+    dispatch(ACTION_CREATORS.setAuthorized(false));
     dispatch(ACTION_CREATORS.setAuthToken(null));
-  },
-  initialize: () => dispatch => {
-    dispatch(ACTION_CREATORS.setVersion('1.0.1'));
-    dispatch(ACTION_CREATORS.setInitialized());
   },
   loadPage: page => (dispatch, getState) => {
     const { modelType, collectionSize: lastPage } = getState();

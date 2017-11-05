@@ -16,6 +16,7 @@ export default {
     piece: 'puzzle',
   },
   HAS_PASSED_AGE_GATE_COOKIE: 'HAS_PASSED_AGE_GATE',
+  AUTH_TOKEN_COOKIE: 'AUTH_TOKEN',
   DEFAULT_MAP_CONFIG: {
     center: {
       lat: 32.770713,

@@ -42,7 +42,10 @@ export function Layout(props) {
     authorized,
     error,
     isLoading,
-    actions: { setError },
+    actions: {
+      deauthorize,
+      setError,
+    },
   } = props;
 
   return (
@@ -57,22 +60,28 @@ export function Layout(props) {
             to='/'>
             <Image size='tiny' src='/logo.png' />
           </Menu.Item>
-
-
-          {!authorized && (
-            <Menu.Menu position='right'>
+          <Menu.Menu position='right'>
+            {authorized
+            ? (
+              <Menu.Item onClick={deauthorize}>
+                <Icon name='sign out' /> Sign out
+              </Menu.Item>
+            )
+            : [
               <Menu.Item
                 as={Link}
+                key='sign-in'
                 to='/sign-in'>
                 <Icon name='sign in' /> Sign in
-              </Menu.Item>
+              </Menu.Item>,
               <Menu.Item
                 as={Link}
+                key='sign-up'
                 to='/sign-up'>
                 <Icon name='user plus' /> Sign up
               </Menu.Item>
-            </Menu.Menu>
-          )}
+            ]}
+          </Menu.Menu>
         </Menu>
 
           <Container
