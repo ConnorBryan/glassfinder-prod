@@ -110,12 +110,13 @@ export const ACTION_HANDLERS = {
         passwordAgain,
       });
 
-      if (data.error || !data.success) {
-        dispatch(ACTION_CREATORS.setError({
-          error: data.error,
-          message: data.error,
-        }));
-      }
+      data.error || !data.success || !data.token
+        ? dispatch(ACTION_CREATORS.setError({
+            error: data.error,
+            message: data.error,
+          }))
+        : dispatch(ACTION_CREATORS.setAuthToken(data.token));
+
     } catch (e) {
       dispatch(ACTION_CREATORS.setError({
         error: e,
@@ -140,12 +141,13 @@ export const ACTION_HANDLERS = {
         password,
       });
 
-      if (data.error || !data.success) {
-        dispatch(ACTION_CREATORS.setError({
-          error: data.error,
-          message: data.error,
-        }));
-      }
+      data.error || !data.success || !data.token
+        ? dispatch(ACTION_CREATORS.setError({
+            error: data.error,
+            message: data.error,
+          }))
+        : dispatch(ACTION_CREATORS.setAuthToken(data.token));      
+
     } catch (e) {
       dispatch(ACTION_CREATORS.setError({
         error: e,
