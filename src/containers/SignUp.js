@@ -4,6 +4,7 @@ import QuickForm from '../components/QuickForm';
 
 export function SignUp(props) {
   const {
+    history,
     actions: {
       signup,
       setSignupFormEmail,
@@ -55,7 +56,10 @@ export function SignUp(props) {
         required: true,
       },
     ],
-    onSubmit: signup,
+    onSubmit: () => {
+      signup();
+      history.push(`/user-verification?awaiting-verification=true`);
+    },
   };
 
   const {

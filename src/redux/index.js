@@ -68,35 +68,25 @@ export const ACTION_HANDLERS = {
     dispatch(ACTION_CREATORS.setAuthorized(false));
     dispatch(ACTION_CREATORS.setAuthToken(null));
   },
-  loadPage: page => (dispatch, getState) => {
-    const { modelType, collectionSize: lastPage } = getState();
-    const modelGetter = Formatters.getModelGetter(modelType);
-
-    if ((page < 0) || (page >= lastPage)) return false;
-
+  verify: (userId, verificationCode) => async dispatch => {
     try {
-      dispatch(ACTION_HANDLERS.setLoading(true));
-      dispatch(ACTION_HANDLERS.setPage(page));
-      dispatch(ACTION_HANDLERS[modelGetter](page));
-    } catch (e) {
-      dispatch(ACTION_HANDLERS.setError({
-        error: e,
-        message: `Unable to load page ${page} of ${modelType}`,
-      }));
-    } finally {
-      dispatch(ACTION_HANDLERS.setLoading(false));
-    }
-  },
-  getMapmarkers: () => async dispatch => {
-    try {
-      const { data } = await axios.get(`${CONSTANTS.API_ROOT}/mapmarkers`);
+      const url = `${CONSTANTS.API_ROOT}/users/verify?userId=${userId}&verificationCode=${verificationCode}`;
+      const { data } = await axios.post(url);
 
-      dispatch(ACTION_CREATORS.setMapmarkers(data));
+      (data.error || !data.success || !data.token)
+        ? dispatch(ACTION_CREATORS.setError({
+            error: data.error,
+            message: data.error,
+          }))
+        : dispatch(ACTION_HANDLERS.authorize(data.token));  
+
     } catch (e) {
       dispatch(ACTION_CREATORS.setError({
         error: e,
-        message: `Unable to retrieve mapmarkers`,
+        message: `Unable to verify user`,
       }));
+    } finally {
+      dispatch(ACTION_HANDLERS.setLoading(false));
     }
   },
   checkAgeGate: () => (dispatch, getState) => {
@@ -134,13 +124,12 @@ export const ACTION_HANDLERS = {
         passwordAgain,
       });
 
-      data.error || !data.success || !data.token
-        ? dispatch(ACTION_CREATORS.setError({
-            error: data.error,
-            message: data.error,
-          }))
-        : dispatch(ACTION_HANDLERS.authorize(data.token));
-
+      (data.error || !data.success) && (
+        dispatch(ACTION_CREATORS.setError({
+          error: data.error,
+          message: data.error,
+        }))
+      );
     } catch (e) {
       dispatch(ACTION_CREATORS.setError({
         error: e,
@@ -165,7 +154,7 @@ export const ACTION_HANDLERS = {
         password,
       });
 
-      data.error || !data.success || !data.token
+      (data.error || !data.success || !data.token)
         ? dispatch(ACTION_CREATORS.setError({
             error: data.error,
             message: data.error,
@@ -179,6 +168,40 @@ export const ACTION_HANDLERS = {
       }));
     } finally {
       dispatch(ACTION_CREATORS.setLoading(false));
+    }
+  },
+
+  // Old
+
+  loadPage: page => (dispatch, getState) => {
+    const { modelType, collectionSize: lastPage } = getState();
+    const modelGetter = Formatters.getModelGetter(modelType);
+
+    if ((page < 0) || (page >= lastPage)) return false;
+
+    try {
+      dispatch(ACTION_HANDLERS.setLoading(true));
+      dispatch(ACTION_HANDLERS.setPage(page));
+      dispatch(ACTION_HANDLERS[modelGetter](page));
+    } catch (e) {
+      dispatch(ACTION_HANDLERS.setError({
+        error: e,
+        message: `Unable to load page ${page} of ${modelType}`,
+      }));
+    } finally {
+      dispatch(ACTION_HANDLERS.setLoading(false));
+    }
+  },
+  getMapmarkers: () => async dispatch => {
+    try {
+      const { data } = await axios.get(`${CONSTANTS.API_ROOT}/mapmarkers`);
+
+      dispatch(ACTION_CREATORS.setMapmarkers(data));
+    } catch (e) {
+      dispatch(ACTION_CREATORS.setError({
+        error: e,
+        message: `Unable to retrieve mapmarkers`,
+      }));
     }
   },
 };
