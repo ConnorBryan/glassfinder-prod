@@ -9,6 +9,7 @@ import ReactDOM from 'react-dom';
 import {
   BrowserRouter as Router,
   Link,
+  Redirect,
   Route,
   Switch,
 } from 'react-router-dom';
@@ -38,6 +39,7 @@ import './index.css';
 
 export function Layout(props) {
   const {
+    authorized,
     error,
     isLoading,
     actions: { setError },
@@ -55,18 +57,22 @@ export function Layout(props) {
             to='/'>
             <Image size='tiny' src='/logo.png' />
           </Menu.Item>
-          <Menu.Menu position='right'>
-            <Menu.Item
-              as={Link}
-              to='/sign-in'>
-              <Icon name='sign in' /> Sign in
-            </Menu.Item>
-            <Menu.Item
-              as={Link}
-              to='/sign-up'>
-              <Icon name='user plus' /> Sign up
-            </Menu.Item>
-          </Menu.Menu>
+
+
+          {!authorized && (
+            <Menu.Menu position='right'>
+              <Menu.Item
+                as={Link}
+                to='/sign-in'>
+                <Icon name='sign in' /> Sign in
+              </Menu.Item>
+              <Menu.Item
+                as={Link}
+                to='/sign-up'>
+                <Icon name='user plus' /> Sign up
+              </Menu.Item>
+            </Menu.Menu>
+          )}
         </Menu>
 
           <Container
@@ -86,14 +92,16 @@ export function Layout(props) {
               </Segment>
             )}
             <Segment>
-              {!isLoading ? props.children : (
-                <Dimmer
-                  active
-                  className='second-third'
-                  style={{ height: '90vh' }}>
-                  <Loader active />
-                </Dimmer>
-              )}
+              {isLoading
+                ? (
+                  <Dimmer
+                    active
+                    className='second-third'
+                    style={{ height: '90vh' }}>
+                    <Loader active />
+                  </Dimmer>
+                )
+                : props.children}
             </Segment>
           </Container>
     </div>
@@ -133,11 +141,23 @@ export class BaseApp extends Component {
     setReduxProps({ ...this.props });
   }
 
+  requiresAuthorized(Component) {
+    const { authorized } = this.props;
+
+    return authorized ? Component : <Redirect to='/' />;
+  }
+
+  requiresUnauthorized(Component) {
+    const { authorized } = this.props;
+
+    return authorized ? <Redirect to='/' /> : Component;
+  }
+
   render() {
     const {
-        hasPassedAgeGate,
-        actions: { passAgeGate },
-      } = this.props;
+      hasPassedAgeGate,
+      actions: { passAgeGate },
+    } = this.props;
 
     return (
       <Router>
@@ -157,7 +177,7 @@ export class BaseApp extends Component {
                     <Route
                       exact
                       path='/sign-in'
-                      render={history => (
+                      render={history => this.requiresUnauthorized(
                         <SignIn
                           {...this.props}
                           {...history} />
@@ -165,7 +185,7 @@ export class BaseApp extends Component {
                     <Route
                       exact
                       path='/sign-up'
-                      render={history => (
+                      render={history => this.requiresUnauthorized(
                         <SignUp
                           {...this.props}
                           {...history} />
@@ -173,11 +193,11 @@ export class BaseApp extends Component {
                     <Route
                       exact
                       path='/forgot-password'
-                      render={history => (
+                      render={history => this.requiresUnauthorized((
                         <ForgotPassword
                           {...this.props}
                           {...history}  />
-                      )} />
+                      ))} />
                     {MODELS.map(({ singular, plural }, index) => [
                       <Route
                         exact
