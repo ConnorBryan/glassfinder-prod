@@ -40,6 +40,16 @@ generateReduxConfigFromModels(
 
 export const ACTION_HANDLERS = {
   ...ACTION_CREATORS,
+  authorize: token => dispatch => {
+    if (!token) throw Error(`Cannot authroize without a token`);
+
+    dispatch(ACTION_CREATORS.setAuthorized(true));
+    dispatch(ACTION_CREATORS.setAuthToken(token));
+  },
+  deauthorize: () => dispatch => {
+    dispatch(ACTION_CREATORS.setAuthorized(true));
+    dispatch(ACTION_CREATORS.setAuthToken(null));
+  },
   initialize: () => dispatch => {
     dispatch(ACTION_CREATORS.setVersion('1.0.1'));
     dispatch(ACTION_CREATORS.setInitialized());
@@ -115,7 +125,7 @@ export const ACTION_HANDLERS = {
             error: data.error,
             message: data.error,
           }))
-        : dispatch(ACTION_CREATORS.setAuthToken(data.token));
+        : dispatch(ACTION_HANDLERS.authorize(data.token));
 
     } catch (e) {
       dispatch(ACTION_CREATORS.setError({
@@ -146,7 +156,7 @@ export const ACTION_HANDLERS = {
             error: data.error,
             message: data.error,
           }))
-        : dispatch(ACTION_CREATORS.setAuthToken(data.token));      
+        : dispatch(ACTION_HANDLERS.authorize(data.token));      
 
     } catch (e) {
       dispatch(ACTION_CREATORS.setError({
