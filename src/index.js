@@ -32,6 +32,7 @@ import SignUp from './containers/SignUp';
 import SignIn from './containers/SignIn';
 import ForgotPassword from './containers/ForgotPassword';
 import UserVerification from './containers/UserVerification';
+import MyAccount from './containers/MyAccount';
 import Master from './containers/Master';
 import Detail from './containers/Detail';
 import MODELS from './models';
@@ -63,11 +64,19 @@ export function Layout(props) {
           </Menu.Item>
           <Menu.Menu position='right'>
             {authorized
-            ? (
-              <Menu.Item onClick={deauthorize}>
+            ? [
+              <Menu.Item
+                as={Link}
+                key='my-account'
+                to='/my-account'>
+                <Icon name='user' /> My Account
+              </Menu.Item>,
+              <Menu.Item
+                key='sign-out'
+                onClick={deauthorize}>
                 <Icon name='sign out' /> Sign out
               </Menu.Item>
-            )
+            ]
             : [
               <Menu.Item
                 as={Link}
@@ -137,6 +146,7 @@ export class BaseApp extends Component {
    */
   componentDidMount() {
     const {
+      history,
       setReduxProps,
       actions: { initialize },
     } = this.props;
@@ -215,6 +225,13 @@ export class BaseApp extends Component {
                         <UserVerification
                           {...this.props}
                           {...location} />
+                      )} />
+                    <Route
+                      exact
+                      path='/my-account'
+                      render={() => this.requiresAuthorized(
+                        <MyAccount
+                          {...this.props} />
                       )} />
                     {MODELS.map(({ singular, plural }, index) => [
                       <Route

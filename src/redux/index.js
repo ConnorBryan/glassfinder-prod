@@ -50,7 +50,7 @@ export const ACTION_HANDLERS = {
 
     dispatch(ACTION_CREATORS.setInitialized());
   },
-  authorize: token => dispatch => {
+  authorize: (token, history) => dispatch => {
     if (!token) throw Error(`Cannot authorize without a token`);
 
     window.localStorage.setItem(CONSTANTS.AUTH_TOKEN_COOKIE, token);
@@ -59,6 +59,8 @@ export const ACTION_HANDLERS = {
 
     dispatch(ACTION_CREATORS.setAuthorized(true));
     dispatch(ACTION_CREATORS.setAuthToken(token));
+
+    history && history.push('/my-account');    
   },
   deauthorize: () => dispatch => {
     window.localStorage.removeItem(CONSTANTS.AUTH_TOKEN_COOKIE);
@@ -68,18 +70,19 @@ export const ACTION_HANDLERS = {
     dispatch(ACTION_CREATORS.setAuthorized(false));
     dispatch(ACTION_CREATORS.setAuthToken(null));
   },
-  verify: (userId, verificationCode) => async dispatch => {
+  verify: (userId, verificationCode, history) => async dispatch => {
     try {
       const url = `${CONSTANTS.API_ROOT}/users/verify?userId=${userId}&verificationCode=${verificationCode}`;
       const { data } = await axios.post(url);
 
-      (data.error || !data.success || !data.token)
-        ? dispatch(ACTION_CREATORS.setError({
+      if (data.error || !data.success || !data.token) {
+        dispatch(ACTION_CREATORS.setError({
             error: data.error,
             message: data.error,
           }))
-        : dispatch(ACTION_HANDLERS.authorize(data.token));  
-
+      } else {
+        dispatch(ACTION_HANDLERS.authorize(data.token, history));  
+      }
     } catch (e) {
       dispatch(ACTION_CREATORS.setError({
         error: e,

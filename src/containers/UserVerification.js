@@ -4,9 +4,10 @@ export default class UserVerification extends Component {
   static StatusTypes = {
     AWAITING_VERIFICATION: 0,
     VERIFYING: 1,
-    INVALID_USER_ID: 2,
-    INVALID_VERIFICATION_CODE: 3,
-    REDIRECTING: 4,
+    DIRECT_NAVIGATION: 2,
+    INVALID_USER_ID: 3,
+    INVALID_VERIFICATION_CODE: 4,
+    REDIRECTING: 5,
   };
 
   constructor(props) {
@@ -38,6 +39,9 @@ export default class UserVerification extends Component {
       case awaitingVerification:
         status = UserVerification.StatusTypes.AWAITING_VERIFICATION;
         break;
+      case (!userId && !verificationCode):
+        status = UserVerification.StatusTypes.DIRECT_NAVIGATION;
+        break;
       case (!!userId && !!verificationCode):
         status = UserVerification.StatusTypes.VERIFYING;
         break;
@@ -59,10 +63,10 @@ export default class UserVerification extends Component {
   }
 
   componentDidMount() {
-    const { actions: { verify } } = this.props;
+    const { history, actions: { verify } } = this.props;
     const { status, userId, verificationCode } = this.state;
 
-    status === UserVerification.StatusTypes.VERIFYING && verify(userId, verificationCode);
+    status === UserVerification.StatusTypes.VERIFYING && verify(userId, verificationCode, history);
   }
 
   render() {
@@ -76,6 +80,9 @@ export default class UserVerification extends Component {
             `An account has been created, but it must be verified prior to use.
             Please check your email for a validation link.`
           )}
+          {status === UserVerification.StatusTypes.DIRECT_NAVIGATION && (
+            `Are you sure you're not here by mistake?`
+          )}
           {status === UserVerification.StatusTypes.VERIFYING && (
             `Verifying the account now...`
           )}
@@ -86,7 +93,7 @@ export default class UserVerification extends Component {
             `Unfortunately, it seems the verification code in the URL is invalid.`
           )}
           {status === UserVerification.StatusTypes.REDIRECTING && (
-            `Successfully verified! Redirecting in.`
+            `Successfully verified! Redirecting.`
           )}
         </p>
       </div>
