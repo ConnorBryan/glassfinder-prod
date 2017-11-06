@@ -45,8 +45,12 @@ export const ACTION_HANDLERS = {
         COOKIES.get(CONSTANTS.AUTH_TOKEN_COOKIE) ||
         window.localStorage.getItem(CONSTANTS.AUTH_TOKEN_COOKIE)
       );
+      const myAccount = window.localStorage.getItem(CONSTANTS.MY_ACCOUNT_COOKIE);
 
-      if (token) dispatch(ACTION_HANDLERS.authorize(token));
+      if (token && myAccount) {
+        dispatch(ACTION_HANDLERS.setMyAccount(JSON.parse(myAccount)));
+        dispatch(ACTION_HANDLERS.authorize(token));
+      }
 
       dispatch(ACTION_CREATORS.setInitialized());
     },
@@ -64,11 +68,13 @@ export const ACTION_HANDLERS = {
     },
     deauthorize: () => dispatch => {
       window.localStorage.removeItem(CONSTANTS.AUTH_TOKEN_COOKIE);
+      window.localStorage.removeItem(CONSTANTS.MY_ACCOUNT_COOKIE);
 
       COOKIES.remove(CONSTANTS.AUTH_TOKEN_COOKIE);
 
       dispatch(ACTION_CREATORS.setAuthorized(false));
       dispatch(ACTION_CREATORS.setAuthToken(null));
+      dispatch(ACTION_CREATORS.setMyAccount(null));
     },
     verify: (userId, verificationCode, history) => async dispatch => {
       try {
@@ -152,18 +158,28 @@ export const ACTION_HANDLERS = {
       dispatch(ACTION_CREATORS.setLoading(true));
 
       try {
-        const { data } = await axios.post(`${CONSTANTS.API_ROOT}/user`, {
+        const {
+          data: {
+            error,
+            token,
+            user,
+          },
+        } = await axios.post(`${CONSTANTS.API_ROOT}/user`, {
           email,
           password,
         });
 
-        (data.error || !data.success || !data.token)
-          ? dispatch(ACTION_CREATORS.setError({
-              error: data.error,
-              message: data.error,
-            }))
-          : dispatch(ACTION_HANDLERS.authorize(data.token));      
-
+        if (error || !token) {
+          dispatch(ACTION_CREATORS.setError({
+            error: error,
+            message: error || `The sign in process failed`,
+          }));
+        } else {
+          dispatch(ACTION_HANDLERS.authorize(token));
+          dispatch(ACTION_CREATORS.setMyAccount(user));
+        
+          window.localStorage.setItem(CONSTANTS.MY_ACCOUNT_COOKIE, JSON.stringify(user));
+        }
       } catch (e) {
         dispatch(ACTION_CREATORS.setError({
           error: e,
@@ -178,13 +194,14 @@ export const ACTION_HANDLERS = {
         authToken,
         changePasswordFormPassword,
         changePasswordFormPasswordAgain,
+        myAccount,
       } = getState();
 
       if (changePasswordFormPassword !== changePasswordFormPasswordAgain) return;
 
       try {
         const { data } = await axios.post(`${CONSTANTS.API_ROOT}/change-password`, {
-          user: {},
+          user: myAccount,
           token: authToken,
           password: changePasswordFormPassword,
         });

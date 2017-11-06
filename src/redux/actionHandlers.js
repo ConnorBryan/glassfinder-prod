@@ -13,6 +13,7 @@ export default {
   [ACTION_TYPES.SET_MAPMARKERS]: (state, { mapmarkers }) => ({ ...state, mapmarkers }),
   [ACTION_TYPES.SET_INITIALIZED]: state => ({ ...state, initialized: true }),
 
+  [ACTION_TYPES.SET_MY_ACCOUNT]: (state, { myAccount }) => ({ ...state, myAccount }),
 
   [ACTION_TYPES.SET_AUTHORIZED]: (state, { authorized }) => ({ ...state, authorized }),
   [ACTION_TYPES.SET_AUTH_TOKEN]: (state, { authToken }) => ({ ...state, authToken }),

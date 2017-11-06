@@ -146,11 +146,7 @@ export class BaseApp extends Component {
    *    M E T H O D S
    */
   componentDidMount() {
-    const {
-      history,
-      setReduxProps,
-      actions: { initialize },
-    } = this.props;
+    const { setReduxProps, actions: { initialize } } = this.props;
 
     setReduxProps({...this.props});
     initialize();

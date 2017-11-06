@@ -11,7 +11,6 @@ export function SignUp(props) {
       setSignupFormEmailAgain,
       setSignupFormPassword,
       setSignupFormPasswordAgain,
-      setSignupFormError,
     },
   } = props;
 
