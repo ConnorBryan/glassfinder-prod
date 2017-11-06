@@ -76,18 +76,33 @@ export const ACTION_HANDLERS = {
       dispatch(ACTION_CREATORS.setAuthToken(null));
       dispatch(ACTION_CREATORS.setMyAccount(null));
     },
-    verify: (userId, verificationCode, history) => async dispatch => {
-      try {
+    checkAgeGate: () => (dispatch, getState) => {
+      const { hasPassedAgeGate } = getState();
+
+      if (hasPassedAgeGate) return;
+
+      const hasPassedAgeGateCookie = COOKIES.get(CONSTANTS.HAS_PASSED_AGE_GATE_COOKIE);
+
+      dispatch(ACTION_CREATORS.setHasPassedAgeGate(hasPassedAgeGateCookie));
+    },
+    passAgeGate: () => (dispatch, getState) => {
+      const hasPassedAgeGateCookie = COOKIES.get(CONSTANTS.HAS_PASSED_AGE_GATE_COOKIE);
+
+      if (!hasPassedAgeGateCookie) COOKIES.set(CONSTANTS.HAS_PASSED_AGE_GATE_COOKIE, true, { path: '/' });
+
+      dispatch(ACTION_CREATORS.setHasPassedAgeGate(true));
+    },
+
+    /**
+     * @func verify
+     * @desc Verify a user account on the server when provided URL params for userId and verificationCode.
+     */
+    verify: (userId, verificationCode, history) => async (dispatch, getState) => {
+      processify(dispatch, async () => {
         dispatch(ACTION_CREATORS.setError(null));
 
         const url = `${CONSTANTS.API_ROOT}/users/verify?userId=${userId}&verificationCode=${verificationCode}`;
-        const {
-          data: {
-            error,
-            user,
-            token,
-          },
-        } = await axios.post(url);
+        const { data: { error, user, token } } = await axios.post(url);
 
         if (error || !token) {
           dispatch(ACTION_CREATORS.setError({
@@ -99,114 +114,88 @@ export const ACTION_HANDLERS = {
           dispatch(ACTION_HANDLERS.authorize(token, history));
           dispatch(ACTION_HANDLERS.setMyAccount(user));
         }
-      } catch (e) {
-        dispatch(ACTION_CREATORS.setError({
-          error: e,
-          message: `Unable to verify user`,
-        }));
-      } finally {
-        dispatch(ACTION_HANDLERS.setLoading(false));
-      }
+      });
     },
+
+    /**
+     * @func link
+     * @desc For a non-linked user account, permanently associated
+     *       with a single Artist, Headshop or Brand.
+     */
     link: type => async (dispatch, getState) => {
-      try {
+      processify(dispatch, async () => {
+        const { authToken, myAccount } = getState();
+
+        const { data: { error } } = await (
+          axios.post(`${CONSTANTS.API_ROOT}/users/link`, {
+            token: authToken,
+            user: JSON.stringify(myAccount),
+            type
+          })
+        );
+
+        error 
+          ? dispatch(ACTION_CREATORS.setError({
+              message: error.message || error,
+            }))
+          : dispatch(ACTION_HANDLERS.syncMyAccount());
+      });
+    },
+
+    /**
+     * @func signup
+     * @desc Provide an email and password to create a new user.
+     */
+    signup: () => async (dispatch, getState) => {
+      processify(dispatch, async () => {
         const {
-          authToken,
-          myAccount,
+          signupFormEmail: email,
+          signupFormEmailAgain: emailAgain,
+          signupFormPassword: password,
+          signupFormPasswordAgain: passwordAgain,
         } = getState();
 
-        const { data: { error } } = await axios.post(`${CONSTANTS.API_ROOT}/users/link`, {
-          token: authToken,
-          user: JSON.stringify(myAccount),
-          type
-        });
+        dispatch(ACTION_CREATORS.setError(null));
+        dispatch(ACTION_CREATORS.setLoading(true));
 
-        if (error) {
+        const { data: { error } } = await (
+          axios.post(`${CONSTANTS.API_ROOT}/users`, {
+            email,
+            emailAgain,
+            password,
+            passwordAgain,
+          })
+        );
+
+        error && (
           dispatch(ACTION_CREATORS.setError({
-            message: error.message || error,
-          }));
-        } else {
-          dispatch(ACTION_HANDLERS.syncMyAccount());
-        }
-      } catch (e) {
-        dispatch(ACTION_CREATORS.setError({
-          error: e,
-          message: e.message,
-        }));
-      } finally {
-        dispatch(ACTION_CREATORS.setLoading(false));
-      }
-    },
-    checkAgeGate: () => (dispatch, getState) => {
-      const { hasPassedAgeGate } = getState();
-
-      if (hasPassedAgeGate) return;
-
-      const hasPassedAgeGateCookie = COOKIES.get(CONSTANTS.HAS_PASSED_AGE_GATE_COOKIE);
-
-      dispatch(ACTION_CREATORS.setHasPassedAgeGate(hasPassedAgeGateCookie));
-    },
-    passAgeGate: () => dispatch => {
-      const hasPassedAgeGateCookie = COOKIES.get(CONSTANTS.HAS_PASSED_AGE_GATE_COOKIE);
-
-      if (!hasPassedAgeGateCookie) COOKIES.set(CONSTANTS.HAS_PASSED_AGE_GATE_COOKIE, true, { path: '/' });
-
-      dispatch(ACTION_CREATORS.setHasPassedAgeGate(true));
-    },
-    signup: () => async (dispatch, getState) => {
-      const {
-        signupFormEmail: email,
-        signupFormEmailAgain: emailAgain,
-        signupFormPassword: password,
-        signupFormPasswordAgain: passwordAgain,
-      } = getState();
-
-      dispatch(ACTION_CREATORS.setError(null));
-      dispatch(ACTION_CREATORS.setLoading(true));
-
-      try {
-        const { data } = await axios.post(`${CONSTANTS.API_ROOT}/users`, {
-          email,
-          emailAgain,
-          password,
-          passwordAgain,
-        });
-
-        (data.error || !data.success) && (
-          dispatch(ACTION_CREATORS.setError({
-            error: data.error,
-            message: data.error,
+            error,
+            message: error || `The signup process failed`,
           }))
         );
-      } catch (e) {
-        dispatch(ACTION_CREATORS.setError({
-          error: e,
-          message: e.message,
-        }));
-      } finally {
-        dispatch(ACTION_CREATORS.setLoading(false));
-      }
+      });
     },
+
+    /**
+     * @func signin
+     * @desc Grab an email and password, validate through the database, and set the local copy and token.
+     */
     signin: () => async (dispatch, getState) => {
-      const {
-        signinFormEmail: email,
-        signinFormPassword: password,
-      } = getState();
-
-      dispatch(ACTION_CREATORS.setError(null));
-      dispatch(ACTION_CREATORS.setLoading(true));
-
-      try {
+      processify(dispatch, async () => {
         const {
-          data: {
-            error,
-            token,
-            user,
-          },
-        } = await axios.post(`${CONSTANTS.API_ROOT}/user`, {
-          email,
-          password,
-        });
+          signinFormEmail: email,
+          signinFormPassword: password,
+        } = getState();
+
+        dispatch(ACTION_CREATORS.setError(null));
+        dispatch(ACTION_CREATORS.setLoading(true));
+
+        const { data: { error, token, user } } = await (
+          axios.post(`${CONSTANTS.API_ROOT}/user`, {
+            email,
+            password,
+          })
+        );
 
         if (error || !token) {
           dispatch(ACTION_CREATORS.setError({
@@ -219,57 +208,54 @@ export const ACTION_HANDLERS = {
           dispatch(ACTION_HANDLERS.authorize(token));
           dispatch(ACTION_CREATORS.setMyAccount(user));
         }
-      } catch (e) {
-        dispatch(ACTION_CREATORS.setError({
-          error: e,
-          message: e.message,
-        }));
-      } finally {
-        dispatch(ACTION_CREATORS.setLoading(false));
-      }
+      });
     },
+
+    /**
+     * @func changePassword
+     * @desc Self-explanatory.
+     */
     changePassword: history => async (dispatch, getState) => {
-      const {
-        authToken,
-        changePasswordFormPassword,
-        changePasswordFormPasswordAgain,
-        myAccount,
-      } = getState();
-
-      if (changePasswordFormPassword !== changePasswordFormPasswordAgain) return;
-
-      try {
-        const { data } = await axios.post(`${CONSTANTS.API_ROOT}/change-password`, {
-          user: myAccount,
-          token: authToken,
-          password: changePasswordFormPassword,
-        });
-
-        (data.error || !data.success)
-        ? dispatch(ACTION_CREATORS.setError({
-            message: data.error || `Unable to change password`
-          }))
-        : history.push('/my-account');
-      } catch (e) {
-        dispatch(ACTION_CREATORS.setError({
-          error: e,
-          message: e.message,
-        }));
-      } finally {
-        dispatch(ACTION_CREATORS.setLoading(false));
-      }
-    },
-    syncMyAccount: () => async (dispatch, getState) => {
-      try {
+      processify(dispatch, async () => {
         const {
           authToken,
-          myAccount: { email },
+          changePasswordFormPassword,
+          changePasswordFormPasswordAgain,
+          myAccount,
         } = getState();
+
+        if (changePasswordFormPassword !== changePasswordFormPasswordAgain) return;
         
-        const { data: { error, user } } = await axios.post(`${CONSTANTS.API_ROOT}/users/sync`, {
-          token: authToken,
-          email,
-        });
+        const { data: { error } } = await (
+          axios.post(`${CONSTANTS.API_ROOT}/change-password`, {
+            user: myAccount,
+            token: authToken,
+            password: changePasswordFormPassword,
+          })
+        );
+
+        error
+          ? dispatch(ACTION_CREATORS.setError({
+              message: error || `Unable to change password`
+            }))
+          : history.push('/my-account');
+      });
+    },
+
+    /**
+     * @func syncMyAccount
+     * @desc Update the locally stored MyAccount property with the latest from the database.
+     */
+    syncMyAccount: () => (dispatch, getState) => {
+      processify(dispatch, async () => {
+        const { authToken, myAccount: { email } } = getState();
+        
+        const { data: { error, user } } = await (
+          axios.post(`${CONSTANTS.API_ROOT}/users/sync`, {
+            token: authToken,
+            email,
+          })
+        );
 
         if (error) {
           dispatch(ACTION_CREATORS.setError({
@@ -278,17 +264,9 @@ export const ACTION_HANDLERS = {
           }));
         } else {
           dispatch(ACTION_CREATORS.setMyAccount(user));
-        
           window.localStorage.setItem(CONSTANTS.MY_ACCOUNT_COOKIE, JSON.stringify(user));
         }
-      } catch (e) {
-        dispatch(ACTION_CREATORS.setError({
-          error: e,
-          message: e.message,
-        }));
-      } finally {
-        dispatch(ACTION_CREATORS.setLoading(false));
-      }
+      });
     },
 
     // Old
@@ -337,3 +315,24 @@ export const mapStateToProps = state => ({ ...state });
 export const mapDispatchToProps = dispatch => ({ actions: bindActionCreators(ACTION_HANDLERS, dispatch) });
 
 export default configureStore();
+
+/* = = = */
+
+/**
+ * @func processify
+ * @desc In the context of an action, wrap a series of dispatches in a generic try-catch.
+ * @param {function} dispatch 
+ * @param {function} process 
+ */
+export function processify(dispatch, process) {
+  try {
+    process();
+  } catch (e) {
+    dispatch(ACTION_CREATORS.setError({
+      error: e,
+      message: e.message,
+    }));
+  } finally {
+    dispatch(ACTION_CREATORS.setLoading(false));
+  }
+}

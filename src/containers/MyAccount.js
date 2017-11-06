@@ -13,6 +13,7 @@ import CONSTANTS from '../constants';
 export function MyAccount(props) {
   const {
     myAccount,
+    linkedAccount,
     actions: {
       link,
     },
@@ -23,42 +24,55 @@ export function MyAccount(props) {
   );
 
   const { linked, type } = myAccount;
-
+  const { name } = linkedAccount;
   const accountType = CONSTANTS.ACCOUNT_TYPES[type];
 
   return (
-    <Segment>
-      {linked && (
-        <Label
-          ribbon
-          color='blue'
-          positon='top left'>
-          <Header
-            as='h3'
-            className='fancy'>
-            {accountType}
-          </Header>
-        </Label>
-      )}
+    <Segment.Group>
+      <Segment>
+        {linked && (
+          <Label
+            ribbon
+            color='blue'
+            positon='top left'>
+            <Header
+              as='h3'
+              className='fancy'>
+              {accountType}
+            </Header>
+          </Label>
+        )}
 
-      <Button
-        as={Link}
-        pull='right'
-        to='/change-password'>
-        <Icon name='lock' /> Change password
-      </Button>
-
-      {accountType !== CONSTANTS.ACCOUNT_TYPES.artist && (
-        <Button onClick={() => link('artist')}>
-          <Icon name={CONSTANTS.ICONS.artist} /> Become an artist
+        <Button
+          as={Link}
+          pull='right'
+          to='/change-password'>
+          <Icon name='lock' /> Change password
         </Button>
+
+        {accountType !== CONSTANTS.ACCOUNT_TYPES.artist && (
+          <Button onClick={() => link('artist')}>
+            <Icon name={CONSTANTS.ICONS.artist} /> Become an artist
+          </Button>
+        )}
+      </Segment>
+      {linked && (
+        <Segment>
+          <Header
+            as='h4'
+            className='fancy'>
+              Name
+          </Header>
+          {name}
+        </Segment>
       )}
-    </Segment>
+    </Segment.Group>
   );
 }
 
 MyAccount.defaultProps = {
-  myAccount: {},
+  myAccount: null,
+  linkedAccount: {},
 };
 
 export default MyAccount;
