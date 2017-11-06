@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import {
   Button,
   Header,
@@ -18,11 +18,11 @@ export function MyAccount(props) {
     },
   } = props;
 
-  const {
-    email,
-    linked,
-    type,
-  } = myAccount;
+  if (!myAccount) return (
+    <Redirect to='/' />
+  );
+
+  const { linked, type } = myAccount;
 
   const accountType = CONSTANTS.ACCOUNT_TYPES[type];
 

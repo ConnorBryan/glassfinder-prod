@@ -79,7 +79,7 @@ export const ACTION_HANDLERS = {
     verify: (userId, verificationCode, history) => async dispatch => {
       try {
         dispatch(ACTION_CREATORS.setError(null));
-        
+
         const url = `${CONSTANTS.API_ROOT}/users/verify?userId=${userId}&verificationCode=${verificationCode}`;
         const {
           data: {
@@ -88,7 +88,7 @@ export const ACTION_HANDLERS = {
             token,
           },
         } = await axios.post(url);
-        
+
         if (error || !token) {
           dispatch(ACTION_CREATORS.setError({
               message: error || `The verification process failed`,
