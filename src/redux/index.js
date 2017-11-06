@@ -189,7 +189,11 @@ export const ACTION_HANDLERS = {
           password: changePasswordFormPassword,
         });
 
-        history.push('/my-account');
+        (data.error || !data.success)
+        ? dispatch(ACTION_CREATORS.setError({
+            message: data.error || `Unable to change password`
+          }))
+        : history.push('/my-account');
       } catch (e) {
         dispatch(ACTION_CREATORS.setError({
           error: e,
