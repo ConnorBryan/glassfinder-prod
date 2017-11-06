@@ -13,7 +13,6 @@ import CONSTANTS from '../constants';
 export function MyAccount(props) {
   const {
     myAccount,
-    linkedAccount,
     actions: {
       link,
     },
@@ -23,7 +22,7 @@ export function MyAccount(props) {
     <Redirect to='/' />
   );
 
-  const { linked, type } = myAccount;
+  const { linked, linkedAccount = {}, type } = myAccount;
   const { name } = linkedAccount;
   const accountType = CONSTANTS.ACCOUNT_TYPES[type];
 
