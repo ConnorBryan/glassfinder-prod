@@ -78,16 +78,26 @@ export const ACTION_HANDLERS = {
     },
     verify: (userId, verificationCode, history) => async dispatch => {
       try {
+        dispatch(ACTION_CREATORS.setError(null));
+        
         const url = `${CONSTANTS.API_ROOT}/users/verify?userId=${userId}&verificationCode=${verificationCode}`;
-        const { data } = await axios.post(url);
-
-        if (data.error || !data.success || !data.token) {
+        const {
+          data: {
+            error,
+            user,
+            token,
+          },
+        } = await axios.post(url);
+        
+        if (error || !token) {
           dispatch(ACTION_CREATORS.setError({
-              error: data.error,
-              message: data.error,
+              message: error || `The verification process failed`,
             }))
         } else {
-          dispatch(ACTION_HANDLERS.authorize(data.token, history));  
+          window.localStorage.setItem(CONSTANTS.MY_ACCOUNT_COOKIE, JSON.stringify(user));
+
+          dispatch(ACTION_HANDLERS.authorize(token, history));
+          dispatch(ACTION_HANDLERS.setMyAccount(user));
         }
       } catch (e) {
         dispatch(ACTION_CREATORS.setError({
@@ -96,6 +106,35 @@ export const ACTION_HANDLERS = {
         }));
       } finally {
         dispatch(ACTION_HANDLERS.setLoading(false));
+      }
+    },
+    link: type => async (dispatch, getState) => {
+      try {
+        const {
+          authToken,
+          myAccount,
+        } = getState();
+
+        const { data: { error } } = await axios.post(`${CONSTANTS.API_ROOT}/users/link`, {
+          token: authToken,
+          user: JSON.stringify(myAccount),
+          type
+        });
+
+        if (error) {
+          dispatch(ACTION_CREATORS.setError({
+            message: error.message || error,
+          }));
+        } else {
+          dispatch(ACTION_HANDLERS.syncMyAccount());
+        }
+      } catch (e) {
+        dispatch(ACTION_CREATORS.setError({
+          error: e,
+          message: e.message,
+        }));
+      } finally {
+        dispatch(ACTION_CREATORS.setLoading(false));
       }
     },
     checkAgeGate: () => (dispatch, getState) => {
@@ -175,10 +214,10 @@ export const ACTION_HANDLERS = {
             message: error || `The sign in process failed`,
           }));
         } else {
+          window.localStorage.setItem(CONSTANTS.MY_ACCOUNT_COOKIE, JSON.stringify(user));
+          
           dispatch(ACTION_HANDLERS.authorize(token));
           dispatch(ACTION_CREATORS.setMyAccount(user));
-        
-          window.localStorage.setItem(CONSTANTS.MY_ACCOUNT_COOKIE, JSON.stringify(user));
         }
       } catch (e) {
         dispatch(ACTION_CREATORS.setError({
@@ -220,9 +259,39 @@ export const ACTION_HANDLERS = {
         dispatch(ACTION_CREATORS.setLoading(false));
       }
     },
+    syncMyAccount: () => async (dispatch, getState) => {
+      try {
+        const {
+          authToken,
+          myAccount: { email },
+        } = getState();
+        
+        const { data: { error, user } } = await axios.post(`${CONSTANTS.API_ROOT}/users/sync`, {
+          token: authToken,
+          email,
+        });
+
+        if (error) {
+          dispatch(ACTION_CREATORS.setError({
+            error: error,
+            message: error || `The syncing process failed`,
+          }));
+        } else {
+          dispatch(ACTION_CREATORS.setMyAccount(user));
+        
+          window.localStorage.setItem(CONSTANTS.MY_ACCOUNT_COOKIE, JSON.stringify(user));
+        }
+      } catch (e) {
+        dispatch(ACTION_CREATORS.setError({
+          error: e,
+          message: e.message,
+        }));
+      } finally {
+        dispatch(ACTION_CREATORS.setLoading(false));
+      }
+    },
 
     // Old
-
     loadPage: page => (dispatch, getState) => {
       const { modelType, collectionSize: lastPage } = getState();
       const modelGetter = Formatters.getModelGetter(modelType);

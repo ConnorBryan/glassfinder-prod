@@ -1,23 +1,39 @@
 export default {
-  // API_ROOT: 'https://glassfinder.com/api',
+  /*
+    O p e r a t i o n s
+  */
   API_ROOT: 'http://localhost:6166/api',
-  ASSOCIATIONS: {
-    headshop: ['piece', 'company', 'artist'],
-    artist: ['piece', 'headshop', 'company'],
-    company: ['headshop', 'artist', 'piece'],
-    piece: ['artist', 'headshop', 'company'],
+
+  /*
+    M o d e l s
+  */
+  ACCOUNT_TYPES: {
+    artist: 'artist',
+    headshop: 'headshop',
+    brand: 'brand',
   },
-  MODEL_TYPES_SINGULAR: ['headshop', 'artist', 'company', 'piece'],
-  MODEL_TYPES_PLURAL: ['headshops', 'artists', 'companies', 'pieces'],
+
+  /*
+    S t y l i n g
+  */
   ICONS: {
-    headshop: 'cart',
     artist: 'paint brush',
-    company: 'building',
+    headshop: 'cart',
+    brand: 'building',
     piece: 'puzzle',
   },
-  HAS_PASSED_AGE_GATE_COOKIE: 'HAS_PASSED_AGE_GATE',
+
+  /*
+    C o o k i e s
+  */
   AUTH_TOKEN_COOKIE: 'AUTH_TOKEN',
+  HAS_PASSED_AGE_GATE_COOKIE: 'HAS_PASSED_AGE_GATE',
   MY_ACCOUNT_COOKIE: 'MY_ACCOUNT',
+
+  /*
+    G o o g l e
+      M a p s
+  */
   DEFAULT_MAP_CONFIG: {
     center: {
       lat: 32.770713,
