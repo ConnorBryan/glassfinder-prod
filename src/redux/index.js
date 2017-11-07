@@ -34,7 +34,7 @@ generateReduxConfigFromModels(
 
 export const ACTIONS = {
     ...ACTION_CREATORS,
-    initialize: () => dispatch => {
+    initialize: () => async dispatch => {
       const token = (
         COOKIES.get(CONSTANTS.AUTH_TOKEN_COOKIE) ||
         window.localStorage.getItem(CONSTANTS.AUTH_TOKEN_COOKIE)
@@ -44,7 +44,8 @@ export const ACTIONS = {
       if (token && myAccount) {
         dispatch(ACTIONS.setMyAccount(JSON.parse(myAccount)));
         dispatch(ACTIONS.authorize(token));
-        dispatch(ACTIONS.syncMyAccount());
+        
+        setTimeout(() => dispatch(ACTIONS.syncMyAccount()), 1000);
       }
 
       dispatch(ACTIONS.setInitialized());
@@ -263,6 +264,35 @@ export const ACTIONS = {
             dispatch(ACTIONS.setMyAccount(user));
             window.localStorage.setItem(CONSTANTS.MY_ACCOUNT_COOKIE, JSON.stringify(user));
           }
+    }),
+
+    /**
+     * @func updateField
+     * @desc Update a field in the database during profile editing.
+     */
+    updateField: (fieldKey, newFieldValue) =>
+      (dispatch, getState) =>
+        processify(dispatch, async () => {
+          const { authToken, myAccount } = getState();
+          const { linked } = myAccount;
+
+          const { data: { error } } = await (
+            axios.post(`${CONSTANTS.API_ROOT}/users/update-field`, {
+              token: authToken,
+              user: JSON.stringify(myAccount),
+              fieldKey,
+              newFieldValue,
+              linked,
+            })
+          );
+
+          if (error) {
+            return dispatch(ACTIONS.setError({
+              message: error || `Unable to update field`,
+            }))
+          }
+
+          dispatch(ACTIONS.syncMyAccount());
     }),
 };
 

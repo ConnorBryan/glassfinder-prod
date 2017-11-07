@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link, Redirect } from 'react-router-dom';
 import {
@@ -11,31 +11,63 @@ import {
 
 import CONSTANTS from '../constants';
 
-export function AccountField(props) {
-  const { title, field } = props;
+export class AccountField extends Component {
+  static propTypes = {
+    title: PropTypes.string.isRequired,
+    fieldKey: PropTypes.string.isRequired,
+    fieldValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    updateField: PropTypes.func.isRequired,
+  };
 
-  return (
-    <Segment>
-      <Header
-        as='h4'
-        className='fancy'>
-          {title}
-      </Header>
-      {field}
-    </Segment>
-  );
+  state = { showingInput: false, newValue: this.props.fieldValue };
+
+  toggleShowingInput = () => this.setState(prevState => ({ showingInput: !prevState.showingInput }));
+
+  updateValue = ({ target: { value: newValue } }) => this.setState({ newValue });
+
+  render() {
+    const {
+      title,
+      fieldKey,
+      fieldValue,
+      updateField,
+    } = this.props;
+    const { showingInput, newValue } = this.state;
+
+    return (
+      <Segment>
+        <Header
+          as='h4'
+          className='fancy'>
+            {title} 
+            <Button
+              icon='pencil'
+              onClick={this.toggleShowingInput} />
+        </Header>
+        {showingInput
+          ? [
+            <input
+              key='input'
+              type='text'
+              value={newValue}
+              onChange={this.updateValue} />,
+            <Button
+              key='button'
+              icon='send'
+              onClick={() => this.toggleShowingInput() || updateField(fieldKey, newValue)} />
+          ]
+          : fieldValue}
+      </Segment>
+    );
+  }
 }
-
-AccountField.propTypes = {
-  title: PropTypes.string.isRequired,
-  field: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-};
 
 export function MyAccount(props) {
   const {
     myAccount,
     actions: {
       link,
+      updateField,
     },
   } = props;
 
@@ -48,7 +80,11 @@ export function MyAccount(props) {
 
   const fields = Object
     .keys(linkedAccount)
-    .map(key => ({ title: capitalize(key), field: linkedAccount[key] }));
+    .map(key => ({
+      title: capitalize(key),
+      fieldKey: key,
+      fieldValue: linkedAccount[key],
+    }));
 
   return (
     <Segment.Group>
@@ -77,11 +113,13 @@ export function MyAccount(props) {
           </Button>
         )}
       </Segment>
-      {linked && fields.map(({ title, field }, index) => (
+      {linked && fields.map(({ title, fieldKey, fieldValue }, index) => (
         <AccountField
           key={index}
+          updateField={updateField}
           title={title}
-          field={field} />
+          fieldKey={fieldKey}
+          fieldValue={fieldValue} />
       ))}
     </Segment.Group>
   );

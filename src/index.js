@@ -34,9 +34,6 @@ import ForgotPassword from './containers/ForgotPassword';
 import ChangePassword from './containers/ChangePassword';
 import UserVerification from './containers/UserVerification';
 import MyAccount from './containers/MyAccount';
-import Master from './containers/Master';
-import Detail from './containers/Detail';
-import MODELS from './models';
 import STORE, { mapStateToProps, mapDispatchToProps } from './redux';
 import './index.css';
 
@@ -238,28 +235,6 @@ export class BaseApp extends Component {
                         <MyAccount
                           {...this.props} />
                       )} />
-                    {MODELS.map(({ singular, plural }, index) => [
-                      <Route
-                        exact
-                        key={`${singular}-master`}
-                        path={`/${plural}`}
-                        render={router => (
-                          <Master
-                            type={plural}
-                            {...this.props}
-                            {...router} />
-                        )} />,
-                      <Route
-                        exact
-                        key={`${singular}-detail`}
-                        path={`/${singular}/:id`}
-                        render={router => (
-                          <Detail
-                            type={singular}
-                            {...this.props}
-                            {...router} />
-                        )} />,
-                    ])} 
                   </Switch>
                 </div>
               )
