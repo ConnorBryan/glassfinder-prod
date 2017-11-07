@@ -109,7 +109,7 @@ function findQueryParam(search, param) {
       .split('?')[1]
       .split('&')
       .find(element => element.includes(`${param}=`))
-      .split('=')[1] || null
+      .split('=')[1] || null;
   } catch (e) {
     return null;
   }
