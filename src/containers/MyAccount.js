@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Link, Redirect } from 'react-router-dom';
 import {
   Button,
@@ -9,6 +10,26 @@ import {
 } from 'semantic-ui-react';
 
 import CONSTANTS from '../constants';
+
+export function AccountField(props) {
+  const { title, field } = props;
+
+  return (
+    <Segment>
+      <Header
+        as='h4'
+        className='fancy'>
+          {title}
+      </Header>
+      {field}
+    </Segment>
+  );
+}
+
+AccountField.propTypes = {
+  title: PropTypes.string.isRequired,
+  field: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+};
 
 export function MyAccount(props) {
   const {
@@ -23,8 +44,11 @@ export function MyAccount(props) {
   );
 
   const { linked, linkedAccount = {}, type } = myAccount;
-  const { name } = linkedAccount;
   const accountType = CONSTANTS.ACCOUNT_TYPES[type];
+
+  const fields = Object
+    .keys(linkedAccount)
+    .map(key => ({ title: capitalize(key), field: linkedAccount[key] }));
 
   return (
     <Segment.Group>
@@ -41,30 +65,24 @@ export function MyAccount(props) {
             </Header>
           </Label>
         )}
-
         <Button
           as={Link}
           pull='right'
           to='/change-password'>
           <Icon name='lock' /> Change password
         </Button>
-
         {accountType !== CONSTANTS.ACCOUNT_TYPES.artist && (
           <Button onClick={() => link('artist')}>
             <Icon name={CONSTANTS.ICONS.artist} /> Become an artist
           </Button>
         )}
       </Segment>
-      {linked && (
-        <Segment>
-          <Header
-            as='h4'
-            className='fancy'>
-              Name
-          </Header>
-          {name}
-        </Segment>
-      )}
+      {linked && fields.map(({ title, field }, index) => (
+        <AccountField
+          key={index}
+          title={title}
+          field={field} />
+      ))}
     </Segment.Group>
   );
 }
@@ -75,3 +93,12 @@ MyAccount.defaultProps = {
 };
 
 export default MyAccount;
+
+/* = = = */
+
+function capitalize(string) {
+  return string
+    .split('')
+    .map((l, i) => i === 0 ? l.toUpperCase() : l)
+    .join('');
+}
