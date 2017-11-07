@@ -8,12 +8,36 @@ export default {
   [ACTION_TYPES.SET_MY_ACCOUNT]: (state, { myAccount }) => ({ ...state, myAccount }),
   [ACTION_TYPES.SET_AUTHORIZED]: (state, { authorized }) => ({ ...state, authorized }),
   [ACTION_TYPES.SET_AUTH_TOKEN]: (state, { authToken }) => ({ ...state, authToken }),
+  
+  /*
+    S i g n
+      U p
+  */
   [ACTION_TYPES.SET_SIGN_UP_FORM_EMAIL]: (state, { signupFormEmail }) => ({ ...state, signupFormEmail }),
   [ACTION_TYPES.SET_SIGN_UP_FORM_EMAIL_AGAIN]: (state, { signupFormEmailAgain }) => ({ ...state, signupFormEmailAgain }),
   [ACTION_TYPES.SET_SIGN_UP_FORM_PASSWORD]: (state, { signupFormPassword }) => ({ ...state, signupFormPassword }),
   [ACTION_TYPES.SET_SIGN_UP_FORM_PASSWORD_AGAIN]: (state, { signupFormPasswordAgain }) => ({ ...state, signupFormPasswordAgain }),
+  
+  /*
+    S i g n
+      I n
+  */
   [ACTION_TYPES.SET_SIGN_IN_FORM_EMAIL]: (state, { signinFormEmail }) => ({ ...state, signinFormEmail }),
   [ACTION_TYPES.SET_SIGN_IN_FORM_PASSWORD]: (state, { signinFormPassword }) => ({ ...state, signinFormPassword }),
+  
+  /*
+    C h a n g e
+      P a s s w o r d
+  */
   [ACTION_TYPES.SET_CHANGE_PASSWORD_FORM_PASSWORD]: (state, { changePasswordFormPassword }) => ({ ...state, changePasswordFormPassword }),
   [ACTION_TYPES.SET_CHANGE_PASSWORD_FORM_PASSWORD_AGAIN]: (state, { changePasswordFormPasswordAgain }) => ({ ...state, changePasswordFormPasswordAgain }),
+
+  /*
+    U p l o a d
+      P i e c e
+  */
+  [ACTION_TYPES.SET_UPLOAD_PIECE_FORM_IMAGE]: (state, { uploadPieceFormImage }) => ({ ...state, uploadPieceFormImage }),
+  [ACTION_TYPES.SET_UPLOAD_PIECE_FORM_TITLE]: (state, { uploadPieceFormTitle }) => ({ ...state, uploadPieceFormTitle }),
+  [ACTION_TYPES.SET_UPLOAD_PIECE_FORM_PRICE]: (state, { uploadPieceFormPrice }) => ({ ...state, uploadPieceFormPrice }),
+  [ACTION_TYPES.SET_UPLOAD_PIECE_FORM_DESCRIPTION]: (state, { uploadPieceFormDescription }) => ({ ...state, uploadPieceFormDescription }),
 };

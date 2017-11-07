@@ -6,6 +6,7 @@ import ForgotPassword from './containers/ForgotPassword';
 import ChangePassword from './containers/ChangePassword';
 import UserVerification from './containers/UserVerification';
 import MyAccount from './containers/MyAccount';
+import UploadPiece from './containers/UploadPiece';
 
 export default {
   /*
@@ -69,6 +70,11 @@ export default {
       path: '/my-account',
       requiresAuthorized: true,
       Component: MyAccount,
+    },
+    {
+      path: '/upload-piece',
+      requiresAuthorized: true,
+      Component: UploadPiece,
     },
   ],
 

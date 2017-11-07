@@ -43,17 +43,24 @@ export function MyAccount(props) {
             </Header>
           </Label>
         )}
-        <Button
-          as={Link}
-          pull='right'
-          to='/change-password'>
-          <Icon name='lock' /> Change password
-        </Button>
-        {accountType !== CONSTANTS.ACCOUNT_TYPES.artist && (
-          <Button onClick={() => link('artist')}>
-            <Icon name={CONSTANTS.ICONS.artist} /> Become an artist
+        <Button.Group>
+          <Button
+            as={Link}
+            pull='right'
+            to='/change-password'>
+            <Icon name='lock' /> Change password
           </Button>
-        )}
+          {accountType !== CONSTANTS.ACCOUNT_TYPES.artist && (
+            <Button onClick={() => link('artist')}>
+              <Icon name={CONSTANTS.ICONS.artist} /> Become an artist
+            </Button>
+          )}
+          <Button
+            as={Link}
+            to='/upload-piece'>
+              <Icon name={CONSTANTS.ICONS.piece} /> Upload a piece
+          </Button>
+        </Button.Group>
       </Segment>
       <AccountFields
         fieldset={userFields}

@@ -266,6 +266,40 @@ export default {
               }))
             : dispatch(ACTIONS.syncMyAccount());
     }),
+
+    /**
+     * @func uploadPiece
+     * @desc Create a new piece in the database associated with the active user. 
+     */
+    uploadPiece: () =>
+      (dispatch, getState) =>
+        processify(dispatch, async () => {
+          const {
+            myAccount,
+            authToken: token,
+            uploadPieceFormImage: image,
+            uploadPieceFormTitle: title,
+            uploadPieceFormPrice: price,
+            uploadPieceFormDescription: description,
+          } = getState();
+
+          const { data: { error, piece } } = await (
+            axios.post(`${CONSTANTS.API_ROOT}/users/upload-piece`, {
+              token,
+              user: JSON.stringify(flatten(myAccount)),
+              image,
+              title,
+              price,
+              description,
+            })
+          );
+
+          return error
+            ? dispatch(ACTIONS.setError({
+              message: error || `Unable to upload piece`,
+            }))
+            : dispatch(ACTIONS.syncMyAccount());
+    }),
 };
 
 /* = = = */

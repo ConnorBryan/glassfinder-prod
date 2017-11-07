@@ -8,12 +8,36 @@ export default {
   setMyAccount: myAccount => ({ type: ACTION_TYPES.SET_MY_ACCOUNT, myAccount }),
   setAuthorized: authorized => ({ type: ACTION_TYPES.SET_AUTHORIZED, authorized }),
   setAuthToken: authToken => ({ type: ACTION_TYPES.SET_AUTH_TOKEN, authToken }),
+  
+  /*
+    S i g n
+      U p
+  */
   setSignupFormEmail: signupFormEmail => ({ type: ACTION_TYPES.SET_SIGN_UP_FORM_EMAIL, signupFormEmail }),
   setSignupFormEmailAgain: signupFormEmailAgain => ({ type: ACTION_TYPES.SET_SIGN_UP_FORM_EMAIL_AGAIN, signupFormEmailAgain }),
   setSignupFormPassword: signupFormPassword => ({ type: ACTION_TYPES.SET_SIGN_UP_FORM_PASSWORD, signupFormPassword }),
   setSignupFormPasswordAgain: signupFormPasswordAgain => ({ type: ACTION_TYPES.SET_SIGN_UP_FORM_PASSWORD_AGAIN, signupFormPasswordAgain }),
+  
+  /*
+    S i g n
+      I n
+  */
   setSigninFormEmail: signinFormEmail => ({ type: ACTION_TYPES.SET_SIGN_IN_FORM_EMAIL, signinFormEmail }),
   setSigninFormPassword: signinFormPassword => ({ type: ACTION_TYPES.SET_SIGN_IN_FORM_PASSWORD, signinFormPassword }),
+  
+  /*
+    C h a n g e
+      P a s s w o r d
+  */
   setChangePasswordFormPassword: changePasswordFormPassword => ({ type: ACTION_TYPES.SET_CHANGE_PASSWORD_FORM_PASSWORD, changePasswordFormPassword }),
   setChangePasswordFormPasswordAgain: changePasswordFormPasswordAgain => ({ type: ACTION_TYPES.SET_CHANGE_PASSWORD_FORM_PASSWORD_AGAIN, changePasswordFormPasswordAgain }),
+
+  /*
+    U p l o a d
+      P i e c e
+  */
+  setUploadPieceFormImage: uploadPieceFormImage => ({ type: ACTION_TYPES.SET_UPLOAD_PIECE_FORM_IMAGE, uploadPieceFormImage }),
+  setUploadPieceFormTitle: uploadPieceFormTitle => ({ type: ACTION_TYPES.SET_UPLOAD_PIECE_FORM_TITLE, uploadPieceFormTitle }),
+  setUploadPieceFormPrice: uploadPieceFormPrice => ({ type: ACTION_TYPES.SET_UPLOAD_PIECE_FORM_PRICE, uploadPieceFormPrice }),
+  setUploadPieceFormDescription: uploadPieceFormDescription => ({ type: ACTION_TYPES.SET_UPLOAD_PIECE_FORM_DESCRIPTION, uploadPieceFormDescription }),
 };
