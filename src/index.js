@@ -8,122 +8,17 @@ import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import {
   BrowserRouter as Router,
-  Link,
   Redirect,
   Route,
   Switch,
 } from 'react-router-dom';
 import 'semantic-ui-css/semantic.min.css';
-import {
-  Container,
-  Dimmer,
-  Header,
-  Icon,
-  Image,
-  Label,
-  Loader,
-  Menu,
-  Segment
-} from 'semantic-ui-react';
 
+import CONSTANTS from './constants';
 import AgeGate from './containers/AgeGate';
-import Home from './containers/Home';
-import SignUp from './containers/SignUp';
-import SignIn from './containers/SignIn';
-import ForgotPassword from './containers/ForgotPassword';
-import ChangePassword from './containers/ChangePassword';
-import UserVerification from './containers/UserVerification';
-import MyAccount from './containers/MyAccount';
+import Layout from './components/Layout';
 import STORE, { mapStateToProps, mapDispatchToProps } from './redux';
 import './index.css';
-
-export function Layout(props) {
-  const {
-    authorized,
-    error,
-    isLoading,
-    actions: {
-      deauthorize,
-      setError,
-    },
-  } = props;
-
-  return (
-    <div className='Layout'>
-        <Menu
-          className='first-third'
-          fluid>
-          <Menu.Item
-            as={Link}
-            className='fancy'
-            header
-            to='/'>
-            <Image size='tiny' src='/logo.png' />
-          </Menu.Item>
-          <Menu.Menu position='right'>
-            {authorized
-            ? [
-              <Menu.Item
-                as={Link}
-                key='my-account'
-                to='/my-account'>
-                <Icon name='user' /> My Account
-              </Menu.Item>,
-              <Menu.Item
-                key='sign-out'
-                onClick={deauthorize}>
-                <Icon name='sign out' /> Sign out
-              </Menu.Item>
-            ]
-            : [
-              <Menu.Item
-                as={Link}
-                key='sign-in'
-                to='/sign-in'>
-                <Icon name='sign in' /> Sign in
-              </Menu.Item>,
-              <Menu.Item
-                as={Link}
-                key='sign-up'
-                to='/sign-up'>
-                <Icon name='user plus' /> Sign up
-              </Menu.Item>
-            ]}
-          </Menu.Menu>
-        </Menu>
-
-          <Container
-            attached='top'        
-            className='second-third'>
-            {error && (
-              <Segment>
-                <Label
-                  icon='close'
-                  color='red'
-                  corner='right'
-                  onClick={() => setError(null)} />
-                <Header as='h3'>
-                    <Icon name='warning sign' /> Error
-                </Header>
-                {error.message}
-              </Segment>
-            )}
-            <Segment>
-              {isLoading
-                ? (
-                  <Dimmer
-                    active
-                    className='second-third'
-                    style={{ height: '90vh' }}>
-                    <Loader active />
-                  </Dimmer>
-                )
-                : props.children}
-            </Segment>
-          </Container>
-    </div>
-  );
-}
 
 /**
  * @class BaseApp
@@ -155,13 +50,13 @@ export class BaseApp extends Component {
     setReduxProps({ ...this.props });
   }
 
-  requiresAuthorized(Component) {
+  requiresAuthorized = Component => {
     const { authorized } = this.props;
 
     return authorized ? Component : <Redirect to='/' />;
   }
 
-  requiresUnauthorized(Component) {
+  requiresUnauthorized = Component => {
     const { authorized } = this.props;
 
     return authorized ? <Redirect to='/' /> : Component;
@@ -178,69 +73,42 @@ export class BaseApp extends Component {
         <Layout {...this.props}>
             {hasPassedAgeGate
               ? (
-                <div>
-                  <Switch>
-                    <Route
-                      exact
-                      path='/'
-                      render={history => (
-                        <Home
-                          {...this.props}
-                          {...history} />
-                      )} />
-                    <Route
-                      exact
-                      path='/sign-in'
-                      render={history => this.requiresUnauthorized(
-                        <SignIn
-                          {...this.props}
-                          {...history} />
-                      )} />
-                    <Route
-                      exact
-                      path='/sign-up'
-                      render={history => this.requiresUnauthorized(
-                        <SignUp
-                          {...this.props}
-                          {...history} />
-                      )} />
-                    <Route
-                      exact
-                      path='/forgot-password'
-                      render={history => this.requiresUnauthorized(
-                        <ForgotPassword
-                          {...this.props}
-                          {...history}  />
-                      )} />
-                    <Route
-                      exact
-                      path='/change-password'
-                      render={history => this.requiresAuthorized(
-                        <ChangePassword
-                          {...this.props}
-                          {...history}  />
-                      )} />
-                    <Route
-                      exact
-                      path='/user-verification'
-                      render={location => this.requiresUnauthorized(
-                        <UserVerification
-                          {...this.props}
-                          {...location} />
-                      )} />
-                    <Route
-                      exact
-                      path='/my-account'
-                      render={() => this.requiresAuthorized(
-                        <MyAccount
-                          {...this.props} />
-                      )} />
-                  </Switch>
-                </div>
+                <Switch>
+                  {CONSTANTS.ROUTES.map((route, index) => {
+                    const {
+                      path,
+                      requiresAuthorized,
+                      requiresUnauthorized,
+                      Component,
+                    } = route;
+                    
+                    let authFunc = Component => Component;
+                    
+                    if (requiresAuthorized) authFunc = this.requiresAuthorized;
+                    if (requiresUnauthorized) authFunc = this.requiresUnauthorized;
+                    
+                    const render = (history, location) => authFunc(
+                      <Component
+                        {...this.props}
+                        {...history}
+                        {...location} />
+                    );
+
+                    return (
+                      <Route
+                        exact
+                        key={index}
+                        path={path}
+                        render={render} />
+                    );
+                  })}
+                </Switch>
               )
-              : <AgeGate onClick={passAgeGate} />}
-      </Layout>
-    </Router>
+              : (
+                <AgeGate onClick={passAgeGate} />
+              )}
+        </Layout>
+      </Router>
     );
   }
 }

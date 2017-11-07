@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
   Button,
   Header,
@@ -49,5 +50,9 @@ export function AgeGate({ onClick }) {
     </Modal>
   );
 }
+
+AgeGate.propTypes = {
+  onClick: PropTypes.func.isRequired,
+};
 
 export default AgeGate;

@@ -6,6 +6,23 @@ body {
   min-width: 424px !important;
 }
 
+.first-third {
+  height: 6vh !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+  z-index: 1 !important;
+  margin-bottom: 1.2rem !important;
+}
+
+.second-third {
+  border-radius: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  overflow-x: hidden;
+  min-height: 50vh;
+}
+
 .AgeGate {
   text-align: center !important;
 }
@@ -23,6 +40,11 @@ body {
   color: white !important;
 }
 
+.fancy {
+  text-transform: uppercase !important;
+  letter-spacing: 0.33rem;
+}
+
 .Slider-images {
   white-space: nowrap;
   overflow-x: scroll;
@@ -33,39 +55,9 @@ body {
   margin-right: 1rem !important;
 }
 
-.fancy {
-  text-transform: uppercase !important;
-  letter-spacing: 0.33rem;
-}
-
-.Master-item .image {
-  margin-top: 1rem;
-}
-
-.Master .segment {
-  margin-top: 0 !important;
-  margin-bottom: 0 !important;
-}
-
 .Layout {
   height: 100vh !important;
   margin: 0 !important;
-}
-
-.first-third {
-  height: 6vh !important;
-  margin: 0 !important;
-  border-radius: 0 !important;
-  z-index: 1 !important;
-  margin-bottom: 1.2rem !important;
-}
-
-.second-third {
-  border-radius: 0 !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  border: none !important;
-  overflow-x: hidden;
 }
 
 .Home-link {

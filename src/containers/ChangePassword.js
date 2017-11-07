@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import QuickForm from '../components/QuickForm';
 
@@ -53,5 +54,10 @@ export function ChangePassword(props) {
       onSubmit={onSubmit} />
   );
 }
+
+ChangePassword.propTypes = {
+  history: PropTypes.object.isRequired,
+  actions: PropTypes.objectOf(PropTypes.func).isRequired,
+};
 
 export default ChangePassword;

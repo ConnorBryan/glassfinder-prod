@@ -1,3 +1,12 @@
+
+import Home from './containers/Home';
+import SignUp from './containers/SignUp';
+import SignIn from './containers/SignIn';
+import ForgotPassword from './containers/ForgotPassword';
+import ChangePassword from './containers/ChangePassword';
+import UserVerification from './containers/UserVerification';
+import MyAccount from './containers/MyAccount';
+
 export default {
   /*
     O p e r a t i o n s
@@ -22,6 +31,46 @@ export default {
     brand: 'building',
     piece: 'puzzle',
   },
+
+  /*  
+    R o u t i n g
+  */
+  ROUTES: [
+    {
+      path: '/',
+      Component: Home,
+    },
+    {
+      path: '/sign-in',
+      requiresUnauthorized: true,
+      Component: SignIn,
+    },
+    {
+      path: '/sign-up',
+      requiresUnauthorized: true,
+      Component: SignUp,
+    },
+    {
+      path: '/forgot-password',
+      requiresUnauthorized: true,
+      Component: ForgotPassword,
+    },
+    {
+      path: '/change-password',
+      requiresAuthorized: true,
+      Component: ChangePassword,
+    },
+    {
+      path: '/user-verification',
+      requiresUnauthorized: true,
+      Component: UserVerification,
+    },
+    {
+      path: '/my-account',
+      requiresAuthorized: true,
+      Component: MyAccount,
+    },
+  ],
 
   /*
     C o o k i e s
