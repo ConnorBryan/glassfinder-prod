@@ -9,6 +9,7 @@ import {
 } from 'semantic-ui-react';
 
 import CONSTANTS from '../constants';
+import flatten from '../utils/flatten';
 import AccountField from '../components/AccountField';
 
 export function MyAccount(props) {
@@ -20,17 +21,12 @@ export function MyAccount(props) {
   if (!myAccount) return (
     <Redirect to='/' />
   );
-
-  const { linked, linkedAccount = {}, type } = myAccount;
+  
+  const { linkedAccount = {} } = myAccount;
+  const { linked, type } = flatten(myAccount);
   const accountType = CONSTANTS.ACCOUNT_TYPES[type];
-
-  const fields = Object
-    .keys(linkedAccount)
-    .map(key => ({
-      title: capitalize(key),
-      fieldKey: key,
-      fieldValue: linkedAccount[key],
-    }));
+  const userFields = fieldify(myAccount);
+  const linkedFields = fieldify(linkedAccount);
 
   return (
     <Segment.Group>
@@ -59,14 +55,14 @@ export function MyAccount(props) {
           </Button>
         )}
       </Segment>
-      {linked && fields.map(({ title, fieldKey, fieldValue }, index) => (
-        <AccountField
-          key={index}
-          updateField={updateField}
-          title={title}
-          fieldKey={fieldKey}
-          fieldValue={fieldValue} />
-      ))}
+      <AccountFields
+        fieldset={userFields}
+        updateField={updateField} />
+      {linked && (
+        <AccountFields
+          fieldset={linkedFields}
+          updateField={updateField} />
+      )}
     </Segment.Group>
   );
 }
@@ -85,4 +81,33 @@ function capitalize(string) {
     .split('')
     .map((l, i) => i === 0 ? l.toUpperCase() : l)
     .join('');
+}
+
+function fieldify(object) {
+  return Object
+    .keys(object)
+    .map(key => ({
+      title: capitalize(key),
+      fieldKey: key,
+      fieldValue: object[key].value,
+      editable: object[key].editable,
+    }));
+}
+
+function AccountFields({ fieldset, updateField }) {
+  return fieldset.map((field, index) => {
+    const { title, fieldKey, fieldValue, editable } = field;
+
+    if (typeof fieldValue === 'object') return null;
+
+    return (
+      <AccountField
+        key={index}
+        updateField={updateField}
+        title={title}
+        fieldKey={fieldKey}
+        fieldValue={fieldValue}
+        editable={editable} />
+    );
+  });
 }

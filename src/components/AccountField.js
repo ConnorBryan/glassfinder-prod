@@ -10,8 +10,18 @@ export default class AccountField extends Component {
   static propTypes = {
     title: PropTypes.string.isRequired,
     fieldKey: PropTypes.string.isRequired,
-    fieldValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    fieldValue: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number,
+      PropTypes.bool,
+    ]).isRequired,
     updateField: PropTypes.func.isRequired,
+    editable: PropTypes.bool.isRequired,
+  };
+
+  static defaultProps = {
+    fieldValue: '',
+    editable: false,
   };
 
   state = { showingInput: false, newValue: this.props.fieldValue };
@@ -26,6 +36,7 @@ export default class AccountField extends Component {
       fieldKey,
       fieldValue,
       updateField,
+      editable,
     } = this.props;
     const { showingInput, newValue } = this.state;
 
@@ -35,9 +46,11 @@ export default class AccountField extends Component {
           as='h4'
           className='fancy'>
             {title} 
-            <Button
-              icon='pencil'
-              onClick={this.toggleShowingInput} />
+            {editable && (
+              <Button
+                icon='pencil'
+                onClick={this.toggleShowingInput} />
+            )}
         </Header>
         {showingInput
           ? [
@@ -51,7 +64,9 @@ export default class AccountField extends Component {
               icon='send'
               onClick={() => this.toggleShowingInput() || updateField(fieldKey, newValue)} />
           ]
-          : fieldValue}
+          : (
+            <p>{fieldValue}</p>
+          )}
       </Segment>
     );
   }

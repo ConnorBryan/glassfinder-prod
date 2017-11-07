@@ -2,6 +2,7 @@ import axios from 'axios';
 import Cookies from 'universal-cookie';
 
 import CONSTANTS from '../constants';
+import flatten from '../utils/flatten';
 import ACTION_CREATORS from './actionCreators';
 import ACTIONS from './actions';
 
@@ -87,7 +88,7 @@ export default {
 
             dispatch(ACTIONS.authorize(token, history));
             dispatch(ACTIONS.setMyAccount(user));
-            dispatch(ACTIONS.syncMyAccount());
+            setTimeout(() => dispatch(ACTIONS.syncMyAccount()), 1000);
           }
     }),
 
@@ -104,7 +105,7 @@ export default {
           const { data: { error } } = await (
             axios.post(`${CONSTANTS.API_ROOT}/users/link`, {
               token: authToken,
-              user: JSON.stringify(myAccount),
+              user: JSON.stringify(flatten(myAccount)),
               type
             })
           );
@@ -173,6 +174,7 @@ export default {
 
             dispatch(ACTIONS.authorize(token));
             dispatch(ACTIONS.setMyAccount(user));
+            setTimeout(() => dispatch(ACTIONS.syncMyAccount()), 1000);
           }
     }),
 
@@ -194,7 +196,7 @@ export default {
           
           const { data: { error } } = await (
             axios.post(`${CONSTANTS.API_ROOT}/change-password`, {
-              user: myAccount,
+              user: JSON.stringify(flatten(myAccount)),
               token: authToken,
               password: changePasswordFormPassword,
             })
@@ -214,8 +216,9 @@ export default {
     syncMyAccount: () =>
       (dispatch, getState) =>
         processify(dispatch, async () => {
-          const { authToken, myAccount: { email } } = getState();
-          
+          const { authToken, myAccount } = getState();
+          const { email } = flatten(myAccount);
+
           const { data: { error, user, linkedAccount } } = await (
             axios.post(`${CONSTANTS.API_ROOT}/users/sync`, {
               token: authToken,
@@ -232,6 +235,7 @@ export default {
             }));
           } else {
             dispatch(ACTIONS.setMyAccount(user));
+
             window.localStorage.setItem(CONSTANTS.MY_ACCOUNT_COOKIE, JSON.stringify(user));
           }
     }),
@@ -244,12 +248,12 @@ export default {
       (dispatch, getState) =>
         processify(dispatch, async () => {
           const { authToken, myAccount } = getState();
-          const { linked } = myAccount;
+          const { linked } = flatten(myAccount);
 
           const { data: { error } } = await (
             axios.post(`${CONSTANTS.API_ROOT}/users/update-field`, {
               token: authToken,
-              user: JSON.stringify(myAccount),
+              user: JSON.stringify(flatten(myAccount)),
               fieldKey,
               newFieldValue,
               linked,
