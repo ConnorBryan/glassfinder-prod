@@ -291,7 +291,7 @@ export default {
           formData.append('price', price);
           formData.append('description', description);
 
-          const { data: { error, piece } } = await (
+          const { data: { error } } = await (
             axios.post(`${CONSTANTS.API_ROOT}/users/upload-piece`, formData, {
               headers: {
                 'Content-Type': 'multipart/form-data',
