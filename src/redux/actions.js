@@ -219,7 +219,7 @@ export default {
           const { authToken, myAccount } = getState();
           const { email } = flatten(myAccount);
 
-          const { data: { error, user, linkedAccount } } = await (
+          const { data: { error, user, linkedAccount, pieces } } = await (
             axios.post(`${CONSTANTS.API_ROOT}/users/sync`, {
               token: authToken,
               email,
@@ -227,6 +227,7 @@ export default {
           );
 
           if (linkedAccount) user.linkedAccount = linkedAccount;
+          if (pieces) user.pieces = pieces;
 
           if (error) {
             dispatch(ACTIONS.setError({
