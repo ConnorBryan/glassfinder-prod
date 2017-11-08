@@ -1,13 +1,4 @@
-
-import Home from './containers/Home';
-import SignUp from './containers/SignUp';
-import SignIn from './containers/SignIn';
-import ForgotPassword from './containers/ForgotPassword';
-import ChangePassword from './containers/ChangePassword';
-import UserVerification from './containers/UserVerification';
-import MyAccount from './containers/MyAccount';
-import UploadPiece from './containers/UploadPiece';
-import MyPieces from './containers/MyPieces';
+import ROUTES from './routes';
 
 export default {
   /*
@@ -34,100 +25,10 @@ export default {
     piece: 'puzzle',
   },
 
-  /*  
+  /*
     R o u t i n g
   */
-  ROUTES: [
-    {
-      path: '/',
-      Component: Home,
-    },
-    {
-      path: '/sign-in',
-      requiresUnauthorized: true,
-      Component: SignIn,
-    },
-    {
-      path: '/sign-up',
-      requiresUnauthorized: true,
-      Component: SignUp,
-    },
-    {
-      path: '/forgot-password',
-      requiresUnauthorized: true,
-      Component: ForgotPassword,
-    },
-    {
-      path: '/change-password',
-      requiresAuthorized: true,
-      Component: ChangePassword,
-    },
-    {
-      path: '/user-verification',
-      requiresUnauthorized: true,
-      Component: UserVerification,
-    },
-    {
-      path: '/my-account',
-      requiresAuthorized: true,
-      Component: MyAccount,
-    },
-    {
-      path: '/upload-piece',
-      requiresAuthorized: true,
-      Component: UploadPiece,
-    },
-    {
-      path: '/my-pieces',
-      requiresAuthorized: true,
-      Component: MyPieces,
-    },
-  ],
-
-  BREADCRUMBS: {
-    '/': [
-      {
-        pageName: 'Home',
-        active: true,
-      },
-    ],
-    '/my-account': [
-      {
-        pageName: 'My Account',
-        active: true,
-      },
-    ],
-    '/change-password': [
-      {
-        pageName: 'My Account',
-        route: '/my-account',
-      },
-      {
-        pageName: 'Change Password',
-        active: true,
-      },
-    ],
-    '/upload-piece': [
-      {
-        pageName: 'My Account',
-        route: '/my-account',
-      },
-      {
-        pageName: 'Upload Piece',
-        active: true,
-      },
-    ],
-    '/my-pieces': [
-      {
-        pageName: 'My Account',
-        route: '/my-account',
-      },
-      {
-        pageName: 'My Pieces',
-        active: true,
-      },
-    ],
-  },
+  ROUTES,
 
   /*
     C o o k i e s

@@ -15,7 +15,7 @@ export function Breadcrumbs(props) {
     location: { pathname },
   } = props;
 
-  const breadcrumbs = CONSTANTS.BREADCRUMBS[pathname];
+  const breadcrumbs = (CONSTANTS.ROUTES.find(({ path }) => path === pathname) || {}).breadcrumbs;
 
   if (!breadcrumbs) return null;
 
