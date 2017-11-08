@@ -283,14 +283,20 @@ export default {
             uploadPieceFormDescription: description,
           } = getState();
 
+          const formData = new FormData();
+
+          formData.append('user', JSON.stringify(flatten(myAccount)));
+          formData.append('image', image);
+          formData.append('title', title);
+          formData.append('price', price);
+          formData.append('description', description);
+
           const { data: { error, piece } } = await (
-            axios.post(`${CONSTANTS.API_ROOT}/users/upload-piece`, {
-              token,
-              user: JSON.stringify(flatten(myAccount)),
-              image,
-              title,
-              price,
-              description,
+            axios.post(`${CONSTANTS.API_ROOT}/users/upload-piece`, formData, {
+              headers: {
+                'Content-Type': 'multipart/form-data',
+                'x-access-token': token,
+              },
             })
           );
 
