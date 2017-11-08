@@ -307,6 +307,31 @@ export default {
             }))
             : dispatch(ACTIONS.syncMyAccount());
     }),
+
+    /**
+     * @func explorePieces
+     * @desc Browse existing pieces on the site in progressively more detail. 
+     */
+    explorePieces: () =>
+      (dispatch, getState) =>
+        processify(dispatch, async () => {
+          const { localPieces } = getState();
+
+          if (localPieces) return;
+
+          debugger;
+
+          const { data: { error, pieces } } = await axios.get(`${CONSTANTS.API_ROOT}/pieces`);
+
+          if (error) {
+            dispatch(ACTIONS.setError({
+                message: error || `Unable to explore pieces`,
+              }));
+          } else {
+            dispatch(ACTIONS.setLocalPiecesPage(1));
+            dispatch(ACTIONS.setLocalPieces(pieces));
+          }
+    }),
 };
 
 /* = = = */

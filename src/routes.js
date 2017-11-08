@@ -8,6 +8,7 @@ import UserVerification from './containers/UserVerification';
 import MyAccount from './containers/MyAccount';
 import UploadPiece from './containers/UploadPiece';
 import MyPieces from './containers/MyPieces';
+import ExplorePieces from './containers/ExplorePieces';
 
 export default [
   {
@@ -76,6 +77,20 @@ export default [
       },
       {
         pageName: 'User verification',
+        active: true,
+      },
+    ],
+  },
+  {
+    path: '/explore-pieces',
+    Component: ExplorePieces,
+    breadcrumbs: [
+      {
+        pageName: 'Home',
+        route: '/',
+      },
+      {
+        pageName: 'Explore pieces',
         active: true,
       },
     ],

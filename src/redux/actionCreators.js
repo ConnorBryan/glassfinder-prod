@@ -40,4 +40,11 @@ export default {
   setUploadPieceFormTitle: uploadPieceFormTitle => ({ type: ACTION_TYPES.SET_UPLOAD_PIECE_FORM_TITLE, uploadPieceFormTitle }),
   setUploadPieceFormPrice: uploadPieceFormPrice => ({ type: ACTION_TYPES.SET_UPLOAD_PIECE_FORM_PRICE, uploadPieceFormPrice }),
   setUploadPieceFormDescription: uploadPieceFormDescription => ({ type: ACTION_TYPES.SET_UPLOAD_PIECE_FORM_DESCRIPTION, uploadPieceFormDescription }),
+
+  /*
+    E x p l o r e
+      P i e c e s
+  */
+  setLocalPieces: localPieces => ({ type: ACTION_TYPES.SET_LOCAL_PIECES, localPieces }),
+  setLocalPiecesPage: localPiecesPage => ({ type: ACTION_TYPES.SET_LOCAL_PIECES_PAGE, localPiecesPage }),
 };

@@ -22,13 +22,19 @@ export function TopBar(props) {
         <Image size='tiny' src='/logo.png' />
       </Menu.Item>
       <Menu.Menu position='right'>
+        <Menu.Item
+          as={Link}
+          key='explore-pieces'
+          to='/explore-pieces'>
+          <Icon name='puzzle' /> Explore pieces
+        </Menu.Item>
         {authorized
         ? [
           <Menu.Item
             as={Link}
             key='my-account'
             to='/my-account'>
-            <Icon name='user' /> My Account
+            <Icon name='user' /> My account
           </Menu.Item>,
           <Menu.Item
             key='sign-out'
