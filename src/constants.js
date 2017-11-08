@@ -4,7 +4,7 @@ export default {
   /*
     O p e r a t i o n s
   */
-  API_ROOT: 'http://localhost:6166/api',
+  API_ROOT: 'https://glassfinder.com/api',
 
   /*
     M o d e l s
