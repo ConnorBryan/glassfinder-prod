@@ -5,6 +5,7 @@ import {
   Header,
   Icon,
   Label,
+  Menu,
   Segment,
 } from 'semantic-ui-react';
 
@@ -43,24 +44,31 @@ export function MyAccount(props) {
             </Header>
           </Label>
         )}
-        <Button.Group>
-          <Button
+        <Menu
+          fluid
+          vertical>
+          <Menu.Item
             as={Link}
             pull='right'
             to='/change-password'>
             <Icon name='lock' /> Change password
-          </Button>
+          </Menu.Item>
           {accountType !== CONSTANTS.ACCOUNT_TYPES.artist && (
-            <Button onClick={() => link('artist')}>
+            <Menu.Item onClick={() => link('artist')}>
               <Icon name={CONSTANTS.ICONS.artist} /> Become an artist
-            </Button>
+            </Menu.Item>
           )}
-          <Button
+          <Menu.Item
             as={Link}
             to='/upload-piece'>
               <Icon name={CONSTANTS.ICONS.piece} /> Upload a piece
-          </Button>
-        </Button.Group>
+          </Menu.Item>
+          <Menu.Item
+            as={Link}
+            to='/my-pieces'>
+              <Icon name={CONSTANTS.ICONS.piece} /> My pieces
+          </Menu.Item>
+        </Menu>
       </Segment>
       <AccountFields
         fieldset={userFields}

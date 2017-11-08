@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
 import {
   Container,
   Header,
@@ -10,6 +11,7 @@ import {
 } from 'semantic-ui-react';
 
 import TopBar from './TopBar';
+import Breadcrumbs from './Breadcrumbs';
 
 export function Layout(props) {
   const {
@@ -50,6 +52,7 @@ export function Layout(props) {
                 {error.message}
               </Segment>
             )}
+            <Breadcrumbs {...props} />        
             {props.children}
           </Segment>
           )}
@@ -65,4 +68,4 @@ Layout.propTypes = {
   actions: PropTypes.objectOf(PropTypes.func).isRequired
 };
 
-export default Layout;
+export default withRouter(Layout);

@@ -7,6 +7,7 @@ import ChangePassword from './containers/ChangePassword';
 import UserVerification from './containers/UserVerification';
 import MyAccount from './containers/MyAccount';
 import UploadPiece from './containers/UploadPiece';
+import MyPieces from './containers/MyPieces';
 
 export default {
   /*
@@ -76,7 +77,57 @@ export default {
       requiresAuthorized: true,
       Component: UploadPiece,
     },
+    {
+      path: '/my-pieces',
+      requiresAuthorized: true,
+      Component: MyPieces,
+    },
   ],
+
+  BREADCRUMBS: {
+    '/': [
+      {
+        pageName: 'Home',
+        active: true,
+      },
+    ],
+    '/my-account': [
+      {
+        pageName: 'My Account',
+        active: true,
+      },
+    ],
+    '/change-password': [
+      {
+        pageName: 'My Account',
+        route: '/my-account',
+      },
+      {
+        pageName: 'Change Password',
+        active: true,
+      },
+    ],
+    '/upload-piece': [
+      {
+        pageName: 'My Account',
+        route: '/my-account',
+      },
+      {
+        pageName: 'Upload Piece',
+        active: true,
+      },
+    ],
+    '/my-pieces': [
+      {
+        pageName: 'My Account',
+        route: '/my-account',
+      },
+      {
+        pageName: 'My Pieces',
+        active: true,
+      },
+    ],
+  },
 
   /*
     C o o k i e s
