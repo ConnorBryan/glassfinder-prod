@@ -62,4 +62,19 @@ export default {
     return { ...state, artistsById };
   },
   [ACTION_TYPES.SET_ACTIVE_ARTIST]: (state, { artistId }) => ({ ...state, activeArtist: artistId }),
+
+  /*
+    P i e c e s
+  */
+  [ACTION_TYPES.SET_PIECE]: (state, { piece }) => {
+    const { piecesById } = state;
+    const { id } = piece;
+
+    if (!id) throw Error(`Attempted to call SET_PIECE on invalid piece`);
+
+    piecesById.set(id, piece);
+
+    return { ...state, piecesById };
+  },
+  [ACTION_TYPES.SET_ACTIVE_PIECE]: (state, { pieceId }) => ({ ...state, activePiece: pieceId }),
 };

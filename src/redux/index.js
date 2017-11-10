@@ -20,6 +20,10 @@ export const INITIAL_STATE = {
   mapmarkers: [],
 
   artistsById: new Map(),
+  activeArtist: null,
+
+  piecesById: new Map(),
+  activePiece: null,
 };
 
 export const REDUCER = (state = INITIAL_STATE, action) => (

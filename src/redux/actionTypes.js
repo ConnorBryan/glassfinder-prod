@@ -51,4 +51,10 @@ export default {
   */
   SET_ARTIST: 'SET_ARTIST',
   SET_ACTIVE_ARTIST: 'SET_ACTIVE_ARTIST',
+
+  /*
+    P i e c e s
+  */
+  SET_PIECE: 'SET_PIECE',
+  SET_ACTIVE_PIECE: 'SET_ACTIVE_PIECE',
 };

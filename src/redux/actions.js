@@ -334,6 +334,7 @@ export default {
     /**
      * @func fetchArtist
      * @desc Grab a single artist from the database and set it locally.
+     * @param {number} id - Which artist should be retrieved?
      */
     fetchArtist: id =>
       (dispatch, getState) =>
@@ -347,7 +348,29 @@ export default {
           } else {
             dispatch(ACTIONS.setArtist(artist));
             dispatch(ACTIONS.setActiveArtist(artist.id));
+            dispatch(ACTIONS.fetchPieces(pieces));
           }
+    }),
+
+    /**
+     * @func fetchPieces
+     * @desc Given an array of pieceIds, fetch the ones we don't have locally and set them accordingly.
+     * @param {Array<number>} pieceIds - The IDs to check and potentially fetch.
+     */
+    fetchPieces: pieceIds =>
+      (dispatch, getState) =>
+        processify(dispatch, async () => {
+          const { piecesById } = getState();
+          const pieceIdsToFetch = pieceIds.filter(id => !piecesById.get(id));
+          
+          const url = pieceIdsToFetch
+            .reduce((urlString, pieceId) => urlString += `${pieceId},`, `${CONSTANTS.API_ROOT}/pieces?ids=`);
+
+          const { data: { success, message, pieces } } = await axios.get(url.substr(0, url.length - 1));
+
+          success
+            ? pieces.forEach(piece => dispatch(ACTIONS.setPiece(piece)))
+            : dispatch(ACTIONS.setError({ message }));
     }),
 };
 
