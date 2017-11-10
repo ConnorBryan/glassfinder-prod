@@ -52,4 +52,5 @@ export default {
     A r t i s t s
   */
   setArtist: artist => ({ type: ACTION_TYPES.SET_ARTIST, artist }),
+  setActiveArtist: artistId => ({ type: ACTION_TYPES.SET_ACTIVE_ARTIST, artistId }),
 };

@@ -331,19 +331,22 @@ export default {
           }
     }),
 
+    /**
+     * @func fetchArtist
+     * @desc Grab a single artist from the database and set it locally.
+     */
     fetchArtist: id =>
       (dispatch, getState) =>
         processify(dispatch, async () => {
           if (!id) return;
 
-          const { data: { error, artist } } = await axios.get(`${CONSTANTS.API_ROOT}/artist/${id}`);
-
-          if (error) {
-            dispatch(ACTIONS.setError({
-              message: error || `Unable to fetch artist ${id}`,
-            }));
+          const { data: { success, message, artist, pieces } } = await axios.get(`${CONSTANTS.API_ROOT}/artist/${id}`);
+          
+          if (!success) {
+            dispatch(ACTIONS.setError({ message }));
           } else {
             dispatch(ACTIONS.setArtist(artist));
+            dispatch(ACTIONS.setActiveArtist(artist.id));
           }
     }),
 };

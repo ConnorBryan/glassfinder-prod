@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import {
   Button,
@@ -10,46 +10,60 @@ import {
 } from 'semantic-ui-react';
 import pathToRegexp from 'path-to-regexp';
 
-export function ArtistProfile(props) {
-  const {
-    artistsById,
-    location: { pathname },
-    actions: { fetchArtist },
-  } = props;
+export default class ArtistProfile extends Component {
+  static propTypes = {};
 
-  const id = parseInt(pathname.split('/')[2]);
+  componentDidMount() {
+    const {
+      artistsById,
+      location: { pathname },
+      actions: { setActiveArtist, fetchArtist },
+    } = this.props;
+
+    const id = parseInt(pathname.split('/')[2]);
+    const artist = artistsById.get(id);
+
+    artist ? setActiveArtist(id) : fetchArtist(id);
+  }
+
+  shouldComponentUpdate() {
+    return false;
+  }
   
-  if (isNaN(id)) return (
-    <Redirect to='/artists' />
-  );
+  render() {
+    const {
+      activeArtist,
+      artistsById,
+      location: { pathname },
+      actions: { fetchArtist },
+    } = this.props;
 
-  const artist = artistsById.get(id);
-
-  if (!artist) {
-    fetchArtist(id);
+    const id = parseInt(pathname.split('/')[2]);
     
-    return null;
-  };
+    if (isNaN(id)) return (
+      <Redirect to='/artists' />
+    );
 
-  const {
-    name,
-    tagline,
-    image,
-    from,
-    description,
-  } = artist;
+    const artist = artistsById.get(activeArtist);
 
-  return (
-    <div>
-      {name}
-      {tagline}
-      {image}
-      {from}
-      {description}
-    </div>
-  );
+    if (!artist) return null;
+
+    const {
+      name,
+      tagline,
+      image,
+      from,
+      description,
+    } = artist;
+
+    return (
+      <div>
+        {name}
+        {tagline}
+        {image}
+        {from}
+        {description}
+      </div>
+    );
+  }
 }
-
-ArtistProfile.propTypes = {};
-
-export default ArtistProfile;

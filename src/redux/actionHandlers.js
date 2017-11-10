@@ -61,4 +61,5 @@ export default {
 
     return { ...state, artistsById };
   },
+  [ACTION_TYPES.SET_ACTIVE_ARTIST]: (state, { artistId }) => ({ ...state, activeArtist: artistId }),
 };

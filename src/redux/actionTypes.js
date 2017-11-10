@@ -50,4 +50,5 @@ export default {
     A r t i s t s
   */
   SET_ARTIST: 'SET_ARTIST',
+  SET_ACTIVE_ARTIST: 'SET_ACTIVE_ARTIST',
 };
