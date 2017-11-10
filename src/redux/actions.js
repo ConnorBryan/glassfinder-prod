@@ -319,8 +319,6 @@ export default {
 
           if (localPieces) return;
 
-          debugger;
-
           const { data: { error, pieces } } = await axios.get(`${CONSTANTS.API_ROOT}/pieces`);
 
           if (error) {

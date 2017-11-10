@@ -8,9 +8,9 @@ import {
   Image,
   Label,
 } from 'semantic-ui-react';
-import { formatMoney } from 'accounting';
 
 import CONSTANTS from '../constants';
+import PieceCard from '../components/PieceCard';
 
 export function MyPieces(props) {
   const {
@@ -20,13 +20,6 @@ export function MyPieces(props) {
   if (!pieces) return (
     <Redirect to='/my-account' />
   );
-
-  const makePriceLabel = price => ({
-    as: 'div',
-    color: 'green',
-    content: formatMoney(price),
-    ribbon: 'right',
-  });
 
   return [
     <Header
@@ -44,21 +37,12 @@ export function MyPieces(props) {
       } = piece;
 
       return (
-        <Card
-          fluid
-          key={index}>
-          <Image
-            label={makePriceLabel(price)}
-            src={image} />
-          <Card.Content>
-            <Card.Header>
-              {title}
-            </Card.Header>
-            <Card.Description>
-              {description}
-            </Card.Description>
-          </Card.Content>
-        </Card>
+        <PieceCard
+          key={index}
+          price={price}
+          image={image}
+          title={title}
+          description={description} />
       );
     }),
   ];
