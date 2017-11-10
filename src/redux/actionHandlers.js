@@ -47,4 +47,18 @@ export default {
   */
   [ACTION_TYPES.SET_LOCAL_PIECES]: (state, { localPieces }) => ({ ...state, localPieces }),
   [ACTION_TYPES.SET_LOCAL_PIECES_PAGE]: (state, { localPiecesPage }) => ({ ...state, localPiecesPage }),
+
+  /*
+    A r t i s t s
+  */
+  [ACTION_TYPES.SET_ARTIST]: (state, { artist }) => {
+    const { artistsById } = state;
+    const { id } = artist;
+
+    if (!id) throw Error(`Attempted to call SET_ARTIST on invalid artist`);
+
+    artistsById.set(id, artist);
+
+    return { ...state, artistsById };
+  },
 };

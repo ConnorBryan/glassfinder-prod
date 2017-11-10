@@ -9,6 +9,7 @@ import MyAccount from './containers/MyAccount';
 import UploadPiece from './containers/UploadPiece';
 import MyPieces from './containers/MyPieces';
 import ExplorePieces from './containers/ExplorePieces';
+import ArtistProfile from './containers/ArtistProfile';
 
 export default [
   {
@@ -164,6 +165,20 @@ export default [
       {
         pageName: 'My Pieces',
         active: true,
+      },
+    ],
+  },
+  {
+    path: '/a/:id?',
+    Component: ArtistProfile,
+    breadcrumbs: [
+      {
+        pageName: 'Home',
+        route: '/',
+      },
+      {
+        pageName: 'Artists',
+        route: '/artists',
       },
     ],
   },

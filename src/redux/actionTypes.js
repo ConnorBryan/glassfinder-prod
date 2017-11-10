@@ -45,4 +45,9 @@ export default {
   */
   SET_LOCAL_PIECES: 'SET_LOCAL_PIECES',
   SET_LOCAL_PIECES_PAGE: 'SET_LOCAL_PIECES_PAGE',
+
+  /*
+    A r t i s t s
+  */
+  SET_ARTIST: 'SET_ARTIST',
 };

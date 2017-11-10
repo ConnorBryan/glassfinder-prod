@@ -18,6 +18,8 @@ export const INITIAL_STATE = {
   isLoading: false,
   initialized: false,
   mapmarkers: [],
+
+  artistsById: new Map(),
 };
 
 export const REDUCER = (state = INITIAL_STATE, action) => (

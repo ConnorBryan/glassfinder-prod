@@ -47,4 +47,9 @@ export default {
   */
   setLocalPieces: localPieces => ({ type: ACTION_TYPES.SET_LOCAL_PIECES, localPieces }),
   setLocalPiecesPage: localPiecesPage => ({ type: ACTION_TYPES.SET_LOCAL_PIECES_PAGE, localPiecesPage }),
+
+  /*
+    A r t i s t s
+  */
+  setArtist: artist => ({ type: ACTION_TYPES.SET_ARTIST, artist }),
 };

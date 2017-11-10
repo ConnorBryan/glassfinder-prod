@@ -323,11 +323,27 @@ export default {
 
           if (error) {
             dispatch(ACTIONS.setError({
-                message: error || `Unable to explore pieces`,
-              }));
+              message: error || `Unable to explore pieces`,
+            }));
           } else {
             dispatch(ACTIONS.setLocalPiecesPage(1));
             dispatch(ACTIONS.setLocalPieces(pieces));
+          }
+    }),
+
+    fetchArtist: id =>
+      (dispatch, getState) =>
+        processify(dispatch, async () => {
+          if (!id) return;
+
+          const { data: { error, artist } } = await axios.get(`${CONSTANTS.API_ROOT}/artist/${id}`);
+
+          if (error) {
+            dispatch(ACTIONS.setError({
+              message: error || `Unable to fetch artist ${id}`,
+            }));
+          } else {
+            dispatch(ACTIONS.setArtist(artist));
           }
     }),
 };
