@@ -10,6 +10,8 @@ import {
 } from 'semantic-ui-react';
 import pathToRegexp from 'path-to-regexp';
 
+import PieceCard from '../components/PieceCard';
+
 export default class ArtistProfile extends Component {
   static propTypes = {};
 
@@ -26,8 +28,12 @@ export default class ArtistProfile extends Component {
     artist ? setActiveArtist(id) : fetchArtist(id);
   }
 
-  shouldComponentUpdate() {
-    return false;
+  hydratePieces(pieceIds) {
+    const { piecesById } = this.props;
+
+    const pieces = pieceIds.map(id => piecesById.get(id)).filter(x => x);
+
+    return pieces.length > 0 ? pieces : null;
   }
   
   render() {
@@ -48,6 +54,9 @@ export default class ArtistProfile extends Component {
 
     if (!artist) return null;
 
+    const { pieces: pieceIds } = artist;
+    const pieces = this.hydratePieces(pieceIds);
+
     const {
       name,
       tagline,
@@ -63,6 +72,25 @@ export default class ArtistProfile extends Component {
         {image}
         {from}
         {description}
+
+        <h2>Pieces</h2>
+        {pieces && pieces.map((piece, index) => {
+          const {
+            price,
+            image,
+            title,
+            description,
+          } = piece;
+
+          return (
+            <PieceCard
+              key={index}
+              price={price}
+              image={image}
+              title={title}
+              description={description} />
+          );
+        })}
       </div>
     );
   }

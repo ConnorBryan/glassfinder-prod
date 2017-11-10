@@ -346,6 +346,8 @@ export default {
           if (!success) {
             dispatch(ACTIONS.setError({ message }));
           } else {
+            artist.pieces = pieces;
+            
             dispatch(ACTIONS.setArtist(artist));
             dispatch(ACTIONS.setActiveArtist(artist.id));
             dispatch(ACTIONS.fetchPieces(pieces));
