@@ -15,13 +15,22 @@ export default class Home extends Component {
       <Container>
         <Segment.Group>
           <Segment>
-            <Button
-              as={Link}
-              className='fancy'
-              fluid
-              to='/explore-pieces'>
-              <Icon name={CONSTANTS.ICONS.piece} /> Explore pieces
-            </Button>
+            <Button.Group fluid vertical>
+              <Button
+                as={Link}
+                className='fancy'
+                fluid
+                to='/explore-shops'>
+                <Icon name={CONSTANTS.ICONS.shop} /> Explore shops
+              </Button>
+              <Button
+                as={Link}
+                className='fancy'
+                fluid
+                to='/explore-pieces'>
+                <Icon name={CONSTANTS.ICONS.piece} /> Explore pieces
+              </Button>
+            </Button.Group>
           </Segment>
         </Segment.Group>
       </Container>
