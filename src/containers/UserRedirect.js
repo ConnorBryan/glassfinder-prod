@@ -22,6 +22,7 @@ export default class UserRedirect extends Component {
 
     switch (type) {
       case 'artist': return history.push(`/a/${redirectId}`);
+      case 'shop': return history.push(`/s/${redirectId}`);
       default: return history.push('/');
     }
   }

@@ -24,6 +24,12 @@ export function TopBar(props) {
       <Menu.Menu position='right'>
         <Menu.Item
           as={Link}
+          key='explore-shops'
+          to='/explore-shops'>
+          <Icon name='puzzle' /> Explore shops
+        </Menu.Item>
+        <Menu.Item
+          as={Link}
           key='explore-pieces'
           to='/explore-pieces'>
           <Icon name='puzzle' /> Explore pieces

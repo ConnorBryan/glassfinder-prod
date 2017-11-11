@@ -53,9 +53,14 @@ export function MyAccount(props) {
             to='/change-password'>
             <Icon name='lock' /> Change password
           </Menu.Item>
-          {accountType !== CONSTANTS.ACCOUNT_TYPES.artist && (
+          {!linked && accountType !== CONSTANTS.ACCOUNT_TYPES.artist && (
             <Menu.Item onClick={() => link('artist')}>
               <Icon name={CONSTANTS.ICONS.artist} /> Become an artist
+            </Menu.Item>
+          )}
+          {!linked && accountType !== CONSTANTS.ACCOUNT_TYPES.shop && (
+            <Menu.Item onClick={() => link('shop')}>
+              <Icon name={CONSTANTS.ICONS.shop} /> Become a shop
             </Menu.Item>
           )}
           <Menu.Item

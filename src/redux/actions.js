@@ -309,6 +309,29 @@ export default {
     }),
 
     /**
+     * @func exploreShops
+     * @desc Browse existing shops on the site in progressively more detail. 
+     */
+    exploreShops: () =>
+      (dispatch, getState) =>
+        processify(dispatch, async () => {
+          const { localShops } = getState();
+
+          if (localShops) return;
+
+          const { data: { error, shops } } = await axios.get(`${CONSTANTS.API_ROOT}/shops`);
+
+          if (error) {
+            dispatch(ACTIONS.setError({
+              message: error || `Unable to explore shops`,
+            }));
+          } else {
+            dispatch(ACTIONS.setLocalShopsPage(1));
+            dispatch(ACTIONS.setLocalShops(shops));
+          }
+    }),
+
+    /**
      * @func explorePieces
      * @desc Browse existing pieces on the site in progressively more detail. 
      */
@@ -350,6 +373,29 @@ export default {
             
             dispatch(ACTIONS.setArtist(artist));
             dispatch(ACTIONS.setActiveArtist(artist.id));
+            dispatch(ACTIONS.fetchPieces(pieces));
+          }
+    }),
+
+    /**
+     * @func fetchShop
+     * @desc Grab a single shop from the database and set it locally.
+     * @param {number} id - Which shop should be retrieved?
+     */
+    fetchShop: id =>
+      (dispatch, getState) =>
+        processify(dispatch, async () => {
+          if (!id) return;
+
+          const { data: { success, message, shop, pieces } } = await axios.get(`${CONSTANTS.API_ROOT}/shop/${id}`);
+          
+          if (!success) {
+            dispatch(ACTIONS.setError({ message }));
+          } else {
+            shop.pieces = pieces;
+            
+            dispatch(ACTIONS.setShop(shop));
+            dispatch(ACTIONS.setActiveShop(shop.id));
             dispatch(ACTIONS.fetchPieces(pieces));
           }
     }),

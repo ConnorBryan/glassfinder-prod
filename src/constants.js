@@ -11,7 +11,7 @@ export default {
   */
   ACCOUNT_TYPES: {
     artist: 'artist',
-    headshop: 'headshop',
+    shop: 'shop',
     brand: 'brand',
   },
 
@@ -20,7 +20,7 @@ export default {
   */
   ICONS: {
     artist: 'paint brush',
-    headshop: 'cart',
+    shop: 'cart',
     brand: 'building',
     piece: 'puzzle',
   },

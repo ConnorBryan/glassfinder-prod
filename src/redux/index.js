@@ -19,6 +19,13 @@ export const INITIAL_STATE = {
   initialized: false,
   mapmarkers: [],
 
+  localShopsPage: 1,
+  localPiecesPage: 1,
+
+  shopsById: new Map(),
+  activeShop: null,
+  fetcingShops: false,
+
   artistsById: new Map(),
   activeArtist: null,
 

@@ -7,9 +7,11 @@ import ChangePassword from './containers/ChangePassword';
 import UserVerification from './containers/UserVerification';
 import MyAccount from './containers/MyAccount';
 import UploadPiece from './containers/UploadPiece';
-import MyPieces from './containers/MyPieces';
+import ExploreShops from './containers/ExploreShops';
 import ExplorePieces from './containers/ExplorePieces';
+import MyPieces from './containers/MyPieces';
 import ArtistProfile from './containers/ArtistProfile';
+import ShopProfile from './containers/ShopProfile';
 import UserRedirect from './containers/UserRedirect';
 
 export default [
@@ -93,6 +95,20 @@ export default [
       },
       {
         pageName: 'Explore pieces',
+        active: true,
+      },
+    ],
+  },
+  {
+    path: '/explore-shops',
+    Component: ExploreShops,
+    breadcrumbs: [
+      {
+        pageName: 'Home',
+        route: '/',
+      },
+      {
+        pageName: 'Explore shops',
         active: true,
       },
     ],
@@ -184,6 +200,28 @@ export default [
       {
         pageName: 'Artists',
         route: '/artists',
+      },
+      {
+        pageName: 'Artist',
+        active: true,
+      },
+    ],
+  },
+  {
+    path: '/s/:id?',
+    Component: ShopProfile,
+    breadcrumbs: [
+      {
+        pageName: 'Home',
+        route: '/',
+      },
+      {
+        pageName: 'Shops',
+        route: '/shops',
+      },
+      {
+        pageName: 'Shop',
+        active: true,
       },
     ],
   },

@@ -41,6 +41,13 @@ export default {
 
   /*
     E x p l o r e
+      S h o p s
+  */
+  SET_LOCAL_SHOPS: 'SET_LOCAL_SHOPS',
+  SET_LOCAL_SHOPS_PAGE: 'SET_LOCAL_SHOPS_PAGE',
+
+  /*
+    E x p l o r e
       P i e c e s
   */
   SET_LOCAL_PIECES: 'SET_LOCAL_PIECES',
@@ -51,6 +58,12 @@ export default {
   */
   SET_ARTIST: 'SET_ARTIST',
   SET_ACTIVE_ARTIST: 'SET_ACTIVE_ARTIST',
+
+  /*
+    S h o p s
+  */
+  SET_SHOP: 'SET_SHOP',
+  SET_ACTIVE_SHOP: 'SET_ACTIVE_SHOP',
 
   /*
     P i e c e s

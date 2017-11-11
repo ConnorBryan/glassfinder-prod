@@ -43,6 +43,13 @@ export default {
 
   /*
     E x p l o r e
+      S h o p s 
+  */
+  [ACTION_TYPES.SET_LOCAL_SHOPS]: (state, { localShops }) => ({ ...state, localShops }),
+  [ACTION_TYPES.SET_LOCAL_SHOPS_PAGE]: (state, { localShopsPage }) => ({ ...state, localShopsPage }),
+
+  /*
+    E x p l o r e
       P i e c e s
   */
   [ACTION_TYPES.SET_LOCAL_PIECES]: (state, { localPieces }) => ({ ...state, localPieces }),
@@ -62,6 +69,21 @@ export default {
     return { ...state, artistsById };
   },
   [ACTION_TYPES.SET_ACTIVE_ARTIST]: (state, { artistId }) => ({ ...state, activeArtist: artistId }),
+
+  /*
+    S h o p s
+  */
+  [ACTION_TYPES.SET_SHOP]: (state, { shop }) => {
+    const { shopsById } = state;
+    const { id } = shop;
+
+    if (!id) throw Error(`Attempted to call SET_SHOP on invalid shop`);
+
+    shopsById.set(id, shop);
+
+    return { ...state, shopsById };
+  },
+  [ACTION_TYPES.SET_ACTIVE_SHOP]: (state, { shopId }) => ({ ...state, activeShop: shopId }),
 
   /*
     P i e c e s

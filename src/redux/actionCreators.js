@@ -43,6 +43,13 @@ export default {
 
   /*
     E x p l o r e
+      S h o p s
+  */
+  setLocalShops: localShops => ({ type: ACTION_TYPES.SET_LOCAL_SHOPS, localShops }),
+  setLocalShopsPage: localShopsPage => ({ type: ACTION_TYPES.SET_LOCAL_SHOPS_PAGE, localShopsPage }),
+
+  /*
+    E x p l o r e
       P i e c e s
   */
   setLocalPieces: localPieces => ({ type: ACTION_TYPES.SET_LOCAL_PIECES, localPieces }),
@@ -53,6 +60,12 @@ export default {
   */
   setArtist: artist => ({ type: ACTION_TYPES.SET_ARTIST, artist }),
   setActiveArtist: artistId => ({ type: ACTION_TYPES.SET_ACTIVE_ARTIST, artistId }),
+
+  /*
+    S h o p s
+  */
+  setShop: shop => ({ type: ACTION_TYPES.SET_SHOP, shop }),
+  setActiveShop: shopId => ({ type: ACTION_TYPES.SET_ACTIVE_SHOP, shopId }),
 
   /*
     P i e c e s
