@@ -1,6 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Card, Image } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
+import {
+  Button,
+  Card,
+  Image,
+} from 'semantic-ui-react';
 import { formatMoney } from 'accounting';
 
 export const makePriceLabel = price => ({
@@ -16,6 +21,7 @@ export function PieceCard(props) {
     image,
     title,
     description,
+    userId,
   } = props;
 
   return (
@@ -31,6 +37,17 @@ export function PieceCard(props) {
           {description}
         </Card.Description>
       </Card.Content>
+      {userId && (
+        <Card.Content extra>
+          <Button
+            as={Link}
+            className='fancy'
+            content='View owner'
+            fluid
+            icon='user'
+            to={`/u/${userId}`} />
+        </Card.Content>
+      )}
     </Card>
   );
 }
@@ -40,6 +57,7 @@ PieceCard.propTypes = {
   image: PropTypes.string,
   title: PropTypes.string,
   description: PropTypes.string,
+  userId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
 
 export default PieceCard;

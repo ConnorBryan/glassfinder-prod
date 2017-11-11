@@ -34,6 +34,7 @@ export default class ExplorePieces extends Component {
             image,
             title,
             description,
+            userId
           } = piece;
 
           return (
@@ -42,7 +43,8 @@ export default class ExplorePieces extends Component {
               price={price}
               image={image}
               title={title}
-              description={description} />
+              description={description}
+              userId={userId} />
           );
         })}
       </Segment>

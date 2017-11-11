@@ -10,6 +10,7 @@ import UploadPiece from './containers/UploadPiece';
 import MyPieces from './containers/MyPieces';
 import ExplorePieces from './containers/ExplorePieces';
 import ArtistProfile from './containers/ArtistProfile';
+import UserRedirect from './containers/UserRedirect';
 
 export default [
   {
@@ -167,6 +168,10 @@ export default [
         active: true,
       },
     ],
+  },
+  {
+    path: '/u/:id?',
+    Component: UserRedirect,
   },
   {
     path: '/a/:id?',
