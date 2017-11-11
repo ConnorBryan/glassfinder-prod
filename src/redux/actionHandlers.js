@@ -77,4 +77,5 @@ export default {
     return { ...state, piecesById };
   },
   [ACTION_TYPES.SET_ACTIVE_PIECE]: (state, { pieceId }) => ({ ...state, activePiece: pieceId }),
+  [ACTION_TYPES.SET_FETCHING_PIECES]: (state, { fetchingPieces }) => ({ ...state, fetchingPieces }),
 };

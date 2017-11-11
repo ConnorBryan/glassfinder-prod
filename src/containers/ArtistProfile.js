@@ -29,9 +29,16 @@ export default class ArtistProfile extends Component {
   }
 
   hydratePieces(pieceIds) {
-    const { piecesById } = this.props;
+    const {
+      piecesById,
+      fetchingPieces,
+      actions: { fetchPieces },
+    } = this.props;
 
     const pieces = pieceIds.map(id => piecesById.get(id)).filter(x => x);
+    const missingPieces = pieceIds.filter(id => !piecesById.get(id));
+
+    if (missingPieces.length > 0 && !fetchingPieces) fetchPieces(missingPieces);
 
     return pieces.length > 0 ? pieces : null;
   }

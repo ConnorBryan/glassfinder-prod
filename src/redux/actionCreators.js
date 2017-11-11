@@ -59,4 +59,5 @@ export default {
   */
   setPiece: piece => ({ type: ACTION_TYPES.SET_PIECE, piece }),
   setActivePiece: pieceId => ({ type: ACTION_TYPES.SET_ACTIVE_PIECE, pieceId }),
+  setFetchingPieces: fetchingPieces => ({ type: ACTION_TYPES.SET_FETCHING_PIECES, fetchingPieces }),
 };

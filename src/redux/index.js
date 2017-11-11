@@ -24,6 +24,7 @@ export const INITIAL_STATE = {
 
   piecesById: new Map(),
   activePiece: null,
+  fetcingPieces: false,
 };
 
 export const REDUCER = (state = INITIAL_STATE, action) => (

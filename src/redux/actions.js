@@ -362,7 +362,12 @@ export default {
     fetchPieces: pieceIds =>
       (dispatch, getState) =>
         processify(dispatch, async () => {
-          const { piecesById } = getState();
+          const { fetchingPieces, piecesById } = getState();
+
+          if (fetchingPieces) return;
+
+          dispatch(ACTIONS.setFetchingPieces(true));
+
           const pieceIdsToFetch = pieceIds.filter(id => !piecesById.get(id));
           
           const url = pieceIdsToFetch
@@ -373,6 +378,8 @@ export default {
           success
             ? pieces.forEach(piece => dispatch(ACTIONS.setPiece(piece)))
             : dispatch(ACTIONS.setError({ message }));
+          
+          dispatch(ACTIONS.setFetchingPieces(false));
     }),
 };
 
