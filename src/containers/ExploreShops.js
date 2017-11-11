@@ -6,6 +6,7 @@ import {
   Segment,
 } from 'semantic-ui-react';
 
+import Map from '../components/Map';
 import PieceCard from '../components/PieceCard';
 
 export default class ExploreShops extends Component {
@@ -28,6 +29,7 @@ export default class ExploreShops extends Component {
 
     return (
       <Segment>
+        <Map {...this.props} />
         {localShops && localShops.map((shop, index) => {
           const {
             name,

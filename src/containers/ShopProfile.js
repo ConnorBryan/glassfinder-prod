@@ -10,7 +10,7 @@ import {
 } from 'semantic-ui-react';
 import pathToRegexp from 'path-to-regexp';
 
-import PieceCard from '../components/PieceCard';
+import PieceGrid from '../components/PieceGrid';
 
 export default class ShopProfile extends Component {
   static propTypes = {};
@@ -88,24 +88,10 @@ export default class ShopProfile extends Component {
         {phone}
         {description}        
 
-        <h2>Pieces</h2>
-        {pieces && pieces.map((piece, index) => {
-          const {
-            price,
-            image,
-            title,
-            description,
-          } = piece;
-
-          return (
-            <PieceCard
-              key={index}
-              price={price}
-              image={image}
-              title={title}
-              description={description} />
-          );
-        })}
+        <h2>Pieces</h2>        
+        {pieces && (
+          <PieceGrid pieces={pieces} />
+        )}
       </div>
     );
   }

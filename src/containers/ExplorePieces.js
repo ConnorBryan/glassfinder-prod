@@ -6,7 +6,7 @@ import {
   Segment,
 } from 'semantic-ui-react';
 
-import PieceCard from '../components/PieceCard';
+import PieceGrid from '../components/PieceGrid';
 
 export default class ExplorePieces extends Component {
   static propTypes = {};
@@ -28,25 +28,11 @@ export default class ExplorePieces extends Component {
 
     return (
       <Segment>
-        {localPieces && localPieces.map((piece, index) => {
-          const {
-            price,
-            image,
-            title,
-            description,
-            userId
-          } = piece;
-
-          return (
-            <PieceCard
-              key={index}
-              price={price}
-              image={image}
-              title={title}
-              description={description}
-              userId={userId} />
-          );
-        })}
+        {localPieces && (
+          <PieceGrid
+            pieces={localPieces}
+            showOwner />
+        )}
       </Segment>
     );
   }

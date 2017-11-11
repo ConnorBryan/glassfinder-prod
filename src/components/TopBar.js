@@ -7,6 +7,8 @@ import {
   Image,
 } from 'semantic-ui-react';
 
+import CONSTANTS from '../constants';
+
 export function TopBar(props) {
   const { authorized, deauthorize } = props;
 
@@ -26,13 +28,13 @@ export function TopBar(props) {
           as={Link}
           key='explore-shops'
           to='/explore-shops'>
-          <Icon name='puzzle' /> Explore shops
+          <Icon name={CONSTANTS.ICONS.shop} /> Explore shops
         </Menu.Item>
         <Menu.Item
           as={Link}
           key='explore-pieces'
           to='/explore-pieces'>
-          <Icon name='puzzle' /> Explore pieces
+          <Icon name={CONSTANTS.ICONS.piece} /> Explore pieces
         </Menu.Item>
         {authorized
         ? [
