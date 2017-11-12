@@ -8,6 +8,7 @@ export default {
   [ACTION_TYPES.SET_MY_ACCOUNT]: (state, { myAccount }) => ({ ...state, myAccount }),
   [ACTION_TYPES.SET_AUTHORIZED]: (state, { authorized }) => ({ ...state, authorized }),
   [ACTION_TYPES.SET_AUTH_TOKEN]: (state, { authToken }) => ({ ...state, authToken }),
+  [ACTION_TYPES.SET_SIDEBAR_VISIBLE]: (state, { sidebarVisible }) => ({ ...state, sidebarVisible }),
   
   /*
     S i g n

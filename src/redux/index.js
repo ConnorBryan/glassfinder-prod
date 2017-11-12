@@ -22,6 +22,8 @@ export const INITIAL_STATE = {
 
   error: null,
 
+  sidebarVisible: false,
+
   localShopsPage: 1,
   localPiecesPage: 1,
 

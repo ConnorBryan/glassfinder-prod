@@ -78,6 +78,12 @@ export default {
       setTimeout(() => dispatch(ACTIONS.setError(null)), CONSTANTS.ERROR_TIMEOUT);
     },
 
+    toggleSidebar: () => (dispatch, getState) => {
+      const { sidebarVisible } = getState();
+
+      dispatch(ACTIONS.setSidebarVisible(!sidebarVisible));
+    },
+
     /**
      * @func verify
      * @desc Verify a user account on the server when provided URL params for userId and verificationCode.

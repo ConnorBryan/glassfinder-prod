@@ -8,7 +8,8 @@ export default {
   setMyAccount: myAccount => ({ type: ACTION_TYPES.SET_MY_ACCOUNT, myAccount }),
   setAuthorized: authorized => ({ type: ACTION_TYPES.SET_AUTHORIZED, authorized }),
   setAuthToken: authToken => ({ type: ACTION_TYPES.SET_AUTH_TOKEN, authToken }),
-  
+  setSidebarVisible: sidebarVisible => ({ type: ACTION_TYPES.SET_SIDEBAR_VISIBLE, sidebarVisible }),  
+
   /*
     S i g n
       U p
