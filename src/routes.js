@@ -199,7 +199,7 @@ export default [
       },
       {
         pageName: 'Artists',
-        route: '/artists',
+        route: '/explore-pieces',
       },
       {
         pageName: 'Artist',
@@ -217,7 +217,7 @@ export default [
       },
       {
         pageName: 'Shops',
-        route: '/shops',
+        route: '/explore-shops',
       },
       {
         pageName: 'Shop',

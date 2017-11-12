@@ -22,7 +22,7 @@ export default class ExploreShops extends Component {
       actions: { exploreShops },
     } = this.props;
 
-    if (!localShops) exploreShops();
+    if (localShops.length === 0) exploreShops();
   }
   
   render() {

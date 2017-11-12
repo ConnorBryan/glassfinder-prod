@@ -293,7 +293,7 @@ export default {
             })
           );
 
-          return error
+          error
             ? dispatch(ACTIONS.showError(error))
             : dispatch(ACTIONS.syncMyAccount());
     }),
@@ -305,18 +305,11 @@ export default {
     exploreShops: () =>
       (dispatch, getState) =>
         processify(dispatch, async () => {
-          const { localShops } = getState();
-
-          if (localShops) return;
-
           const { data: { error, shops } } = await axios.get(`${CONSTANTS.API_ROOT}/shops`);
-
-          if (error) {
-            dispatch(ACTIONS.showError(error));
-          } else {
-            dispatch(ACTIONS.setLocalShopsPage(1));
-            dispatch(ACTIONS.setLocalShops(shops));
-          }
+          
+          error
+            ? dispatch(ACTIONS.showError(error))
+            : dispatch(ACTIONS.setLocalShops(shops));
     }),
 
     /**
@@ -326,10 +319,6 @@ export default {
     explorePieces: () =>
       (dispatch, getState) =>
         processify(dispatch, async () => {
-          const { localPieces } = getState();
-
-          if (localPieces) return;
-
           const { data: { error, pieces } } = await axios.get(`${CONSTANTS.API_ROOT}/pieces`);
 
           if (error) {

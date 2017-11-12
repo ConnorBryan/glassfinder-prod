@@ -5,11 +5,15 @@ import { Breadcrumb, Segment } from 'semantic-ui-react';
 
 import CONSTANTS from '../constants';
 
+export const getRoot = string => string.split('/')[1];
+
 export function Breadcrumbs(props) {
   const { location: { pathname } } = props;
 
-  const breadcrumbs = (CONSTANTS.ROUTES.find(({ path }) => path === pathname) || {}).breadcrumbs;
-
+  const root = pathname.split('/')[1];
+  
+  const { breadcrumbs } = CONSTANTS.ROUTES.find(({ path }) => getRoot(path) === root) || {};
+  
   if (!breadcrumbs) return null;
 
   return (

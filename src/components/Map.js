@@ -94,16 +94,12 @@ export default class Map extends Component {
           <Grid.Column
             as={Segment}
             width={16}
-            attached='right'
-            id='map'
-            raised>
+            id='map'>
           </Grid.Column>
           <Grid.Column
-          style={columnStyle}
+            style={columnStyle}
             as={Menu}
             width={16}
-            key='map-menu'
-            attached='left'
             vertical>
             <Menu.Item
               className='fancy'

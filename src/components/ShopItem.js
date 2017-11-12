@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
   Button,
@@ -49,7 +50,8 @@ export function ShopItem(props) {
         src={image} />
       <Item.Content>
         <Item.Header
-          as='a'
+          as={Link}
+          to={`/s/${id}`}
           className='fancy'>
           {name}
         </Item.Header>
@@ -85,9 +87,9 @@ ShopItem.propTypes = {
   description: PropTypes.string,
   email: PropTypes.string,
   history: PropTypes.object,
-  id: PropTypes.string,
+  id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   image: PropTypes.string,
-  linkToShop: PropTypes.string,
+  linkToShop: PropTypes.bool,
   name: PropTypes.string,
   phone: PropTypes.string,
   state: PropTypes.string,

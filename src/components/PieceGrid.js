@@ -38,12 +38,12 @@ export default class PieceGrid extends Component {
 
   render() {
     const { pieces, showOwner } = this.props;
-
+    
     const threeifiedPieces = this.threeify(pieces);
 
     return (
       <Grid stretched>
-        {threeifiedPieces.map((collection, index) => (
+        {threeifiedPieces && threeifiedPieces.map((collection, index) => (
           <Grid.Row
             columns={1}
             key={index}>

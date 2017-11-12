@@ -68,11 +68,10 @@ export default class ShopProfile extends Component {
       <div>
         <Label
           className='fancy'
-          ribbon='left'
           color='blue'>
           <Icon name={CONSTANTS.ICONS.shop} /> Shop
         </Label>
-        <Item.Group fluid>
+        <Item.Group>
           <ShopItem
             history={history}
             {...shop} />

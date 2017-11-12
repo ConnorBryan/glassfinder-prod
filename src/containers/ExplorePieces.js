@@ -21,7 +21,7 @@ export default class ExplorePieces extends Component {
       actions: { explorePieces },
     } = this.props;
 
-    if (!localPieces) explorePieces();
+    if (localPieces.length === 0) explorePieces();
   }
   
   render() {
