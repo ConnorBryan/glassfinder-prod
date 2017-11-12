@@ -4,13 +4,17 @@ import {
   Button,
   Header,
   Icon,
+  Item,
   Label,
   Menu,
   Segment,
 } from 'semantic-ui-react';
 import pathToRegexp from 'path-to-regexp';
 
+import CONSTANTS from '../constants';
+
 import PieceGrid from '../components/PieceGrid';
+import ArtistItem from '../components/ArtistItem';
 
 export default class ArtistProfile extends Component {
   static propTypes = {};
@@ -71,16 +75,28 @@ export default class ArtistProfile extends Component {
       from,
       description,
     } = artist;
+    
+    const headerStyle = {
+      marginBottom: '2rem',
+    };
 
     return (
       <div>
-        {name}
-        {tagline}
-        {image}
-        {from}
-        {description}
-
-        <h2>Pieces</h2>
+        <Label
+          className='fancy'
+          ribbon='left'
+          color='blue'>
+          <Icon name={CONSTANTS.ICONS.artist} /> Artist
+        </Label>
+        <Item.Group fluid>
+          <ArtistItem {...artist} />
+        </Item.Group>          
+        <Header
+          as='h2'
+          icon={CONSTANTS.ICONS.piece}
+          style={headerStyle}
+          content='Pieces'
+          className='fancy' />
         {pieces && (
           <PieceGrid pieces={pieces} />
         )}

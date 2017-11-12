@@ -4,13 +4,17 @@ import {
   Button,
   Header,
   Icon,
+  Item,
   Label,
   Menu,
   Segment,
 } from 'semantic-ui-react';
 import pathToRegexp from 'path-to-regexp';
 
+import CONSTANTS from '../constants';
+
 import PieceGrid from '../components/PieceGrid';
+import { ShopItem } from '../components/ShopItem';
 
 export default class ShopProfile extends Component {
   static propTypes = {};
@@ -47,6 +51,7 @@ export default class ShopProfile extends Component {
     const {
       activeShop,
       shopsById,
+      history,
       location: { pathname },
       actions: { fetchShop },
     } = this.props;
@@ -78,17 +83,22 @@ export default class ShopProfile extends Component {
 
     return (
       <div>
-        {name}
-        {image}
-        {street}
-        {city}
-        {state}
-        {zip}
-        {email}
-        {phone}
-        {description}        
-
-        <h2>Pieces</h2>        
+        <Label
+          className='fancy'
+          ribbon='left'
+          color='blue'>
+          <Icon name={CONSTANTS.ICONS.shop} /> Shop
+        </Label>
+        <Item.Group fluid>
+          <ShopItem
+            history={history}
+            {...shop} />
+        </Item.Group>
+        <Header
+          as='h2'
+          icon={CONSTANTS.ICONS.piece}
+          content='Pieces'
+          className='fancy' />
         {pieces && (
           <PieceGrid pieces={pieces} />
         )}

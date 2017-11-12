@@ -10,7 +10,7 @@ import {
 } from 'semantic-ui-react';
 
 import CONSTANTS from '../constants';
-import PieceCard from '../components/PieceCard';
+import PieceCards from '../components/PieceCard';
 
 export function MyPieces(props) {
   const {
@@ -28,23 +28,11 @@ export function MyPieces(props) {
       key='header'>
       <Icon name={CONSTANTS.ICONS.piece} /> My pieces
     </Header>,
-    pieces.map((piece, index) => {
-      const {
-        image,
-        title,
-        price,
-        description
-      } = piece;
-
-      return (
-        <PieceCard
-          key={index}
-          price={price}
-          image={image}
-          title={title}
-          description={description} />
-      );
-    }),
+    pieces && (
+      <PieceCards
+        key='pieces'
+        collection={pieces} />
+    ),
   ];
 }
 

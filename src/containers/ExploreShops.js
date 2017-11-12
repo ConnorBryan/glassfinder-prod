@@ -7,7 +7,7 @@ import {
 } from 'semantic-ui-react';
 
 import Map from '../components/Map';
-import PieceCard from '../components/PieceCard';
+import ShopItems from '../components/ShopItem';
 
 export default class ExploreShops extends Component {
   static propTypes = {};
@@ -25,38 +25,17 @@ export default class ExploreShops extends Component {
     const {
       localShops,
       localShopsPage,
+      history,
     } = this.props;
 
     return (
       <Segment>
         <Map {...this.props} />
-        {localShops && localShops.map((shop, index) => {
-          const {
-            name,
-            image,
-            street,
-            city,
-            state,
-            zip,
-            email,
-            phone,
-            description,
-          } = shop;
-
-          return (
-            <div key={index}>
-              {name}
-              {image}
-              {street}
-              {city}
-              {state}
-              {zip}
-              {email}
-              {phone}
-              {description}
-            </div>
-          );
-        })}
+        {localShops && (
+          <ShopItems
+            collection={localShops}
+            history={history} />
+        )}
       </Segment>
     );
   }

@@ -5,6 +5,7 @@ import {
   Menu,
   Segment,
 } from 'semantic-ui-react';
+import axios from 'axios';
 
 import CONSTANTS from '../constants';
 
@@ -68,39 +69,47 @@ export default class Map extends Component {
    * @method findMyLocation
    * Center the map on the user's location after requesting permission.
    */
-  findMyLocation = () => {
-    navigator.geolocation.getCurrentPosition(
-      position => this.log(position.coords.latitude),
-      err => console.log(err),
-      { timeout: 5000 }
+  findMyLocation = async () => {
+    const { data: { location } } = await (
+      axios.post(`https://www.googleapis.com/geolocation/v1/geolocate?key=${CONSTANTS.GOOGLE_MAPS_GEOLOCATION_API_KEY}`)
     );
+
+    this.MAP.setCenter(location);
   }
   
-
-  log = message => console.log(message)
-
   render() {
+    const mainStyle = {
+      marginBottom: '2rem',
+      paddingLeft: '1rem',
+      paddingRight: '1rem',
+    };
+
+    const columnStyle = {
+      padding: 0,
+    };
+
     return (
-      <Grid>
+      <Grid style={mainStyle}>
         <Grid.Row>
           <Grid.Column
-            width={4}>
-            <Menu
-              fluid
-              key='map-menu'
-              attached='left'
-              vertical>
-              <Menu.Item onClick={this.findMyLocation}>
-                <Icon name='map pin' /> Find my location
-              </Menu.Item>
-            </Menu>
+            as={Segment}
+            width={16}
+            attached='right'
+            id='map'
+            raised>
           </Grid.Column>
-          <Grid.Column width={12}>
-            <Segment
-              key='map'
-              attached='right'
-              id='map'
-              raised />
+          <Grid.Column
+          style={columnStyle}
+            as={Menu}
+            width={16}
+            key='map-menu'
+            attached='left'
+            vertical>
+            <Menu.Item
+              className='fancy'
+              onClick={this.findMyLocation}>
+              <Icon name='map pin' /> Find my location
+            </Menu.Item>
           </Grid.Column>
         </Grid.Row>
       </Grid>
