@@ -5,6 +5,7 @@ import {
   Menu,
   Icon,
   Image,
+  Responsive,
 } from 'semantic-ui-react';
 
 import CONSTANTS from '../constants';
@@ -13,18 +14,51 @@ export function TopBar(props) {
   const {
     authorized,
     deauthorize,
+    sidebarVisible,
+    toggleSidebar,
     zIndexOverride,
   } = props;
 
   const mainStyle = {
     minHeight: '6vh',
+    marginTop: '-1px',
   };
-
+  
+  const mobileMinWidth = 0;
+  const mobileMaxWidth = 767;
+  const computerMinWidth = 768;
+  const computerMaxWidth = 9999;
+  
   return (
     <div ref={zIndexOverride}>
-      <Menu
+      <Responsive
+        as={Menu}
         fluid
-        style={mainStyle}>
+        style={mainStyle}
+        minWidth={mobileMinWidth}
+        maxWidth={mobileMaxWidth}>
+        <Menu.Item
+          as={Link}
+          className='fancy'
+          header
+          to='/'>
+          <Image size='tiny' src='/logo.png' />
+        </Menu.Item>
+        <Menu.Menu position='right'>
+          <Menu.Item
+            active={sidebarVisible}
+            className='fancy'
+            onClick={toggleSidebar}>
+            <Icon name='bars' /> Menu
+          </Menu.Item>
+        </Menu.Menu>
+      </Responsive>
+      <Responsive
+        as={Menu}
+        fluid
+        style={mainStyle}
+        minWidth={computerMinWidth}
+        maxWidth={computerMaxWidth}>
         <Menu.Item
           as={Link}
           className='fancy'
@@ -74,7 +108,7 @@ export function TopBar(props) {
             </Menu.Item>
           ]}
         </Menu.Menu>
-      </Menu>
+      </Responsive>
     </div>
   );
 }

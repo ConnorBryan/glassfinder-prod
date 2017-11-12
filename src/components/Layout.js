@@ -5,6 +5,7 @@ import {
   Container,
   Icon,
   Loader,
+  Menu,
   Message,
   Segment,
   Sidebar,
@@ -46,9 +47,10 @@ export class Layout extends Component {
       actions: {
         deauthorize,
         setError,
+        toggleSidebar,
       },
     } = this.props;
-    const { context, override } = this.state;
+    const { context } = this.state;
 
     const errorWrapperStyle = {
       height: '100%',
@@ -64,7 +66,13 @@ export class Layout extends Component {
       display: 'inline-block',
     };
 
+    const pushableStyle = {
+      margin: 0,
+    };
+
     const wrapperStyle = {
+      marginRight: 0,
+      marginTop: '4rem',
       marginBottom: '8rem',
     };
 
@@ -90,25 +98,47 @@ export class Layout extends Component {
             </Message>
           </div>
         )}
-        <Sticky context={context}>
+        <Sticky active={context} context={context}>
           <TopBar
+            sidebarVisible={sidebarVisible}
+            toggleSidebar={toggleSidebar}
             zIndexOverride={this.zIndexOverride}
             authorized={authorized}
             deauthorize={deauthorize} />
         </Sticky>
-        <Container style={wrapperStyle}>
-          <Segment.Group>
-            <Breadcrumbs {...this.props} />
-            <Segment
-              attached='bottom'
-              style={mainStyle}>
-              {isLoading ? <Loader active /> : children}
-            </Segment>
-          </Segment.Group>
-        </Container>
-        <Container
-          fluid
-          style={bottomZoneStyle} />
+        <Sidebar.Pushable
+          as={Segment}
+          style={pushableStyle}>
+          <Sidebar
+            animation='slide along'
+            as={Menu}
+            direction='right'
+            inverted
+            vertical
+            visible={sidebarVisible}
+            width='wide'>
+            <Menu.Item
+              className='fancy'
+              onClick={toggleSidebar}>
+              <Icon name='bars' /> Close Menu
+            </Menu.Item>
+          </Sidebar>
+          <Sidebar.Pusher>
+            <Container style={wrapperStyle}>
+              <Segment.Group>
+                <Breadcrumbs {...this.props} />
+                <Segment
+                  attached='bottom'
+                  style={mainStyle}>
+                  {isLoading ? <Loader active /> : children}
+                </Segment>
+              </Segment.Group>
+            </Container>
+            <Container
+              fluid
+              style={bottomZoneStyle} />
+          </Sidebar.Pusher>
+        </Sidebar.Pushable>
       </div>
     );
   }
