@@ -14,6 +14,7 @@ import {
 
 import CONSTANTS from '../constants';
 import TopBar from './TopBar';
+import NavigationMenu from './NavigationMenu';
 import Breadcrumbs from './Breadcrumbs';
 
 export class Layout extends Component {
@@ -109,20 +110,11 @@ export class Layout extends Component {
         <Sidebar.Pushable
           as={Segment}
           style={pushableStyle}>
-          <Sidebar
-            animation='slide along'
-            as={Menu}
-            direction='right'
-            inverted
-            vertical
-            visible={sidebarVisible}
-            width='wide'>
-            <Menu.Item
-              className='fancy'
-              onClick={toggleSidebar}>
-              <Icon name='bars' /> Close Menu
-            </Menu.Item>
-          </Sidebar>
+          <NavigationMenu
+            authorized={authorized}
+            deauthorize={deauthorize}
+            sidebarVisible={sidebarVisible}
+            toggleSidebar={toggleSidebar} />
           <Sidebar.Pusher>
             <Container style={wrapperStyle}>
               <Segment.Group>

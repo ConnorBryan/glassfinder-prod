@@ -31,8 +31,12 @@ export default class ExploreShops extends Component {
       history,
     } = this.props;
 
+    const mainStyle = {
+      paddingTop: 0,
+    };
+
     return (
-      <Segment>
+      <Segment style={mainStyle}>
         <Map {...this.props} />
         {localShops && (
           <ShopItems

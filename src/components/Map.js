@@ -79,9 +79,17 @@ export default class Map extends Component {
   
   render() {
     const mainStyle = {
+      marginTop: 0,
       marginBottom: '2rem',
-      paddingLeft: '1rem',
-      paddingRight: '1rem',
+    };
+
+    const rowStyle = {
+      paddingTop: 0,
+    }
+
+    const mapStyle = {
+      paddingTop: 0,
+      minHeight: '300px',
     };
 
     const columnStyle = {
@@ -90,11 +98,13 @@ export default class Map extends Component {
 
     return (
       <Grid style={mainStyle}>
-        <Grid.Row>
+        <Grid.Row style={rowStyle}>
           <Grid.Column
             as={Segment}
-            width={16}
-            id='map'>
+            fluid
+            id='map'
+            style={mapStyle}
+            width={16}>
           </Grid.Column>
           <Grid.Column
             style={columnStyle}
