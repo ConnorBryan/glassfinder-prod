@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import makeClass from 'classnames';
 import {
-  Button,
   Card,
   Header,
   Item,
@@ -20,6 +19,7 @@ import {
 export function Home(props) {
   const { history } = props;
 
+  const headerStyle = { marginTop: '1rem', marginBottom: '2rem' };
   const className = makeClass('text-center fancy');
   const onClick = url => history.push(url);
   const explorationCards = [
@@ -50,7 +50,8 @@ export function Home(props) {
           as='h2'
           content='Explore'
           className='fancy'
-          icon='binoculars' />
+          icon='binoculars'
+          style={headerStyle} />
         <Card.Group
           items={explorationCards}
           itemsPerRow={2}
@@ -61,7 +62,8 @@ export function Home(props) {
           as='h2'
           content='Latest update'
           className='fancy'
-          icon='newspaper' />
+          icon='newspaper'
+          style={headerStyle} />
         <Item.Group>
           <Item
             className='nested'

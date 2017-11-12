@@ -38,6 +38,16 @@ export function Layout(props) {
     display: 'inline-block',
   };
 
+  const mainStyle = {
+    minHeight: '94vh',
+  };
+
+  const bottomZoneStyle = {
+    minHeight: '30vh',
+    marginTop: '8rem',
+    background: 'rgb(20, 20, 20)',
+  };
+
   return (
     <div>
       {error && (
@@ -53,20 +63,19 @@ export function Layout(props) {
       <TopBar
         authorized={authorized}
         deauthorize={deauthorize} />
-      <Container
-        attached='top'
-        className='second-third'
-        fluid={isLoading}>
-        {isLoading ? <Loader active/>
-        : (
-            <Segment.Group>
-              <Breadcrumbs {...props} />
-              <Segment attached='bottom'>
-                {props.children}
-              </Segment>
-            </Segment.Group>
-          )}
+      <Container>
+        <Segment.Group>
+          <Breadcrumbs {...props} />
+          <Segment
+            attached='bottom'
+            style={mainStyle}>
+            {isLoading ? <Loader active/> : props.children}
+          </Segment>
+        </Segment.Group>
       </Container>
+      <Container
+        fluid
+        style={bottomZoneStyle} />
     </div>
   );
 }

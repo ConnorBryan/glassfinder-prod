@@ -12,10 +12,14 @@ import CONSTANTS from '../constants';
 export function TopBar(props) {
   const { authorized, deauthorize } = props;
 
+  const mainStyle = {
+    minHeight: '6vh',
+  };
+
   return (
     <Menu
-      className='first-third'
-      fluid>
+      fluid
+      style={mainStyle}>
       <Menu.Item
         as={Link}
         className='fancy'
