@@ -1,0 +1,8 @@
+.text-center {
+  text-align: center !important;
+}
+
+.fancy {
+  letter-spacing: 0.33rem !important;
+  text-transform: uppercase !important;
+}
