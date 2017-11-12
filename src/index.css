@@ -6,3 +6,8 @@
   letter-spacing: 0.33rem !important;
   text-transform: uppercase !important;
 }
+
+.nested {
+  border-left: 2px solid rgb(212, 212, 213) !important;
+  padding-left: 1rem !important;
+}
