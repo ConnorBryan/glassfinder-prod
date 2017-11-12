@@ -13,6 +13,11 @@ import MyPieces from './containers/MyPieces';
 import ArtistProfile from './containers/ArtistProfile';
 import ShopProfile from './containers/ShopProfile';
 import UserRedirect from './containers/UserRedirect';
+import Help from './containers/Help';
+import Contact from './containers/Contact';
+import SocialMedia from './containers/SocialMedia';
+import Purchase from './containers/Purchase';
+import PieceDetail from './containers/PieceDetail';
 
 export default [
   {
@@ -21,6 +26,48 @@ export default [
     breadcrumbs: [
       {
         pageName: 'Home',
+        active: true,
+      },
+    ],
+  },
+  {
+    path: '/help',
+    Component: Help,
+    breadcrumbs: [
+      {
+        pageName: 'Home',
+        route: '/',
+      },
+      {
+        pageName: 'Help',
+        active: true,
+      },
+    ],
+  },
+  {
+    path: '/contact',
+    Component: Contact,
+    breadcrumbs: [
+      {
+        pageName: 'Home',
+        route: '/',
+      },
+      {
+        pageName: 'Contact',
+        active: true,
+      },
+    ],
+  },
+  {
+    path: '/social-media',
+    Component: SocialMedia,
+    breadcrumbs: [
+      {
+        pageName: 'Home',
+        route: '/',
+      },
+      {
+        pageName: 'Social media',
         active: true,
       },
     ],
@@ -123,7 +170,7 @@ export default [
         route: '/',
       },
       {
-        pageName: 'My Account',
+        pageName: 'My account',
         route: '/my-account',
       },
       {
@@ -142,7 +189,7 @@ export default [
         route: '/',
       },
       {
-        pageName: 'My Account',
+        pageName: 'My account',
         active: true,
       },
     ],
@@ -157,7 +204,7 @@ export default [
         route: '/',
       },
       {
-        pageName: 'My Account',
+        pageName: 'My account',
         route: '/my-account',
       },
       {
@@ -176,7 +223,7 @@ export default [
         route: '/',
       },
       {
-        pageName: 'My Account',
+        pageName: 'My account',
         route: '/my-account',
       },
       {
@@ -221,6 +268,34 @@ export default [
       },
       {
         pageName: 'Shop',
+        active: true,
+      },
+    ],
+  },
+    {
+    path: '/p/:id?',
+    Component: PieceDetail,
+    breadcrumbs: [
+      {
+        pageName: 'Home',
+        route: '/',
+      },
+      {
+        pageName: 'Piece',
+        active: true,
+      },
+    ],
+  },
+  {
+    path: '/purchase/:id?',
+    Component: Purchase,
+    breadcrumbs: [
+      {
+        pageName: 'Home',
+        route: '/',
+      },
+      {
+        pageName: 'Purchase',
         active: true,
       },
     ],

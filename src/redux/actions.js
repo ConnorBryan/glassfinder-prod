@@ -24,7 +24,7 @@ export default {
         setTimeout(() => dispatch(ACTIONS.syncMyAccount()), 1000);
       }
 
-      dispatch(ACTIONS.setInitialized());
+      setTimeout(() => dispatch(ACTIONS.setInitialized()), 1000);
     },
 
     authorize: (token, history) => dispatch => {

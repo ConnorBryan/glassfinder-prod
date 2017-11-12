@@ -36,7 +36,7 @@ export class Layout extends Component {
    *       after attaching it to content.
    * @param {DOMNode}
    */
-  zIndexOverride = ({ parentNode }) => console.log(1) || (parentNode.style.zIndex = 1);
+  zIndexOverride = ({ parentNode }) => (parentNode.style.zIndex = 1);
 
   render () {
     const {
@@ -83,7 +83,7 @@ export class Layout extends Component {
 
     const bottomZoneStyle = {
       minHeight: '30vh',
-      background: 'rgb(20, 20, 20)',
+      background: 'rgb(27, 28, 29)',
     };
 
     return (
@@ -99,13 +99,13 @@ export class Layout extends Component {
             </Message>
           </div>
         )}
-        <Sticky active={context} context={context}>
+        <Sticky context={context}>
           <TopBar
-            sidebarVisible={sidebarVisible}
-            toggleSidebar={toggleSidebar}
             zIndexOverride={this.zIndexOverride}
             authorized={authorized}
-            deauthorize={deauthorize} />
+            deauthorize={deauthorize}
+            toggleSidebar={toggleSidebar}
+            sidebarVisible={sidebarVisible} />
         </Sticky>
         <Sidebar.Pushable
           as={Segment}

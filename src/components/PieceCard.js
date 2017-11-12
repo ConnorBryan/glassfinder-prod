@@ -17,6 +17,7 @@ export const makePriceLabel = price => ({
 
 export function PieceCard(props) {
   const {
+    id,
     showOwner,
     fluid,
     raised,
@@ -55,17 +56,30 @@ export function PieceCard(props) {
       )}
       <Card.Content extra>
         <Button
+          as={Link}
+          className='fancy'
+          content='More info' 
+          fluid
+          icon='info circle'
+          primary
+          to={`/p/${id}`} />
+      </Card.Content>
+      <Card.Content extra>
+        <Button
+          as={Link}
           fluid
           className='fancy'
           color='green'
           icon='dollar'
-          content='Purchase' />
+          content='Purchase'
+          to={`/purchase/${id}`} />
       </Card.Content>
     </Card>
   );
 }
 
 PieceCard.propTypes = {
+  id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   showOwner: PropTypes.bool,
   fluid: PropTypes.bool,
   raised: PropTypes.bool,
@@ -77,28 +91,14 @@ PieceCard.propTypes = {
 };
 
 export function PieceCards({ collection, showOwner }) {
-  return collection.map((piece, index) => {
-    const {
-      price,
-      image,
-      title,
-      description,
-      userId
-    } = piece;
-
-    return (
-        <PieceCard
-          fluid
-          raised
-          showOwner={showOwner}
-          key={index}
-          price={price}
-          image={image}
-          title={title}
-          description={description}
-          userId={userId} />
-    );
-  })
+  return collection.map((piece, index) => (
+      <PieceCard
+        fluid
+        raised
+        showOwner={showOwner}
+        key={index}
+        {...piece} />
+  ));
 }
 
 export default PieceCards;

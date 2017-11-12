@@ -52,6 +52,21 @@ export function NavigationMenu(props) {
       icon: 'home',
     },
     {
+      to: '/help',
+      title: 'Help',
+      icon: 'question mark',
+    },
+    {
+      to: '/contact',
+      title: 'Contact',
+      icon: 'envelope',
+    },
+    {
+      to: '/social-media',
+      title: 'Social media',
+      icon: 'users',
+    },
+    {
       to: '/explore-shops',
       title: 'Explore shops',
       icon: CONSTANTS.ICONS.shop,
@@ -83,6 +98,11 @@ export function NavigationMenu(props) {
             deauthorize();
             toggleSidebar();
           },
+        },
+        {
+          to: '/change-password',
+          title: 'Change password',
+          icon: 'lock',
         },
       ]
     : [

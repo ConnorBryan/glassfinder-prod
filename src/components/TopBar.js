@@ -25,10 +25,38 @@ export function TopBar(props) {
   };
   
   const mobileMinWidth = 0;
-  const mobileMaxWidth = 767;
-  const computerMinWidth = 768;
+  const mobileMaxWidth = 1440;
+  const computerMinWidth = 1441;
   const computerMaxWidth = 9999;
   
+  const links = [
+    {
+      to: '/help',
+      icon: 'help circle',
+      title: 'Help',
+    },
+    {
+      to: '/contact',
+      icon: 'envelope',
+      title: 'Contact',
+    },
+    {
+      to: '/social-media',
+      icon: 'users',
+      title: 'Social media',
+    },
+    {
+      to: '/explore-shops',
+      icon: CONSTANTS.ICONS.shop,
+      title: 'Explore shops',
+    },
+    {
+      to: '/explore-pieces',
+      icon: CONSTANTS.ICONS.piece,
+      title: 'Explore pieces',
+    },
+  ];
+
   return (
     <div ref={zIndexOverride}>
       <Responsive
@@ -67,27 +95,26 @@ export function TopBar(props) {
           <Image size='tiny' src='/logo.png' />
         </Menu.Item>
         <Menu.Menu position='right'>
-          <Menu.Item
-            as={Link}
-            key='explore-shops'
-            to='/explore-shops'>
-            <Icon name={CONSTANTS.ICONS.shop} /> Explore shops
-          </Menu.Item>
-          <Menu.Item
-            as={Link}
-            key='explore-pieces'
-            to='/explore-pieces'>
-            <Icon name={CONSTANTS.ICONS.piece} /> Explore pieces
-          </Menu.Item>
+          {links.map(({ to, icon, title }, index) => (
+            <Menu.Item
+              as={Link}
+              className='fancy'
+              to={to}>
+              <Icon name={icon} /> {title}
+            </Menu.Item>
+          ))}
+
           {authorized
           ? [
             <Menu.Item
               as={Link}
+              className='fancy'
               key='my-account'
               to='/my-account'>
               <Icon name='user' /> My account
             </Menu.Item>,
             <Menu.Item
+              className='fancy'
               key='sign-out'
               onClick={deauthorize}>
               <Icon name='sign out' /> Sign out
@@ -96,12 +123,14 @@ export function TopBar(props) {
           : [
             <Menu.Item
               as={Link}
+              className='fancy'
               key='sign-in'
               to='/sign-in'>
               <Icon name='sign in' /> Sign in
             </Menu.Item>,
             <Menu.Item
               as={Link}
+              className='fancy'
               key='sign-up'
               to='/sign-up'>
               <Icon name='user plus' /> Sign up
