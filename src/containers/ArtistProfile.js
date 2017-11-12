@@ -1,15 +1,11 @@
 import React, { Component } from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import {
-  Button,
   Header,
   Icon,
   Item,
   Label,
-  Menu,
-  Segment,
 } from 'semantic-ui-react';
-import pathToRegexp from 'path-to-regexp';
 
 import CONSTANTS from '../constants';
 
@@ -26,7 +22,7 @@ export default class ArtistProfile extends Component {
       actions: { setActiveArtist, fetchArtist },
     } = this.props;
 
-    const id = parseInt(pathname.split('/')[2]);
+    const id = parseInt(pathname.split('/')[2], 10);
     const artist = artistsById.get(id);
 
     artist ? setActiveArtist(id) : fetchArtist(id);
@@ -52,10 +48,9 @@ export default class ArtistProfile extends Component {
       activeArtist,
       artistsById,
       location: { pathname },
-      actions: { fetchArtist },
     } = this.props;
 
-    const id = parseInt(pathname.split('/')[2]);
+    const id = parseInt(pathname.split('/')[2], 10);
     
     if (isNaN(id)) return (
       <Redirect to='/artists' />
@@ -67,14 +62,6 @@ export default class ArtistProfile extends Component {
 
     const { pieces: pieceIds } = artist;
     const pieces = this.hydratePieces(pieceIds);
-
-    const {
-      name,
-      tagline,
-      image,
-      from,
-      description,
-    } = artist;
     
     const headerStyle = {
       marginBottom: '2rem',

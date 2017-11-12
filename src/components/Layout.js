@@ -3,13 +3,13 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import {
   Container,
-  Header,
   Icon,
-  Label,
   Loader,
+  Message,
   Segment
 } from 'semantic-ui-react';
 
+import CONSTANTS from '../constants';
 import TopBar from './TopBar';
 import Breadcrumbs from './Breadcrumbs';
 
@@ -24,8 +24,32 @@ export function Layout(props) {
     },
   } = props;
 
+  const errorWrapperStyle = {
+    height: '100%',
+    pointerEvents: 'none',
+    position: 'fixed',
+    textAlign: 'center',
+    top: '5vh',
+    width: '100%',
+    zIndex: 1,
+  };
+
+  const errorStyle = {
+    display: 'inline-block',
+  };
+
   return (
-    <div className='Layout'>
+    <div>
+      {error && (
+        <div style={errorWrapperStyle}>
+          <Message
+            negative
+            onClick={() => setError(null)}
+            style={errorStyle}>
+            <Icon name={CONSTANTS.ICONS.error} /> {error.message}
+          </Message>
+        </div>
+      )}
       <TopBar
         authorized={authorized}
         deauthorize={deauthorize} />
@@ -33,28 +57,14 @@ export function Layout(props) {
         attached='top'
         className='second-third'
         fluid={isLoading}>
-        {isLoading
-          ? (
-          <Loader active/>
-          )
-          : (
-          <Segment>
-            {error && (
-              <Segment>
-                <Label
-                  icon='close'
-                  color='red'
-                  corner='right'
-                  onClick={() => setError(null)} />
-                <Header as='h3'>
-                    <Icon name='warning sign' /> Error
-                </Header>
-                {error.message}
+        {isLoading ? <Loader active/>
+        : (
+            <Segment.Group>
+              <Breadcrumbs {...props} />
+              <Segment attached='bottom'>
+                {props.children}
               </Segment>
-            )}
-            <Breadcrumbs {...props} />        
-            {props.children}
-          </Segment>
+            </Segment.Group>
           )}
       </Container>
     </div>

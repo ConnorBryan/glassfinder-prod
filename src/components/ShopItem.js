@@ -1,13 +1,10 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import {
   Button,
   Icon,
   Item,
 } from 'semantic-ui-react';
-
-import CONSTANTS from '../constants';
 
 export function truncate(description, amount = 20) {
   return description
@@ -19,19 +16,19 @@ export function truncate(description, amount = 20) {
 
 export function ShopItem(props) {
   const {
+    city,
+    description,
+    email,
     history,
     id,
     image,
-    name,
-    description,
-    phone,
-    email,
-    street,
-    city,
-    state,
-    zip,
     linkToShop,
+    name,
+    phone,
+    state,
+    street,
     truncated,
+    zip,
   } = props;
 
   const spanStyle = {
@@ -83,6 +80,22 @@ export function ShopItem(props) {
   );
 }
 
+ShopItem.propTypes = {
+  city: PropTypes.string,
+  description: PropTypes.string,
+  email: PropTypes.string,
+  history: PropTypes.object,
+  id: PropTypes.string,
+  image: PropTypes.string,
+  linkToShop: PropTypes.string,
+  name: PropTypes.string,
+  phone: PropTypes.string,
+  state: PropTypes.string,
+  street: PropTypes.string,
+  truncated: PropTypes.bool,
+  zip: PropTypes.string,
+};
+
 export function ShopItems({ collection, history }) {
   return (
     <Item.Group divided>
@@ -97,6 +110,11 @@ export function ShopItems({ collection, history }) {
     </Item.Group>
   )
 }
+
+ShopItems.propTypes = {
+  collection: PropTypes.arrayOf(PropTypes.object),
+  history: PropTypes.object,
+};
 
 ShopItems.defaultProps = {
   collection: [],

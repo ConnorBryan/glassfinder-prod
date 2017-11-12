@@ -1,15 +1,19 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {
-  Card,
-  Image,
-  Segment,
-} from 'semantic-ui-react';
+import { Segment } from 'semantic-ui-react';
 
 import PieceGrid from '../components/PieceGrid';
 
 export default class ExplorePieces extends Component {
-  static propTypes = {};
+  static propTypes = {
+    localPieces: PropTypes.arrayOf(PropTypes.object),
+    actions: PropTypes.objectOf(PropTypes.func),
+  };
+
+  static defaultProps = {
+    localPieces: [],
+    actions: {},
+  };
 
   componentDidMount() {
     const {
@@ -21,10 +25,7 @@ export default class ExplorePieces extends Component {
   }
   
   render() {
-    const {
-      localPieces,
-      localPiecesPage,
-    } = this.props;
+    const { localPieces } = this.props;
 
     return (
       <Segment>

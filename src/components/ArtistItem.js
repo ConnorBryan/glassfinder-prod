@@ -1,13 +1,9 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import {
-  Button,
   Icon,
   Item,
 } from 'semantic-ui-react';
-
-import CONSTANTS from '../constants';
 
 export function ArtistItem(props) {
    const {
@@ -46,5 +42,13 @@ export function ArtistItem(props) {
     </Item>
   );
 }
+
+ArtistItem.propTypes = {
+  name: PropTypes.string,
+  tagline: PropTypes.string,
+  image: PropTypes.string,
+  from: PropTypes.string,
+  description: PropTypes.string,
+};
 
 export default ArtistItem;

@@ -1,21 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
-import {
-  Card,
-  Header,
-  Icon,
-  Image,
-  Label,
-} from 'semantic-ui-react';
+import { Header, Icon } from 'semantic-ui-react';
 
 import CONSTANTS from '../constants';
 import PieceCards from '../components/PieceCard';
 
 export function MyPieces(props) {
-  const {
-    myAccount: { pieces },
-  } = props;
+  const { myAccount: { pieces } } = props;
 
   if (!pieces) return (
     <Redirect to='/my-account' />
@@ -36,6 +28,8 @@ export function MyPieces(props) {
   ];
 }
 
-MyPieces.propTypes = {};
+MyPieces.propTypes = {
+  myAccount: PropTypes.object,
+};
 
 export default MyPieces;

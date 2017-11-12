@@ -8,7 +8,7 @@ export default class UserRedirect extends Component {
   componentDidMount() {
     const { location: { pathname } } = this.props;
 
-    const id = parseInt(pathname.split('/')[2]);
+    const id = parseInt(pathname.split('/')[2], 10);
 
     this.redirect(id);
   }

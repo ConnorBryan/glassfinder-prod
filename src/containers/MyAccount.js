@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import {
-  Button,
   Header,
   Icon,
   Label,

@@ -1,26 +1,19 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import {
-  Breadcrumb,
-  Button,
-  Header,
-  Segment,
-} from 'semantic-ui-react';
+import { Breadcrumb, Segment } from 'semantic-ui-react';
 
 import CONSTANTS from '../constants';
 
 export function Breadcrumbs(props) {
-  const {
-    location: { pathname },
-  } = props;
+  const { location: { pathname } } = props;
 
   const breadcrumbs = (CONSTANTS.ROUTES.find(({ path }) => path === pathname) || {}).breadcrumbs;
 
   if (!breadcrumbs) return null;
 
   return (
-    <Segment>
+    <Segment attached='top'>
       <Breadcrumb>
         {breadcrumbs.map(({ pageName, route, active }, index) => [
           <Breadcrumb.Section
@@ -41,6 +34,8 @@ export function Breadcrumbs(props) {
   );
 }
 
-Breadcrumbs.propTypes = {};
+Breadcrumbs.propTypes = {
+  location: PropTypes.object,
+};
 
 export default Breadcrumbs;

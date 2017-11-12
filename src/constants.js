@@ -25,7 +25,14 @@ export default {
     shop: 'cart',
     brand: 'building',
     piece: 'puzzle',
+    error: 'warning sign',
   },
+
+  /*
+    E t
+      C e t e r a
+  */
+  ERROR_TIMEOUT: 2000,
 
   /*
     R o u t i n g

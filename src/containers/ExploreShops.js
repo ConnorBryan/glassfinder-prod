@@ -1,16 +1,20 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {
-  Card,
-  Image,
-  Segment,
-} from 'semantic-ui-react';
+import { Segment } from 'semantic-ui-react';
 
 import Map from '../components/Map';
 import ShopItems from '../components/ShopItem';
 
 export default class ExploreShops extends Component {
-  static propTypes = {};
+  static propTypes = {
+    localShops: PropTypes.arrayOf(PropTypes.object),
+    actions: PropTypes.objectOf(PropTypes.func),
+  };
+
+  static defaultProps = {
+    localShops: [],
+    actions: {},
+  };
 
   componentDidMount() {
     const {
@@ -24,7 +28,6 @@ export default class ExploreShops extends Component {
   render() {
     const {
       localShops,
-      localShopsPage,
       history,
     } = this.props;
 

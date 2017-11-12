@@ -69,6 +69,15 @@ export default {
       dispatch(ACTIONS.setHasPassedAgeGate(true));
     },
 
+    showError: e => (dispatch, getState) => {
+      dispatch(ACTIONS.setError({
+        error: e,
+        message: e.message,
+      }));
+
+      setTimeout(() => dispatch(ACTIONS.setError(null)), CONSTANTS.ERROR_TIMEOUT);
+    },
+
     /**
      * @func verify
      * @desc Verify a user account on the server when provided URL params for userId and verificationCode.
@@ -80,15 +89,14 @@ export default {
           const { data: { error, user, token } } = await axios.post(url);
 
           if (error || !token) {
-            dispatch(ACTIONS.setError({
-                message: error || `The verification process failed`,
-              }))
+            dispatch(ACTIONS.showError(error));
           } else {
             window.localStorage.setItem(CONSTANTS.MY_ACCOUNT_COOKIE, JSON.stringify(user));
 
             dispatch(ACTIONS.authorize(token, history));
             dispatch(ACTIONS.setMyAccount(user));
-            setTimeout(() => dispatch(ACTIONS.syncMyAccount()), 1000);
+
+            setTimeout(() => dispatch(ACTIONS.syncMyAccount()), CONSTANTS.ERROR_TIMEOUT);
           }
     }),
 
@@ -111,9 +119,7 @@ export default {
           );
 
           error 
-            ? dispatch(ACTIONS.setError({
-                message: error.message || error,
-              }))
+            ? dispatch(ACTIONS.showError(error))
             : dispatch(ACTIONS.syncMyAccount());
     }),
 
@@ -140,12 +146,7 @@ export default {
             })
           );
 
-          error && (
-            dispatch(ACTIONS.setError({
-              error,
-              message: error || `The signup process failed`,
-            }))
-          );
+          error && dispatch(ACTIONS.showError(error));
     }),
     
     /**
@@ -165,16 +166,14 @@ export default {
           );
 
           if (error || !token) {
-            dispatch(ACTIONS.setError({
-              error: error,
-              message: error || `The sign in process failed`,
-            }));
+            dispatch(ACTIONS.showError(error));
           } else {
             window.localStorage.setItem(CONSTANTS.MY_ACCOUNT_COOKIE, JSON.stringify(user));
 
             dispatch(ACTIONS.authorize(token));
             dispatch(ACTIONS.setMyAccount(user));
-            setTimeout(() => dispatch(ACTIONS.syncMyAccount()), 1000);
+
+            setTimeout(() => dispatch(ACTIONS.syncMyAccount()), CONSTANTS.ERROR_TIMEOUT);
           }
     }),
 
@@ -203,9 +202,7 @@ export default {
           );
 
           error
-            ? dispatch(ACTIONS.setError({
-                message: error || `Unable to change password`
-              }))
+            ? dispatch(ACTIONS.showError(error))
             : history.push('/my-account');
     }),
 
@@ -230,10 +227,7 @@ export default {
           if (pieces) user.pieces = pieces;
 
           if (error) {
-            dispatch(ACTIONS.setError({
-              error: error,
-              message: error || `The syncing process failed`,
-            }));
+            dispatch(ACTIONS.showError(error));
           } else {
             dispatch(ACTIONS.setMyAccount(user));
 
@@ -262,9 +256,7 @@ export default {
           );
 
           return error
-            ? dispatch(ACTIONS.setError({
-                message: error || `Unable to update field`,
-              }))
+            ? dispatch(ACTIONS.showError(error))
             : dispatch(ACTIONS.syncMyAccount());
     }),
 
@@ -302,9 +294,7 @@ export default {
           );
 
           return error
-            ? dispatch(ACTIONS.setError({
-              message: error || `Unable to upload piece`,
-            }))
+            ? dispatch(ACTIONS.showError(error))
             : dispatch(ACTIONS.syncMyAccount());
     }),
 
@@ -322,9 +312,7 @@ export default {
           const { data: { error, shops } } = await axios.get(`${CONSTANTS.API_ROOT}/shops`);
 
           if (error) {
-            dispatch(ACTIONS.setError({
-              message: error || `Unable to explore shops`,
-            }));
+            dispatch(ACTIONS.showError(error));
           } else {
             dispatch(ACTIONS.setLocalShopsPage(1));
             dispatch(ACTIONS.setLocalShops(shops));
@@ -345,9 +333,7 @@ export default {
           const { data: { error, pieces } } = await axios.get(`${CONSTANTS.API_ROOT}/pieces`);
 
           if (error) {
-            dispatch(ACTIONS.setError({
-              message: error || `Unable to explore pieces`,
-            }));
+            dispatch(ACTIONS.showError(error));
           } else {
             dispatch(ACTIONS.setLocalPiecesPage(1));
             dispatch(ACTIONS.setLocalPieces(pieces));
@@ -367,7 +353,7 @@ export default {
           const { data: { success, message, artist, pieces } } = await axios.get(`${CONSTANTS.API_ROOT}/artist/${id}`);
           
           if (!success) {
-            dispatch(ACTIONS.setError({ message }));
+            dispatch(ACTIONS.showError({ message }));
           } else {
             artist.pieces = pieces;
             
@@ -390,7 +376,7 @@ export default {
           const { data: { success, message, shop, pieces } } = await axios.get(`${CONSTANTS.API_ROOT}/shop/${id}`);
           
           if (!success) {
-            dispatch(ACTIONS.setError({ message }));
+            dispatch(ACTIONS.showError({ message }));
           } else {
             shop.pieces = pieces;
             
@@ -423,7 +409,7 @@ export default {
 
           success
             ? pieces.forEach(piece => dispatch(ACTIONS.setPiece(piece)))
-            : dispatch(ACTIONS.setError({ message }));
+            : dispatch(ACTIONS.showError({ message }));
           
           dispatch(ACTIONS.setFetchingPieces(false));
     }),
@@ -442,10 +428,7 @@ export async function processify(dispatch, process) {
     dispatch(ACTIONS.setLoading(true));
     await process();
   } catch (e) {
-    dispatch(ACTIONS.setError({
-      error: e,
-      message: e.message,
-    }));
+    dispatch(ACTIONS.showError(e));
   } finally {
     dispatch(ACTIONS.setLoading(false));
   }

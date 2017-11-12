@@ -14,10 +14,13 @@ import ACTIONS from './actions';
 const COOKIES = new Cookies();
 
 export const INITIAL_STATE = {
-  hasPassedAgeGate: !!COOKIES.get(CONSTANTS.HAS_PASSED_AGE_GATE_COOKIE),
-  isLoading: false,
   initialized: false,
-  mapmarkers: [],
+
+  hasPassedAgeGate: !!COOKIES.get(CONSTANTS.HAS_PASSED_AGE_GATE_COOKIE),
+
+  isLoading: false,
+
+  error: null,
 
   localShopsPage: 1,
   localPiecesPage: 1,

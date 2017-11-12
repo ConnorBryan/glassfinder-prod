@@ -1,15 +1,11 @@
 import React, { Component } from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import {
-  Button,
   Header,
   Icon,
   Item,
   Label,
-  Menu,
-  Segment,
 } from 'semantic-ui-react';
-import pathToRegexp from 'path-to-regexp';
 
 import CONSTANTS from '../constants';
 
@@ -26,7 +22,7 @@ export default class ShopProfile extends Component {
       actions: { setActiveShop, fetchShop },
     } = this.props;
 
-    const id = parseInt(pathname.split('/')[2]);
+    const id = parseInt(pathname.split('/')[2], 10);
     const shop = shopsById.get(id);
 
     shop ? setActiveShop(id) : fetchShop(id);
@@ -53,10 +49,9 @@ export default class ShopProfile extends Component {
       shopsById,
       history,
       location: { pathname },
-      actions: { fetchShop },
     } = this.props;
 
-    const id = parseInt(pathname.split('/')[2]);
+    const id = parseInt(pathname.split('/')[2], 10);
     
     if (isNaN(id)) return (
       <Redirect to='/shops' />
@@ -68,18 +63,6 @@ export default class ShopProfile extends Component {
 
     const { pieces: pieceIds } = shop;
     const pieces = this.hydratePieces(pieceIds);
-
-    const {
-      name,
-      image,
-      street,
-      city,
-      state,
-      zip,
-      email,
-      phone,
-      description,
-    } = shop;
 
     return (
       <div>

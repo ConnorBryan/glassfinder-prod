@@ -5,8 +5,14 @@ import{ Card, Grid } from 'semantic-ui-react';
 import PieceCards from './PieceCard';
 
 export default class PieceGrid extends Component {
+  static propTypes = {
+    pieces: PropTypes.arrayOf(PropTypes.object),
+    showOwner: PropTypes.bool,
+  };
+
   static defaultProps = {
     pieces: [],
+    showOwner: false,
   };
 
   /**
