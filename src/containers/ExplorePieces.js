@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 import { Segment } from 'semantic-ui-react';
 
 import PieceGrid from '../components/PieceGrid';
+import withPageHeader from '../components/withPageHeader';
 
-export default class ExplorePieces extends Component {
+export class ExplorePieces extends Component {
   static propTypes = {
     localPieces: PropTypes.arrayOf(PropTypes.object),
     actions: PropTypes.objectOf(PropTypes.func),
@@ -38,3 +39,5 @@ export default class ExplorePieces extends Component {
     );
   }
 }
+
+export default withPageHeader(ExplorePieces);

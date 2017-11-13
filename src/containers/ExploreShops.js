@@ -4,8 +4,9 @@ import { Segment } from 'semantic-ui-react';
 
 import Map from '../components/Map';
 import ShopItems from '../components/ShopItem';
+import withPageHeader from '../components/withPageHeader';
 
-export default class ExploreShops extends Component {
+export class ExploreShops extends Component {
   static propTypes = {
     localShops: PropTypes.arrayOf(PropTypes.object),
     actions: PropTypes.objectOf(PropTypes.func),
@@ -47,3 +48,5 @@ export default class ExploreShops extends Component {
     );
   }
 }
+
+export default withPageHeader(ExploreShops);

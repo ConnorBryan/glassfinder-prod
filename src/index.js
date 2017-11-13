@@ -91,7 +91,8 @@ export class BaseApp extends Component {
                       <Component
                         {...this.props}
                         {...history}
-                        {...location} />
+                        {...location}
+                        {...route} />
                     );
 
                     return (

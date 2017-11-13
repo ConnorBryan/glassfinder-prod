@@ -29,6 +29,11 @@ export default [
         active: true,
       },
     ],
+    pageHeader: {
+      icon: 'child',
+      title: 'Welcome to Glassfinder',
+      description: 'Take some time to explore our shops and pieces. If you need help, navigate to the "Help" page using the navigation above.',
+    },
   },
   {
     path: '/help',
@@ -43,6 +48,11 @@ export default [
         active: true,
       },
     ],
+    pageHeader: {
+      icon: 'help circle',
+      title: 'Help',
+      description: 'Frequently asked questions related to Glassfinder.',
+    },
   },
   {
     path: '/contact',
@@ -57,6 +67,11 @@ export default [
         active: true,
       },
     ],
+    pageHeader: {
+      icon: 'envelope',
+      title: 'Contact',
+      description: 'Here\'s how to get in touch.',
+    },
   },
   {
     path: '/social-media',
@@ -71,6 +86,11 @@ export default [
         active: true,
       },
     ],
+    pageHeader: {
+      icon: 'users',
+      title: 'Social Media',
+      description: 'Find Glassfinder all over the place.',
+    },
   },
   {
     path: '/sign-in',
@@ -131,6 +151,11 @@ export default [
         active: true,
       },
     ],
+    pageHeader: {
+      icon: 'eye',
+      title: 'User Verification',
+      description: '',
+    },
   },
   {
     path: '/explore-pieces',
@@ -145,6 +170,11 @@ export default [
         active: true,
       },
     ],
+    pageHeader: {
+      icon: 'puzzle',
+      title: 'Explore Pieces',
+      description: 'The perfect piece for you is just waiting to be discovered.',
+    },
   },
   {
     path: '/explore-shops',
@@ -159,6 +189,11 @@ export default [
         active: true,
       },
     ],
+    pageHeader: {
+      icon: 'shopping cart',
+      title: 'Explore Shops',
+      description: 'Support local business and buy your glass from the folks who know it best.',
+    },
   },
   {
     path: '/change-password',
@@ -193,6 +228,11 @@ export default [
         active: true,
       },
     ],
+    pageHeader: {
+      icon: 'user',
+      title: 'My Account',
+      description: 'Make changes to your account, upload pieces, and more.',
+    },
   },
   {
     path: '/upload-piece',
@@ -231,6 +271,11 @@ export default [
         active: true,
       },
     ],
+    pageHeader: {
+      icon: 'puzzle',
+      title: 'My Pieces',
+      description: 'Here you can view pieces you\'ve uploaded, as well as make changes.',
+    },
   },
   {
     path: '/u/:id?',
@@ -299,5 +344,10 @@ export default [
         active: true,
       },
     ],
+    pageHeader: {
+      icon: 'dollar',
+      title: 'Purchase',
+      description: 'It looks like you\'ve found exactly what you were looking for.',
+    },
   },
 ];

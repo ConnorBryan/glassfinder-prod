@@ -7,9 +7,10 @@ import {
   Image,
   Item,
   Loader,
-  Message,
   Segment,
 } from 'semantic-ui-react';
+
+import withPageHeader from '../components/withPageHeader';
 
 /**
  * @func Home
@@ -61,12 +62,6 @@ export function Home(props) {
     )
     : (
       <Segment.Group>
-        <Message
-          attached='top'
-          icon='child'
-          header='Welcome to Glassfinder!'
-          content='Take some time to explore out shops and pieces. If you need help, navigate to the "Help" page using the navigation above.'
-          info />
         <Segment attached='bottom'>
           <Header
             as='h2'
@@ -102,4 +97,4 @@ Home.propTypes = {
   history: PropTypes.object.isRequired,
 };
 
-export default Home;
+export default withPageHeader(Home);

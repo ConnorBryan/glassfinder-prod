@@ -99,6 +99,7 @@ export function TopBar(props) {
             <Menu.Item
               as={Link}
               className='fancy'
+              key={index}
               to={to}>
               <Icon name={icon} /> {title}
             </Menu.Item>

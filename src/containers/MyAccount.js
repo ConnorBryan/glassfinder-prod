@@ -11,6 +11,7 @@ import {
 import CONSTANTS from '../constants';
 import flatten from '../utils/flatten';
 import AccountField from '../components/AccountField';
+import withPageHeader from '../components/withPageHeader';
 
 export function MyAccount(props) {
   const {
@@ -91,7 +92,7 @@ MyAccount.defaultProps = {
   linkedAccount: {},
 };
 
-export default MyAccount;
+export default withPageHeader(MyAccount);
 
 /* = = = */
 

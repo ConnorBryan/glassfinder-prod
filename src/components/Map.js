@@ -28,9 +28,9 @@ export default class Map extends Component {
 
   /**
    * @method renderMapmarkers
-   * Once mapmarkers have been loaded,
-   * iterate over each of them to create a new Google Map Marker.
-   * Clicking the marker sends you straight to the Detail page.
+   * @desc Once mapmarkers have been loaded,
+   *       iterate over each of them to create a new Google Map Marker.
+   *       Clicking the marker sends you straight to the Detail page.
    */
   renderMapmarkers() {
     const { localShops, history } = this.props;
@@ -49,8 +49,8 @@ export default class Map extends Component {
 
   /**
    * @method initMap
-   * After Google's Map library loads,
-   * create an instance attached to the rendered Segment.
+   * @desc After Google's Map library loads,
+   *       create an instance attached to the rendered Segment.
    */
   initMap() {
     try {
@@ -67,7 +67,7 @@ export default class Map extends Component {
 
   /**
    * @method findMyLocation
-   * Center the map on the user's location after requesting permission.
+   * @desc   Center the map on the user's location after requesting permission.
    */
   findMyLocation = async () => {
     const { data: { location } } = await (
@@ -101,7 +101,6 @@ export default class Map extends Component {
         <Grid.Row style={rowStyle}>
           <Grid.Column
             as={Segment}
-            fluid
             id='map'
             style={mapStyle}
             width={16}>

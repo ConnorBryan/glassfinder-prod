@@ -1,8 +1,7 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import {
-  Header,
   Icon,
   Menu,
   Sidebar,
@@ -54,7 +53,7 @@ export function NavigationMenu(props) {
     {
       to: '/help',
       title: 'Help',
-      icon: 'question mark',
+      icon: 'help circle',
     },
     {
       to: '/contact',

@@ -5,7 +5,6 @@ import {
   Container,
   Icon,
   Loader,
-  Menu,
   Message,
   Segment,
   Sidebar,

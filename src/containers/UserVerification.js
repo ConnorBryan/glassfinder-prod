@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 
-export default class UserVerification extends Component {
+import withPageHeader from '../components/withPageHeader';
+
+export class UserVerification extends Component {
   static StatusTypes = {
     AWAITING_VERIFICATION: 0,
     VERIFYING: 1,
@@ -100,6 +102,8 @@ export default class UserVerification extends Component {
     );
   }
 }
+
+export default withPageHeader(UserVerification);
 
 /* = = = */
 

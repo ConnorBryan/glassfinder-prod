@@ -1,15 +1,6 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import makeClass from 'classnames';
-import {
-  Card,
-  Header,
-  Image,
-  Item,
-  Loader,
-  Message,
-  Segment,
-} from 'semantic-ui-react';
+
+import withPageHeader from '../components/withPageHeader';
 
 /**
  * @func Purchase
@@ -27,4 +18,4 @@ export function Purchase(props) {
 
 Purchase.propTypes = {};
 
-export default Purchase;
+export default withPageHeader(Purchase);
