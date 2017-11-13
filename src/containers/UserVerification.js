@@ -76,7 +76,6 @@ export class UserVerification extends Component {
 
     return (
       <div>
-        User Verification
         <p>
           {status === UserVerification.StatusTypes.AWAITING_VERIFICATION && (
             `An account has been created, but it must be verified prior to use.

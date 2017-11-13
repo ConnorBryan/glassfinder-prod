@@ -34,6 +34,7 @@ export default {
       C e t e r a
   */
   ERROR_TIMEOUT: 2000,
+  FETCH_TIMEOUT: 5000,
 
   /*
     R o u t i n g

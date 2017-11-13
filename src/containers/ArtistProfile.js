@@ -71,11 +71,10 @@ export default class ArtistProfile extends Component {
       <div>
         <Label
           className='fancy'
-          ribbon='left'
           color='blue'>
           <Icon name={CONSTANTS.ICONS.artist} /> Artist
         </Label>
-        <Item.Group fluid>
+        <Item.Group>
           <ArtistItem {...artist} />
         </Item.Group>          
         <Header

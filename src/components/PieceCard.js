@@ -9,10 +9,11 @@ import {
 import { formatMoney } from 'accounting';
 
 export const makePriceLabel = price => ({
-  as: 'div',
+  as: 'h2',
   color: 'green',
   content: formatMoney(price),
   ribbon: 'right',
+  style: { fontSize: '1.5rem' }
 });
 
 export function PieceCard(props) {
@@ -61,9 +62,9 @@ export function PieceCard(props) {
         <Button
           as={Link}
           className='fancy'
-          content='More info' 
+          content='View pics' 
           fluid
-          icon='info circle'
+          icon='picture'
           primary
           to={`/p/${id}`} />
       </Card.Content>

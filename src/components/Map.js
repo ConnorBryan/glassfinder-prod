@@ -16,10 +16,6 @@ export default class Map extends Component {
       : (window.initMap = () => this.initMap());
   }
 
-  shouldComponentUpdate() {
-    return false;
-  }
-
   componentWillReceiveProps(nextProps) {
     const { localShops } = nextProps;
 

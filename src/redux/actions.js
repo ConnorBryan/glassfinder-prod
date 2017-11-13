@@ -327,7 +327,7 @@ export default {
               description,
             })
           );
-          
+
           piece && dispatch(ACTIONS.setPiece(piece));
 
           error

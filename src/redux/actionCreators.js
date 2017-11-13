@@ -75,6 +75,7 @@ export default {
   */
   setShop: shop => ({ type: ACTION_TYPES.SET_SHOP, shop }),
   setActiveShop: shopId => ({ type: ACTION_TYPES.SET_ACTIVE_SHOP, shopId }),
+  setFetchingShops: fetchingShops => ({ type: ACTION_TYPES.FETCHING_SHOPS, fetchingShops }),
 
   /*
     P i e c e s

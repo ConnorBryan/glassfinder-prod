@@ -74,6 +74,7 @@ export default {
   */
   SET_SHOP: 'SET_SHOP',
   SET_ACTIVE_SHOP: 'SET_ACTIVE_SHOP',
+  SET_FETCHING_SHOPS: 'SET_FETCHING_SHOPS',
 
   /*
     P i e c e s
