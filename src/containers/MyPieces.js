@@ -1,16 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import PieceCards from '../components/PieceCard';
+import PieceGrid from '../components/PieceGrid';
 import withPageHeader from '../components/withPageHeader';
 
 export function MyPieces(props) {
   const { myAccount: { pieces } } = props;
 
   return (
-    <PieceCards
-      key='pieces'
-      collection={pieces} />
+    <PieceGrid collection={pieces} />
   );
 }
 

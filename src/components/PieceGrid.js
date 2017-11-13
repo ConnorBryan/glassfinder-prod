@@ -6,7 +6,7 @@ import PieceCards from './PieceCard';
 
 export default class PieceGrid extends Component {
   static propTypes = {
-    pieces: PropTypes.arrayOf(PropTypes.object),
+    collection: PropTypes.arrayOf(PropTypes.object),
     showOwner: PropTypes.bool,
   };
 
@@ -18,11 +18,11 @@ export default class PieceGrid extends Component {
   /**
    * @method threeify
    * @desc Transform an array for the grid.
-   * @param {Array<Piece>} pieces
+   * @param {Array<Piece>} collection
    * @returns {Array<Array<Piece>>}
    */
-  threeify(pieces) {
-    return pieces.reduce((collection, piece) => {
+  threeify(collection) {
+    return collection.reduce((collection, piece) => {
       if (!collection) return [[piece]];
 
       const mostRecent = collection.length - 1;
@@ -37,13 +37,13 @@ export default class PieceGrid extends Component {
   }
 
   render() {
-    const { pieces, showOwner } = this.props;
+    const { collection, showOwner } = this.props;
     
-    const threeifiedPieces = this.threeify(pieces);
+    const threeifiedCollection = this.threeify(collection);
 
     return (
       <Grid stretched>
-        {threeifiedPieces && threeifiedPieces.map((collection, index) => (
+        {threeifiedCollection && threeifiedCollection.map((collection, index) => (
           <Grid.Row
             columns={1}
             key={index}>

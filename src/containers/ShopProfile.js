@@ -83,7 +83,7 @@ export default class ShopProfile extends Component {
           className='fancy' />
           {thisOrThat(
             pieces && pieces.length > 0,
-            <PieceGrid pieces={pieces} />,
+            <PieceGrid collection={pieces} />,
             <p>{name} has not yet uploaded any pieces. Check back soon!</p>
           )}
       </div>
