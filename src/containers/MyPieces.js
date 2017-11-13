@@ -5,10 +5,16 @@ import PieceGrid from '../components/PieceGrid';
 import withPageHeader from '../components/withPageHeader';
 
 export function MyPieces(props) {
-  const { myAccount: { pieces } } = props;
+  const {
+    myAccount: { pieces },
+    actions: { deletePiece },
+  } = props;
 
   return (
-    <PieceGrid collection={pieces} />
+    <PieceGrid
+      collection={pieces}
+      deletePiece={deletePiece}
+      showEdit />
   );
 }
 

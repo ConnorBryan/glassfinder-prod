@@ -33,7 +33,8 @@ export class ExplorePieces extends Component {
         {localPieces && (
           <PieceGrid
             collection={localPieces}
-            showOwner />
+            showOwner
+            showPurchase />
         )}
       </Segment>
     );

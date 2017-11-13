@@ -89,13 +89,18 @@ export default {
   /*
     P i e c e s
   */
-  [ACTION_TYPES.SET_PIECE]: (state, { piece }) => {
+  [ACTION_TYPES.SET_PIECE]: (state, { piece, destroy }) => {
     const { piecesById } = state;
-    const { id } = piece;
+    
+    if (destroy) {
+      piecesById.set(destroy, undefined);
+    } else {
+      const { id } = piece;
 
-    if (!id) throw Error(`Attempted to call SET_PIECE on invalid piece`);
+      if (!id) throw Error(`Attempted to call SET_PIECE on invalid piece`);
 
-    piecesById.set(id, piece);
+      piecesById.set(id, piece);
+    }
 
     return { ...state, piecesById };
   },

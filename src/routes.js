@@ -273,7 +273,7 @@ export default [
     ],
     pageHeader: {
       icon: 'puzzle',
-      title: 'My Pieces',
+      title: 'My pieces',
       description: 'Here you can view pieces you\'ve uploaded, as well as make changes.',
     },
   },

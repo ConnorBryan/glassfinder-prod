@@ -71,7 +71,7 @@ export default {
   /*
     P i e c e s
   */
-  setPiece: piece => ({ type: ACTION_TYPES.SET_PIECE, piece }),
+  setPiece: (piece, destroy) => ({ type: ACTION_TYPES.SET_PIECE, payload: { piece, destroy } }),
   setActivePiece: pieceId => ({ type: ACTION_TYPES.SET_ACTIVE_PIECE, pieceId }),
   setFetchingPieces: fetchingPieces => ({ type: ACTION_TYPES.SET_FETCHING_PIECES, fetchingPieces }),
 };

@@ -305,6 +305,28 @@ export default {
     }),
 
     /**
+     * @func deletePiece
+     * @desc Delete a piece in the database based on a given id.
+     * @param {number | string} id
+     */
+    deletePiece: id =>
+      (dispatch, getState) =>
+        processify(dispatch, async () => {
+          const { piecesById } = getState();
+          const localPiece = piecesById.get(id);
+
+          const { data: { error } } = await (
+            axios.delete(`${CONSTANTS.API_ROOT}/piece/${id}`)
+          );
+          
+          if (localPiece) dispatch(ACTIONS.setPiece(null, id));
+
+          error
+            ? dispatch(ACTIONS.showError(error))
+            : dispatch(ACTIONS.syncMyAccount());
+    }),
+
+    /**
      * @func exploreShops
      * @desc Browse existing shops on the site in progressively more detail. 
      */

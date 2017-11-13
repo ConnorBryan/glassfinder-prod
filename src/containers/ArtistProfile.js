@@ -85,7 +85,9 @@ export default class ArtistProfile extends Component {
           content='Pieces'
           className='fancy' />
         {pieces && (
-          <PieceGrid collection={pieces} />
+          <PieceGrid
+            collection={pieces}
+            showPurchase />
         )}
       </div>
     );

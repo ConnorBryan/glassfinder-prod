@@ -7,12 +7,18 @@ import PieceCards from './PieceCard';
 export default class PieceGrid extends Component {
   static propTypes = {
     collection: PropTypes.arrayOf(PropTypes.object),
+    deletePiece: PropTypes.func,
+    showEdit: PropTypes.bool,
     showOwner: PropTypes.bool,
+    showPurchase: PropTypes.bool,
   };
 
   static defaultProps = {
-    pieces: [],
+    collection: [],
+    deletePiece: () => {},
+    showEdit: false,
     showOwner: false,
+    showPurchase: false,
   };
 
   /**
@@ -37,7 +43,13 @@ export default class PieceGrid extends Component {
   }
 
   render() {
-    const { collection, showOwner } = this.props;
+    const {
+      collection,
+      deletePiece,
+      showEdit,
+      showOwner,
+      showPurchase,
+    } = this.props;
     
     const threeifiedCollection = this.threeify(collection);
 
@@ -53,7 +65,10 @@ export default class PieceGrid extends Component {
                 stackable>
                 <PieceCards
                   collection={collection}
-                  showOwner={showOwner} />
+                  deletePiece={deletePiece}
+                  showEdit={showEdit}
+                  showOwner={showOwner}
+                  showPurchase={showPurchase} />
               </Card.Group>
             </Grid.Column>
           </Grid.Row>
