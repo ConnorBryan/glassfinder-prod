@@ -8,7 +8,6 @@ import {
   Message,
   Segment,
   Sidebar,
-  Sticky
 } from 'semantic-ui-react';
 
 import CONSTANTS from '../constants';
@@ -23,10 +22,6 @@ export class Layout extends Component {
     isLoading: PropTypes.bool.isRequired,
     actions: PropTypes.objectOf(PropTypes.func).isRequired,
   };
-
-  state = {};
-
-  handleContext = context => this.setState({ context });
   
   /**
    * @method zIndesOverride
@@ -50,7 +45,6 @@ export class Layout extends Component {
         toggleSidebar,
       },
     } = this.props;
-    const { context } = this.state;
 
     const errorWrapperStyle = {
       height: '100%',
@@ -72,7 +66,7 @@ export class Layout extends Component {
 
     const wrapperStyle = {
       marginRight: 0,
-      marginTop: '4rem',
+      marginTop: '2rem',
       marginBottom: '8rem',
     };
 
@@ -86,8 +80,7 @@ export class Layout extends Component {
     };
 
     return (
-      <div
-        ref={this.handleContext}>
+      <div>
         {error && (
           <div style={errorWrapperStyle}>
             <Message
@@ -98,14 +91,12 @@ export class Layout extends Component {
             </Message>
           </div>
         )}
-        <Sticky context={context}>
-          <TopBar
-            zIndexOverride={this.zIndexOverride}
-            authorized={authorized}
-            deauthorize={deauthorize}
-            toggleSidebar={toggleSidebar}
-            sidebarVisible={sidebarVisible} />
-        </Sticky>
+        <TopBar
+          zIndexOverride={this.zIndexOverride}
+          authorized={authorized}
+          deauthorize={deauthorize}
+          toggleSidebar={toggleSidebar}
+          sidebarVisible={sidebarVisible} />
         <Sidebar.Pushable
           as={Segment}
           style={pushableStyle}>

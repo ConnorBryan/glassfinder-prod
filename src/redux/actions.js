@@ -313,7 +313,6 @@ export default {
       (dispatch, getState) =>
         processify(dispatch, async () => {
           const {
-            myAccount,
             authToken: token,
             editPieceFormTitle: title,
             editPieceFormPrice: price,
