@@ -61,7 +61,7 @@ export default class ShopProfile extends Component {
 
     if (!activeShop) return null;
 
-    const { pieces: pieceIds } = shop;
+    const { name, pieces: pieceIds } = shop;
     const pieces = this.hydratePieces(pieceIds);
 
     return (
@@ -81,10 +81,23 @@ export default class ShopProfile extends Component {
           icon={CONSTANTS.ICONS.piece}
           content='Pieces'
           className='fancy' />
-        {pieces && (
-          <PieceGrid pieces={pieces} />
-        )}
+          {thisOrThat(
+            pieces && pieces.length > 0,
+            <PieceGrid pieces={pieces} />,
+            <p>{name} has not yet uploaded any pieces. Check back soon!</p>
+          )}
       </div>
     );
   }
+}
+
+/**
+ * Because it's prettier.
+ * @param {boolean} condition 
+ * @param {Component} ifTrue 
+ * @param {Component} ifFalse 
+ * @returns {Component}
+ */
+export function thisOrThat(condition, ifTrue, ifFalse) {
+  return condition ? ifTrue : ifFalse;
 }
