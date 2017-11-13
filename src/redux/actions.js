@@ -305,6 +305,38 @@ export default {
     }),
 
     /**
+     * @func editPiece
+     * @desc Edit one or more fields related to a piece.
+     * @param {number | string} id
+     */
+    editPiece: id =>
+      (dispatch, getState) =>
+        processify(dispatch, async () => {
+          const {
+            myAccount,
+            authToken: token,
+            editPieceFormTitle: title,
+            editPieceFormPrice: price,
+            editPieceFormDescription: description,
+          } = getState();
+
+          const { data: { error, piece } } = await (
+            axios.post(`${CONSTANTS.API_ROOT}/piece/${id}`, {
+              token,
+              title,
+              price,
+              description,
+            })
+          );
+          
+          piece && dispatch(ACTIONS.setPiece(piece));
+
+          error
+            ? dispatch(ACTIONS.showError(error))
+            : dispatch(ACTIONS.syncMyAccount());
+    }),
+
+    /**
      * @func deletePiece
      * @desc Delete a piece in the database based on a given id.
      * @param {number | string} id
@@ -312,14 +344,17 @@ export default {
     deletePiece: id =>
       (dispatch, getState) =>
         processify(dispatch, async () => {
-          const { piecesById } = getState();
-          const localPiece = piecesById.get(id);
+          const {
+              piecesById,
+              myAccount: { pieces },
+            } = getState();
+          const localPiece = piecesById.get(id) || pieces.find(({ id }) => id);
 
           const { data: { error } } = await (
             axios.delete(`${CONSTANTS.API_ROOT}/piece/${id}`)
           );
           
-          if (localPiece) dispatch(ACTIONS.setPiece(null, id));
+          if (localPiece) dispatch(ACTIONS.deletePiece(localPiece));
 
           error
             ? dispatch(ACTIONS.showError(error))

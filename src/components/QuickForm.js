@@ -37,6 +37,7 @@ export function QuickForm(props) {
               error,
               onChange,
               required,
+              value,
             } = field;
 
             return (
@@ -48,7 +49,8 @@ export function QuickForm(props) {
                 placeholder={placeholder}
                 error={error}
                 onChange={onChange}
-                required={required} />
+                required={required}
+                value={value} />
             );
           })}
           <Form.Group unstackable>

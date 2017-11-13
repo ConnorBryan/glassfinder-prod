@@ -43,6 +43,14 @@ export default {
   [ACTION_TYPES.SET_UPLOAD_PIECE_FORM_DESCRIPTION]: (state, { uploadPieceFormDescription }) => ({ ...state, uploadPieceFormDescription }),
 
   /*
+    E d i t
+      P i e c e
+  */
+  [ACTION_TYPES.SET_EDIT_PIECE_FORM_TITLE]: (state, { editPieceFormTitle }) => ({ ...state, editPieceFormTitle }),
+  [ACTION_TYPES.SET_EDIT_PIECE_FORM_PRICE]: (state, { editPieceFormPrice }) => ({ ...state, editPieceFormPrice }),
+  [ACTION_TYPES.SET_EDIT_PIECE_FORM_DESCRIPTION]: (state, { editPieceFormDescription }) => ({ ...state, editPieceFormDescription }),
+
+  /*
     E x p l o r e
       S h o p s 
   */
@@ -89,21 +97,26 @@ export default {
   /*
     P i e c e s
   */
-  [ACTION_TYPES.SET_PIECE]: (state, { piece, destroy }) => {
+  [ACTION_TYPES.SET_PIECE]: (state, { piece }) => {
     const { piecesById } = state;
-    
-    if (destroy) {
-      piecesById.set(destroy, undefined);
-    } else {
-      const { id } = piece;
+    const { id } = piece;
 
-      if (!id) throw Error(`Attempted to call SET_PIECE on invalid piece`);
+    if (!id) throw Error(`Attempted to call SET_PIECE on invalid piece`);
 
-      piecesById.set(id, piece);
-    }
+    piecesById.set(id, piece);
 
     return { ...state, piecesById };
   },
   [ACTION_TYPES.SET_ACTIVE_PIECE]: (state, { pieceId }) => ({ ...state, activePiece: pieceId }),
   [ACTION_TYPES.SET_FETCHING_PIECES]: (state, { fetchingPieces }) => ({ ...state, fetchingPieces }),
+  [ACTION_TYPES.DELETE_PIECE]: (state, { piece }) => {
+    const { piecesById } = state;
+    const { id } = piece;
+
+    if (!id) throw Error(`Attempted to call DELETE_PIECE on invalid piece`);
+    
+    piecesById.set(id, undefined);
+
+    return { ...state, piecesById };
+  },
 };

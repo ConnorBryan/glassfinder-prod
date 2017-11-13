@@ -7,6 +7,7 @@ import ChangePassword from './containers/ChangePassword';
 import UserVerification from './containers/UserVerification';
 import MyAccount from './containers/MyAccount';
 import UploadPiece from './containers/UploadPiece';
+import EditPiece from './containers/EditPiece';
 import ExploreShops from './containers/ExploreShops';
 import ExplorePieces from './containers/ExplorePieces';
 import MyPieces from './containers/MyPieces';
@@ -276,6 +277,29 @@ export default [
       title: 'My pieces',
       description: 'Here you can view pieces you\'ve uploaded, as well as make changes.',
     },
+  },
+  {
+    path: '/my-pieces/:id?',
+    requiresAuthorized: true,
+    Component: EditPiece,
+    breadcrumbs: [
+      {
+        pageName: 'Home',
+        route: '/',
+      },
+      {
+        pageName: 'My account',
+        route: '/my-account',
+      },
+      {
+        pageName: 'My pieces',
+        route: '/my-pieces',
+      },
+      {
+        pageName: 'Edit piece',
+        active: true,
+      },
+    ],
   },
   {
     path: '/u/:id?',

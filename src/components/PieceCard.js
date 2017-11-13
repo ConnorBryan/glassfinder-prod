@@ -89,7 +89,7 @@ export function PieceCard(props) {
             className='fancy'
             icon='pencil'
             content='Edit'
-            to={`/edit-piece/${id}`} />
+            to={`/my-pieces/${id}`} />
         </Card.Content>,
         <Card.Content
           extra

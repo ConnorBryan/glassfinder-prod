@@ -41,6 +41,14 @@ export default {
   setUploadPieceFormTitle: uploadPieceFormTitle => ({ type: ACTION_TYPES.SET_UPLOAD_PIECE_FORM_TITLE, uploadPieceFormTitle }),
   setUploadPieceFormPrice: uploadPieceFormPrice => ({ type: ACTION_TYPES.SET_UPLOAD_PIECE_FORM_PRICE, uploadPieceFormPrice }),
   setUploadPieceFormDescription: uploadPieceFormDescription => ({ type: ACTION_TYPES.SET_UPLOAD_PIECE_FORM_DESCRIPTION, uploadPieceFormDescription }),
+  
+  /*
+    E d i t
+      P i e c e
+  */
+  setEditPieceFormTitle: editPieceFormTitle => ({ type: ACTION_TYPES.SET_EDIT_PIECE_FORM_TITLE, editPieceFormTitle }),
+  setEditPieceFormPrice: editPieceFormPrice => ({ type: ACTION_TYPES.SET_EDIT_PIECE_FORM_PRICE, editPieceFormPrice }),
+  setEditPieceFormDescription: editPieceFormDescription => ({ type: ACTION_TYPES.SET_EDIT_PIECE_FORM_DESCRIPTION, editPieceFormDescription }),
 
   /*
     E x p l o r e
@@ -71,7 +79,8 @@ export default {
   /*
     P i e c e s
   */
-  setPiece: (piece, destroy) => ({ type: ACTION_TYPES.SET_PIECE, payload: { piece, destroy } }),
+  setPiece: piece => ({ type: ACTION_TYPES.SET_PIECE, piece }),
   setActivePiece: pieceId => ({ type: ACTION_TYPES.SET_ACTIVE_PIECE, pieceId }),
   setFetchingPieces: fetchingPieces => ({ type: ACTION_TYPES.SET_FETCHING_PIECES, fetchingPieces }),
+  deletePiece: piece => ({ type: ACTION_TYPES.DELETE_PIECE, piece }),
 };
