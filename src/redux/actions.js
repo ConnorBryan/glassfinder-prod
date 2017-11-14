@@ -5,14 +5,11 @@ import CONSTANTS from '../constants';
 import flatten from '../utils/flatten';
 import ACTION_CREATORS from './actionCreators';
 import ACTIONS from './actions';
-import ACTIONS_V2 from './actions_v2';
 
 const COOKIES = new Cookies();
 
 export default {
     ...ACTION_CREATORS,
-    ...ACTIONS_V2,
-    
     initialize: () => dispatch => {
       const token = (
         COOKIES.get(CONSTANTS.AUTH_TOKEN_COOKIE) ||

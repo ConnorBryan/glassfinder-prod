@@ -2,44 +2,76 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
   Container,
+  Icon,
+  Loader,
+  Menu,
   Segment,
+  Table,
 } from 'semantic-ui-react';
+
+import API from '../api';
+import ModelTable from './ModelTable';
 import './Admin.css';
 
 export default class Admin extends Component {
-  static propTypes = {
-
+  state = {
+    page: 0,
+    pageCount: 0,
+    perPage: 10,
+    plural: 'users',
+    collection: [],
+    loading: false,
   };
 
   componentDidMount() {
-    const {
-      actions: {
-        v2CreateModel,
-        v2ReadModel,
-        v2ReadSomeModels,
-        v2ReadAllModels,
-        v2UpdateModel,
-        v2DestroyModel,
-      },
-    } = this.props;
+    this.loadModels();
+  }
 
-    v2CreateModel('users', {
-      email: 'cchromium@gmail.com',
-      password: 'abc123',
-    });
+  componentDidUpdate(nextProps, nextState) {
+    const { page: currentPage } = this.state;
+    const { page: nextPage } = nextState;
 
-    v2ReadModel('artist', 1);
-    v2ReadSomeModels('users', [1, 2, 3]);
-    v2ReadAllModels('pieces');
+    nextPage !== currentPage && this.loadModels();
+  }
 
-    v2UpdateModel('user', 1, {
-      email: 'bob@bob.com',
-    });
+  setPage = page => this.setState({ page });
+  setPerPage = perPage => this.setState({ perPage });
 
-    v2DestroyModel('artist', 1);
+  previousPage = () => this.setPage(this.state.page - 1);
+  resetPage = () => this.setPage(0);
+  nextPage = () => this.setPage(this.state.page + 1);
+
+  startLoading = () => this.setState({ loading: true });
+  stopLoading = () => this.setState({ loading: false });
+
+  /**
+   * @async
+   * @method loadModels
+   * @param {string} plural
+   * @desc Load a type of model into the collection array to be displayed.
+   */
+  loadModels = async () => {
+    try {      
+      const { plural, page, perPage } = this.state;
+
+      this.startLoading();      
+
+      const {
+        models: collection,
+        pageCount,
+      } = await API.v2ReadAllModels(plural, page, perPage);
+
+      this.setState({ collection, pageCount });
+    } catch (e) {
+      console.error(e);
+    } finally {
+      this.stopLoading();
+    }
   }
 
   render() {
+    const { collection, loading, page } = this.state;
+
     return (
       <Container
         className='Admin'
@@ -49,7 +81,17 @@ export default class Admin extends Component {
           className='a' />
         <Segment
           attached='bottom'
-          className='b' />
+          className='b'>
+          <Loader active={loading} />
+          {collection.length > 0 && (
+            <ModelTable
+              setPage={this.setPage}
+              previous={this.previousPage}
+              reset={this.resetPage}
+              next={this.nextPage}
+              {...this.state} />
+          )}
+        </Segment>
         <Segment
           attached='bottom'
           className='c' />
