@@ -1,13 +1,11 @@
 import ROUTES from './routes';
 
 export default {
-  /*
-    O p e r a t i o n s
-  */
-  // API_ROOT: 'http://localhost:6166/api',
-  API_ROOT: 'https://glassfinder.com/api',
-  GOOGLE_MAPS_API_KEY: 'AIzaSyDhcnItQMqZ3K2yeq6bxbNmCbcjyreQDXM',
-  GOOGLE_MAPS_GEOLOCATION_API_KEY: 'AIzaSyAJIK5AWaKs9f4ehSV4Wadk_r7n6phI4Ig',
+  ADMIN: process.env.REACT_APP_ADMIN                                                  || false,
+  API_ROOT: process.env.REACT_APP_API_ROOT                                            || 'http://localhost:6166/api',
+  V2_API_ROOT: process.env.REACT_APP_V2_API_ROOT                                      || 'http://localhost:6166/api/v2',
+  GOOGLE_MAPS_API_KEY: process.env.REACT_GOOGLE_MAPS_API_KEY                          || 'AIzaSyDhcnItQMqZ3K2yeq6bxbNmCbcjyreQDXM',
+  GOOGLE_MAPS_GEOLOCATION_API_KEY: process.env.REACT_GOOGLE_MAPS_GEOLOCATION_API_KEY  || 'AIzaSyAJIK5AWaKs9f4ehSV4Wadk_r7n6phI4Ig',
 
   /*
     M o d e l s

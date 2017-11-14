@@ -11,6 +11,7 @@ import {
 } from 'semantic-ui-react';
 
 import CONSTANTS from '../constants';
+import Admin from '../admin';
 import TopBar from './TopBar';
 import NavigationMenu from './NavigationMenu';
 import Breadcrumbs from './Breadcrumbs';
@@ -79,50 +80,52 @@ export class Layout extends Component {
       background: 'rgb(27, 28, 29)',
     };
 
-    return (
-      <div>
-        {error && (
-          <div style={errorWrapperStyle}>
-            <Message
-              negative
-              onClick={() => setError(null)}
-              style={errorStyle}>
-              <Icon name={CONSTANTS.ICONS.error} /> {error.message}
-            </Message>
-          </div>
-        )}
-        <TopBar
-          zIndexOverride={this.zIndexOverride}
-          authorized={authorized}
-          deauthorize={deauthorize}
-          toggleSidebar={toggleSidebar}
-          sidebarVisible={sidebarVisible} />
-        <Sidebar.Pushable
-          as={Segment}
-          style={pushableStyle}>
-          <NavigationMenu
+    return CONSTANTS.ADMIN
+    ? <Admin {...this.props} />
+    : (
+        <div>
+          {error && (
+            <div style={errorWrapperStyle}>
+              <Message
+                negative
+                onClick={() => setError(null)}
+                style={errorStyle}>
+                <Icon name={CONSTANTS.ICONS.error} /> {error.message}
+              </Message>
+            </div>
+          )}
+          <TopBar
+            zIndexOverride={this.zIndexOverride}
             authorized={authorized}
             deauthorize={deauthorize}
-            sidebarVisible={sidebarVisible}
-            toggleSidebar={toggleSidebar} />
-          <Sidebar.Pusher>
-            <Container style={wrapperStyle}>
-              <Segment.Group>
-                <Breadcrumbs {...this.props} />
-                <Segment
-                  attached='bottom'
-                  style={mainStyle}>
-                  {isLoading ? <Loader active /> : children}
-                </Segment>
-              </Segment.Group>
-            </Container>
-            <Container
-              fluid
-              style={bottomZoneStyle} />
-          </Sidebar.Pusher>
-        </Sidebar.Pushable>
-      </div>
-    );
+            toggleSidebar={toggleSidebar}
+            sidebarVisible={sidebarVisible} />
+          <Sidebar.Pushable
+            as={Segment}
+            style={pushableStyle}>
+            <NavigationMenu
+              authorized={authorized}
+              deauthorize={deauthorize}
+              sidebarVisible={sidebarVisible}
+              toggleSidebar={toggleSidebar} />
+            <Sidebar.Pusher>
+              <Container style={wrapperStyle}>
+                <Segment.Group>
+                  <Breadcrumbs {...this.props} />
+                  <Segment
+                    attached='bottom'
+                    style={mainStyle}>
+                    {isLoading ? <Loader active /> : children}
+                  </Segment>
+                </Segment.Group>
+              </Container>
+              <Container
+                fluid
+                style={bottomZoneStyle} />
+            </Sidebar.Pusher>
+          </Sidebar.Pushable>
+        </div>
+      );
   }
 }
 
