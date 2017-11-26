@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
+  Button,
+  Form,
   Segment,
 } from 'semantic-ui-react';
+import Aux from 'react-aux';
 
 export default class ShopLink extends Component {
   state = {
@@ -48,19 +51,53 @@ export default class ShopLink extends Component {
     alert('Sending...');
   };
 
-  Stage0() {
+  /* = = = */
+
+  setName = ({ target: { value: name } }) => this.setState({ name });
+  setDescription = ({ target: { value: description } }) => this.setState({ description });
+
+  /* = = = */
+
+  Stage0 = () => {
+    const { name, description } = this.state;
+
     return (
-      <div>
-        Stage 0
-      </div>
+      <Aux>
+        <Form
+          as={Segment}
+          attached='top'>
+          <Form.Input
+            label='What is the name of your business?'
+            type='text'
+            onChange={this.setName} />
+          <Form.TextArea
+            label='What do you stand for?'
+            onChange={this.setDescription} />
+          <Form.Button
+            content='Continue'
+            disabled={!name || !description}
+            icon='chevron right'
+            onClick={this.advanceState} />
+        </Form>
+      </Aux>
     );
   }
 
   render() {
-    const { Stage0 } = this;
+    const {
+      LinkNav,
+      Stage0,
+      state: { stage },
+    } = this;
+
+    const stages = [
+      <Stage0 />,
+    ];
 
     return (
-      <Stage0 />
+      <Aux>
+        {stages[stage]}
+      </Aux>        
     );
   }
 }
