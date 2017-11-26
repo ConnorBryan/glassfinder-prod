@@ -237,7 +237,7 @@ export default [
     },
   },
   {
-    path: '/link-my-account',
+    path: '/link-my-account/:type?',
     requiresAuthorized: true,
     Component: LinkingProcess,
     breadcrumbs: [
@@ -248,6 +248,10 @@ export default [
       {
         pageName: 'My account',
         route: '/my-account'
+      },
+      {
+        pageName: 'Link my account',
+        active: true,
       },
     ],
     pageHeader: {

@@ -24,15 +24,6 @@ export class Layout extends Component {
     actions: PropTypes.objectOf(PropTypes.func).isRequired,
   };
   
-  /**
-   * @method zIndesOverride
-   * @desc Due to the nature of Sticky in Semantic UI React,
-   *       this hack is used to set the zIndex on the Sticky element
-   *       after attaching it to content.
-   * @param {DOMNode}
-   */
-  zIndexOverride = ({ parentNode }) => (parentNode.style.zIndex = 1);
-
   render () {
     const {
       authorized,
