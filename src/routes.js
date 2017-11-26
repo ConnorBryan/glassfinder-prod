@@ -19,6 +19,7 @@ import Contact from './containers/Contact';
 import SocialMedia from './containers/SocialMedia';
 import Purchase from './containers/Purchase';
 import PieceDetail from './containers/PieceDetail';
+import LinkingProcess from './containers/LinkingProcess';
 
 export default [
   {
@@ -233,6 +234,26 @@ export default [
       icon: 'user',
       title: 'My Account',
       description: 'Make changes to your account, upload pieces, and more.',
+    },
+  },
+  {
+    path: '/link-my-account',
+    requiresAuthorized: true,
+    Component: LinkingProcess,
+    breadcrumbs: [
+      {
+        pageName: 'Home',
+        route: '/',
+      },
+      {
+        pageName: 'My account',
+        route: '/my-account'
+      },
+    ],
+    pageHeader: {
+      icon: 'chain',
+      title: 'Link My Account',
+      description: 'Upgrade your account and become an artist, a shop, or a brand.',
     },
   },
   {

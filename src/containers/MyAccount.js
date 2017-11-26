@@ -44,6 +44,9 @@ export function MyAccount(props) {
             </Header>
           </Label>
         )}
+        <Link to='/link-my-account'>
+          <Icon name='chain' /> Link my account
+        </Link>
         <Menu
           fluid
           vertical>
