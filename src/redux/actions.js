@@ -2,6 +2,7 @@ import axios from 'axios';
 import Cookies from 'universal-cookie';
 
 import CONSTANTS from '../constants';
+import * as VALIDATE from '../validators';
 import flatten from '../utils/flatten';
 import ACTION_CREATORS from './actionCreators';
 import ACTIONS from './actions';
@@ -462,6 +463,30 @@ export default {
             : dispatch(ACTIONS.showError({ message }));
           
           dispatch(ACTIONS.setFetchingPieces(false));
+    }),
+
+    /* = = V2 = = */
+
+    v2LinkAccount: (type, data) =>
+      (dispatch, getState) =>
+        processify(dispatch, async () => {
+          try {
+            const { myAccount: { email: { value: email } } } = getState();
+
+            VALIDATE.accountLink(data);
+            console.log('type is', type)
+            const { data: { success } } = await (
+              axios.post(`${CONSTANTS.V2_API_ROOT}/link-account`, {
+                email,
+                type,
+                data,
+              })
+            );
+
+            console.log(success);
+          } catch (e) {
+            dispatch(ACTIONS.showError(e));
+          }
     }),
 };
 

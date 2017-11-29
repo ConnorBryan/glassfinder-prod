@@ -62,10 +62,6 @@ export class Layout extends Component {
       marginBottom: '8rem',
     };
 
-    const mainStyle = {
-      minHeight: '94vh',
-    };
-
     const bottomZoneStyle = {
       minHeight: '30vh',
       background: 'rgb(27, 28, 29)',
@@ -104,8 +100,7 @@ export class Layout extends Component {
                 <Segment.Group>
                   <Breadcrumbs {...this.props} />
                   <Segment
-                    attached='bottom'
-                    style={mainStyle}>
+                    attached='bottom'>
                     {isLoading ? <Loader active /> : children}
                   </Segment>
                 </Segment.Group>

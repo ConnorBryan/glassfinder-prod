@@ -15,7 +15,7 @@ import {
 } from 'semantic-ui-react';
 import Aux from 'react-aux';
 
-import constants from '../../../constants';
+import CONSTANTS from '../../../constants';
 
 export default class ShopLink extends Component {
   constructor() {
@@ -60,6 +60,8 @@ export default class ShopLink extends Component {
   }
 
   confirm = () => {
+    const { history, actions: { v2LinkAccount } } = this.props;
+
     let requestValid = true;
 
     Object.values(this.state).forEach(property => {
@@ -68,7 +70,9 @@ export default class ShopLink extends Component {
 
     if (!requestValid) return;
 
-    alert('Sending...');
+    v2LinkAccount(CONSTANTS.ACCOUNT_TYPES.shop, this.state);
+
+    history.push('/my-account');
   };
 
   /* = = = */
