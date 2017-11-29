@@ -4,12 +4,17 @@ import {
   Button,
   Card,
   Form,
+  Grid,
   Header,
   Icon,
   Image,
   Label,
+  Message,
   Segment,
 } from 'semantic-ui-react';
+import Aux from 'react-aux';
+
+import constants from '../../../constants';
 
 export default class ShopLink extends Component {
   constructor() {
@@ -18,23 +23,23 @@ export default class ShopLink extends Component {
     this.state = this.getInitialState();
   }
 
+  componentWillUpdate(nextProps, nextState) {
+    const { stage: currentStage } = this.state;
+    const { stage: upcomingStage } = nextState;
+    const shouldClearImage = currentStage !== 2 && upcomingStage === 2;
+
+    shouldClearImage && this.setState({ image: null });
+  } 
+
   getInitialState = () => ({
     stage: 0,
-
-    // Who are you and what do you stand for?
     name: '',
     description: '',
-
-    // Where can enthusiasts find you?
     street: '',
     city: '',
     state: '',
     zip: '',
-
-    // Put your best foot forward.
-    image: '',
-
-    // How can enthusiasts get in touch?
+    image: null,
     email: '',
     phone: '',
   });
@@ -49,7 +54,11 @@ export default class ShopLink extends Component {
     if (prevState.stage < 4) return { stage: prevState.stage + 1 };
   });
 
-  submitRequest = () => {
+  startOver = () => {
+    this.setState(this.getInitialState());
+  }
+
+  confirm = () => {
     let requestValid = true;
 
     Object.values(this.state).forEach(property => {
@@ -77,27 +86,22 @@ export default class ShopLink extends Component {
   setPhone = ({ target: { value: phone } }) => this.setState({ phone });
 
   /* = = = */
-  
+
   Stage0 = () => {
     const { name, description } = this.state;
 
     return (
-      <Form
-        as={Segment}
-        attached='top'>
+      <Aux>
         <Form.Input
-          label='What is the name of your business?'
-          type='text'
-          onChange={this.setName} />
+        label='What is the name of your business?'
+        type='text'
+        onChange={this.setName}
+        value={name} />
         <Form.TextArea
           label='What do you stand for?'
-          onChange={this.setDescription} />
-        <Form.Button
-          content='Continue'
-          disabled={!name || !description}
-          icon='chevron right'
-          onClick={this.advanceState} />
-      </Form>
+          onChange={this.setDescription}
+          value={description} />
+      </Aux>
     );
   }
 
@@ -110,37 +114,29 @@ export default class ShopLink extends Component {
     } = this.state;
 
     return (
-      <Form
-        as={Segment}
-        attached='top'>
+      <Aux>
         <Form.Input
           label='Street'
           type='text'
-          onChange={this.setStreet} />
+          onChange={this.setStreet}
+          value={street} />
         <Form.Input
           label='City'
           type='text'
-          onChange={this.setCity} />
+          onChange={this.setCity}
+          value={city} />
         <Form.Input
           label='State'
           type='text'
-          onChange={this.setStateCode} />
+          onChange={this.setStateCode}
+          value={state} />
         <Form.Input
           label='ZIP'
           type='number'
           max='99999'
-          onChange={this.setZip} />
-        <Form.Button
-          content='Previous'
-          icon='chevron left'
-          onClick={this.regressState} />
-        {street && city && state && zip && (
-          <Form.Button
-            content='Next'
-            icon='chevron right'
-            onClick={this.advanceState} />
-        )}
-      </Form>
+          onChange={this.setZip}
+          value={zip} />
+      </Aux>
     );
   }
 
@@ -148,26 +144,18 @@ export default class ShopLink extends Component {
     const { image } = this.state;
 
     return (
-      <Form>
+      <Aux>
         <Form.Field>
           <Header
-            as='h3'
-            content='Upload a file' />
+            as='h5'
+            className='fancy'>
+            <Icon name='file image outline' /> Upload an image
+          </Header>
           <input
             type='file'
-            onChange={this.setImage}/>
+            onChange={this.setImage} />
         </Form.Field>
-        <Form.Button
-          content='Previous'
-          icon='chevron left'
-          onClick={this.regressState} />
-        {image && (
-          <Form.Button
-            content='Next'
-            icon='chevron right'
-            onClick={this.advanceState} />
-        )}
-      </Form>
+      </Aux>
     );
   }
 
@@ -175,26 +163,18 @@ export default class ShopLink extends Component {
     const { email, phone } = this.state;
 
     return (
-      <Form>
+      <Aux>
         <Form.Input
           label='What is the email address for your business?'
           type='text'
-          onChange={this.setEmail} />
+          onChange={this.setEmail}
+          value={email} />
         <Form.Input
           label='What is the phone number for your business?'
           type='text'
-          onChange={this.setPhone} />
-        <Form.Button
-          content='Previous'
-          icon='chevron left'
-          onClick={this.regressState} />
-        {email && phone && (
-          <Form.Button
-            content='Next'
-            icon='chevron right'
-            onClick={this.advanceState} />
-        )}
-      </Form>
+          onChange={this.setPhone}
+          value={phone} />
+      </Aux>
     );
   }
 
@@ -212,30 +192,62 @@ export default class ShopLink extends Component {
     } = this.state;
 
     return (
-      <Card.Group>
-        <Card>
-          <Image src='https://placehold.it/400x400' />
-          <Card.Content>
-            <Card.Header>
-              {name}
-            </Card.Header>
-            <Card.Description>
-              {description}
-            </Card.Description>
-          </Card.Content>
-          <Card.Content extra>
-            <Card.Description>
-              {street} {city}, {state} {zip}
-            </Card.Description>
-          </Card.Content>
-          <Card.Content extra>
-            <Icon name='phone' /> {phone}
-          </Card.Content>
-          <Card.Content extra>
-            <Icon name='phone' /> {email}
-          </Card.Content>
-        </Card>
-      </Card.Group>
+      <Grid>
+        <Grid.Row>
+          <Grid.Column width={4}>
+            <Card.Group>
+              <Card>
+                <Image src='https://placehold.it/400x400' />
+                <Card.Content>
+                  <Card.Header>
+                    {name}
+                  </Card.Header>
+                  <Card.Description>
+                    {description}
+                  </Card.Description>
+                </Card.Content>
+                <Card.Content extra>
+                  <Card.Description>
+                    {street} {city}, {state} {zip}
+                  </Card.Description>
+                </Card.Content>
+                <Card.Content extra>
+                  <Icon name='phone' /> {phone}
+                </Card.Content>
+                <Card.Content extra>
+                  <Icon name='envelope' /> {email}
+                </Card.Content>
+              </Card>
+            </Card.Group>
+          </Grid.Column>
+          <Grid.Column width={12}>
+            <Segment>
+              <Header as='h2'>
+                Does this look right?
+              </Header>
+              If the information to the left looks good, click "Confirm" below to submit the link request. <br />
+              Otherwise, click "Start over" to try again.
+            </Segment>
+            <Segment attached='bottom'>
+              <Button.Group fluid>
+                <Button
+                  onClick={this.confirm}
+                  positive
+                  floated='right'>
+                  <Icon name='checkmark' /> Confirm
+                </Button>
+                <Button.Or text='' />
+                <Button
+                  onClick={this.startOver}
+                  negative
+                  floated='right'>
+                  <Icon name='undo' /> Start over
+                </Button>
+              </Button.Group>
+            </Segment>
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
     );
   }
 
@@ -248,7 +260,18 @@ export default class ShopLink extends Component {
       Stage2,
       Stage3,
       Stage4,
-      state: { stage },
+      state: {
+        stage,
+        name,
+        description,
+        street,
+        city,
+        state,
+        zip,
+        image,
+        email,
+        phone
+      },
     } = this;
 
     const stages = [
@@ -259,6 +282,50 @@ export default class ShopLink extends Component {
       <Stage4 />,
     ];
 
-    return stages[stage];
+    const requirements = [
+      name && description,
+      street && city && state && zip,
+      image,
+      email && phone,
+    ];
+    const fulfillsRequirements = requirements[stage];
+
+    return (
+      <Aux>
+        <Message icon>
+          <Icon name='shop' />
+          <Message.Content>
+            <Message.Header>
+              Linking as a shop
+            </Message.Header>
+            Shops can upload pieces to sell and show up on the map.
+          </Message.Content>
+        </Message>
+        <Form
+          as={Segment}
+          attached='top'>
+          {stages[stage]}
+        </Form>
+        {stage !== 4 && (
+          <Segment attached='bottom'>
+            <Button.Group fluid>
+              <Button
+                disabled={stage === 0}
+                onClick={this.regressState}
+                floated='left'>
+                <Icon name='chevron left' /> Previous
+              </Button>
+              <Button.Or text='' />
+              <Button
+                onClick={this.advanceState}
+                disabled={!fulfillsRequirements}
+                floated='right'>
+                <Icon name='chevron right' /> Next
+              </Button>
+            </Button.Group>
+          </Segment>
+        )}
+      </Aux>
+    );
   }
 }
