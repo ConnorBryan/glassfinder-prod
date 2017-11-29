@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
+  Button,
   Card,
   Icon,
   Image,
@@ -29,9 +30,12 @@ export function LinkHero(props) {
         )}
       </Card.Content>
       <Card.Content extra>
-        <Link to={link}>
+        <Button
+          as={Link}
+          to={link}
+          fluid>
           <Icon name='chain' /> Link account as a {linkType}
-        </Link>
+        </Button>
       </Card.Content>
     </Card>
   );

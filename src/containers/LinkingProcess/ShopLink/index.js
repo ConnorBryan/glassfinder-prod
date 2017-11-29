@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import {
   Button,
   Card,
@@ -192,7 +193,7 @@ export default class ShopLink extends Component {
     } = this.state;
 
     return (
-      <Grid>
+      <Grid divided='vertically'>
         <Grid.Row>
           <Grid.Column width={4}>
             <Card.Group>
@@ -221,7 +222,7 @@ export default class ShopLink extends Component {
             </Card.Group>
           </Grid.Column>
           <Grid.Column width={12}>
-            <Segment>
+            <Segment attached='top'>
               <Header as='h2'>
                 Does this look right?
               </Header>
@@ -299,6 +300,13 @@ export default class ShopLink extends Component {
               Linking as a shop
             </Message.Header>
             Shops can upload pieces to sell and show up on the map.
+            <Button
+              as={Link}
+              to='/my-account'
+              negative
+              floated='right'>
+              <Icon name='close' /> Cancel
+            </Button>
           </Message.Content>
         </Message>
         <Form
