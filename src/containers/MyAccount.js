@@ -7,6 +7,7 @@ import {
   Menu,
   Segment,
 } from 'semantic-ui-react';
+import Aux from 'react-aux';
 
 import CONSTANTS from '../constants';
 import flatten from '../utils/flatten';
@@ -28,6 +29,8 @@ export function MyAccount(props) {
   const accountType = CONSTANTS.ACCOUNT_TYPES[type];
   const userFields = fieldify(myAccount);
   const linkedFields = fieldify(linkedAccount);
+  const shouldShowPieceOptions = accountType === CONSTANTS.ACCOUNT_TYPES.shop ||
+                                  accountType ===  CONSTANTS.ACCOUNT_TYPES.artist;
 
   return (
     <Segment.Group>
@@ -44,9 +47,6 @@ export function MyAccount(props) {
             </Header>
           </Label>
         )}
-        <Link to='/link-my-account'>
-          <Icon name='chain' /> Link my account
-        </Link>
         <Menu
           fluid
           vertical>
@@ -56,36 +56,29 @@ export function MyAccount(props) {
             to='/change-password'>
             <Icon name='lock' /> Change password
           </Menu.Item>
-          {!linked && accountType !== CONSTANTS.ACCOUNT_TYPES.artist && (
-            <Menu.Item onClick={() => link('artist')}>
-              <Icon name={CONSTANTS.ICONS.artist} /> Become an artist
+          {shouldShowPieceOptions && (
+            <Aux>
+              <Menu.Item
+                as={Link}
+                to='/upload-piece'>
+                  <Icon name={CONSTANTS.ICONS.piece} /> Upload a piece
+              </Menu.Item>
+              <Menu.Item
+                as={Link}
+                to='/my-pieces'>
+                  <Icon name={CONSTANTS.ICONS.piece} /> My pieces
+              </Menu.Item>
+            </Aux>
+          )}
+          {!linked && (
+            <Menu.Item
+              as={Link}
+              to='/link-my-account'>
+                <Icon name='chain' /> Link my account
             </Menu.Item>
           )}
-          {!linked && accountType !== CONSTANTS.ACCOUNT_TYPES.shop && (
-            <Menu.Item onClick={() => link('shop')}>
-              <Icon name={CONSTANTS.ICONS.shop} /> Become a shop
-            </Menu.Item>
-          )}
-          <Menu.Item
-            as={Link}
-            to='/upload-piece'>
-              <Icon name={CONSTANTS.ICONS.piece} /> Upload a piece
-          </Menu.Item>
-          <Menu.Item
-            as={Link}
-            to='/my-pieces'>
-              <Icon name={CONSTANTS.ICONS.piece} /> My pieces
-          </Menu.Item>
         </Menu>
       </Segment>
-      <AccountFields
-        fieldset={userFields}
-        updateField={updateField} />
-      {linked && (
-        <AccountFields
-          fieldset={linkedFields}
-          updateField={updateField} />
-      )}
     </Segment.Group>
   );
 }
