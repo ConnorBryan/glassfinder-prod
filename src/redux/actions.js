@@ -474,7 +474,7 @@ export default {
             const { myAccount: { email: { value: email } } } = getState();
 
             VALIDATE.accountLink(data);
-            console.log('type is', type)
+
             const { data: { success } } = await (
               axios.post(`${CONSTANTS.V2_API_ROOT}/link-account`, {
                 email,
